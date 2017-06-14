@@ -4,7 +4,19 @@
   "description": "Express middleware for GitToken GitHub Webhook endpoints",
   "main": "./src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha",
+    "build": "babel ./src/ --out-dir ./dist/ --plugins transform-runtime"
+  },
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-plugin-inline-import": "^2.0.5",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.5.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-runtime": "^6.23.0",
+    "chai": "^4.0.1"
   },
   "keywords": [
     "GitToken",
@@ -14,5 +26,15 @@
     "Git"
   ],
   "author": "GitToken",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "eth-lightwallet": "^2.5.4",
+    "ethereumjs-tx": "^1.3.1",
+    "ethereumjs-util": "^5.1.2",
+    "jsonfile": "^3.0.0",
+    "web3": "^0.19.0",
+    "zeppelin-solidity": "^1.0.7"
+  },
+  "repository": "git@github.com:git-token/api-middleware.git"
 }
