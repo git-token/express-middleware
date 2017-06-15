@@ -105,32 +105,29 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
   (0, _createClass3.default)(GitTokenMiddleware, [{
     key: 'routeRequests',
     value: function routeRequests() {
-      var router = (0, _express.Router)();
-      router.post('/', this.handleRequest);
-      return router;
-    }
-  }, {
-    key: 'handleRequest',
-    value: function handleRequest(req, res, next) {
       var _this2 = this;
 
-      var headers = req.headers,
-          body = req.body;
+      var router = (0, _express.Router)();
+      router.post('/', function (req, res, next) {
+        var headers = req.headers,
+            body = req.body;
 
-      _bluebird2.default.resolve().then(function () {
-        if (_this2.isGitHubHook) {
-          return handleGitHubWebHookEvent({
-            event: headers['x-github-event'],
-            data: body
-          });
-        } else {
-          throw new Error('Request not yet configured');
-        }
-      }).then(function (response) {
-        res.status(200).send(response);
-      }).catch(function (error) {
-        res.status(500).send(error);
+        _bluebird2.default.resolve().then(function () {
+          if (_this2.isGitHubHook) {
+            return handleGitHubWebHookEvent({
+              event: headers['x-github-event'],
+              data: body
+            });
+          } else {
+            throw new Error('Request not yet configured');
+          }
+        }).then(function (response) {
+          res.status(200).send(response);
+        }).catch(function (error) {
+          res.status(500).send(error);
+        });
       });
+      return router;
     }
   }, {
     key: 'handleGitHubWebHookEvent',

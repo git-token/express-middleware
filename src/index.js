@@ -54,28 +54,25 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
 
   routeRequests () {
     let router = Router()
-    router.post('/', this.handleRequest)
+    router.post('/', (req, res, next) => {
+      const { headers, body } = req
+      Promise.resolve().then(() => {
+        if (this.isGitHubHook) {
+          return handleGitHubWebHookEvent({
+            event: headers['x-github-event'],
+            data: body
+          })
+        } else {
+          throw new Error('Request not yet configured')
+        }
+      }).then((response) => {
+        res.status(200).send(response)
+      }).catch((error) => {
+        res.status(500).send(error)
+      })
+    })
     return router
   }
-
-  handleRequest (req, res, next) {
-    const { headers, body } = req
-    Promise.resolve().then(() => {
-      if (this.isGitHubHook) {
-        return handleGitHubWebHookEvent({
-          event: headers['x-github-event'],
-          data: body
-        })
-      } else {
-        throw new Error('Request not yet configured')
-      }
-    }).then((response) => {
-      res.status(200).send(response)
-    }).catch((error) => {
-      res.status(500).send(error)
-    })
-  }
-
 
   handleGitHubWebHookEvent ({ event, data }) {
     return new Promise((resolve, reject) => {
