@@ -109,10 +109,10 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
 
       var router = (0, _express.Router)();
       router.post('/', function (req, res, next) {
-        console.log('routeRequests::req', req);
         var headers = req.headers,
             body = req.body;
 
+        console.log('routeRequests::headers[\'x-github-event\']', headers['x-github-event']);
         _bluebird2.default.resolve().then(function () {
           if (_this2.isGitHubHook) {
             return handleGitHubWebHookEvent({
@@ -139,6 +139,7 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
           data = _ref.data;
 
       return new _bluebird2.default(function (resolve, reject) {
+        console.log('handleGitHubWebHookEvent::event', event);
         switch (event) {
           case 'ping':
             console.log('Entered the Ping event');
