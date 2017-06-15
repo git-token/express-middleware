@@ -55,6 +55,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
   routeRequests () {
     let router = Router()
     router.post('/', (req, res, next) => {
+      console.log('routeRequests::req', req)
       const { headers, body } = req
       Promise.resolve().then(() => {
         if (this.isGitHubHook) {
@@ -78,6 +79,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     return new Promise((resolve, reject) => {
       switch(event) {
         case 'ping':
+        console.log('Entered the Ping event')
           resolve(this.ping(data))
         default:
           let error = new Error('Invalid Event Found')

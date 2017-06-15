@@ -109,6 +109,7 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
 
       var router = (0, _express.Router)();
       router.post('/', function (req, res, next) {
+        console.log('routeRequests::req', req);
         var headers = req.headers,
             body = req.body;
 
@@ -140,6 +141,7 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
       return new _bluebird2.default(function (resolve, reject) {
         switch (event) {
           case 'ping':
+            console.log('Entered the Ping event');
             resolve(_this3.ping(data));
           default:
             var error = new Error('Invalid Event Found');

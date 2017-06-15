@@ -19,8 +19,10 @@ function ping(_ref) {
   var deliveryId = _ref.deliveryId;
 
   return new _bluebird2.default(function (resolve, reject) {
+    console.log('Retrieving Keystore');
     _this.importKeystore().then(function (_ks) {
       if (!_ks) {
+        console.log('Did not find keystore, generating new keystore');
         var salt = new Date();
         var password = (0, _ethereumjsUtil.sha3)('' + deliveryId + salt).toString('hex');
         return _this.createAndSaveKeystore(password);
