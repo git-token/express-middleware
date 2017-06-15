@@ -1,29 +1,49 @@
+const REWARD_VALUES = {
+  commitComment: 250,             // | Any time a Commit is commented on.
+  create: 1000,                    // | Any time a Branch or Tag is created.
+  delete: 0,                    // | Any time a Branch or Tag is deleted.
+  deployment: 10000,                // | Any time a Repository has a new deployment created from the API.
+  deploymentStatus: 0,          // | Any time a deployment for a Repository has a status update from
+  fork: 15000,                      // | Any time a Repository is forked.
+  gollum: 750,                    // | Any time a Wiki page is updated.
+  installation: 0,              // | Any time a GitHub App is installed or uninstalled.
+  installationRepositories: 0,  // | Any time a repository is added or removed from an
+  issueComment: 250,              // | Any time a comment on an issue is created, edited, or deleted.
+  issues: 1000,                    // | Any time an Issue is assigned, unassigned, labeled, unlabeled, opened, edited,
+  label: 100,                     // | Any time a Label is created, edited, or deleted.
+  marketplacePurchase: 0,       // | Any time a user purchases, cancels, or changes their GitHub
+  member: 25000,                    // | Any time a User is added or removed as a collaborator to a Repository, or has their
+  membership: 5000,                // | Any time a User is added or removed from a team. Organization hooks only.
+  milestone: 15000,                 // | Any time a Milestone is created, closed, opened, edited, or deleted.
+  organization: 100000,              // | Any time a user is added, removed, or invited to an Organization.
+  orgBlock: 0,                  // | Any time an organization blocks or unblocks a user. Organization hooks only.
+  pageBuild: 1000,                 // | Any time a Pages site is built or results in a failed build.
+  projectCard: 0,               // | Any time a Project Card is created, edited, moved, converted to an issue,
+  projectColumn: 0,             // | Any time a Project Column is created, edited, moved, or deleted.
+  ping: 1000,                      // | Use when setting up the webhook for github
+}
+
+
+
 module.exports = {
   name: 'GitToken',
   symbol: 'GTK',
   decimals: 8,
-  rewardValues: [
-    250, // commitComment | Any time a Commit is commented on.
-    1000, // create | Any time a Branch or Tag is created.
-    0, // delete | Any time a Branch or Tag is deleted.
-    10000, // deployment | Any time a Repository has a new deployment created from the API.
-    0, // deploymentStatus | Any time a deployment for a Repository has a status update from
-    15000, // fork | Any time a Repository is forked.
-    750, // gollum | Any time a Wiki page is updated.
-    0, // installation | Any time a GitHub App is installed or uninstalled.
-    0, // installationRepositories | Any time a repository is added or removed from an
-    250, // issueComment | Any time a comment on an issue is created, edited, or deleted.
-    1000, // issues | Any time an Issue is assigned, unassigned, labeled, unlabeled, opened, edited,
-    100, // label | Any time a Label is created, edited, or deleted.
-    0, // marketplacePurchase | Any time a user purchases, cancels, or changes their GitHub
-    25000, // member | Any time a User is added or removed as a collaborator to a Repository, or has their
-    5000, // membership | Any time a User is added or removed from a team. Organization hooks only.
-    15000, // milestone | Any time a Milestone is created, closed, opened, edited, or deleted.
-    100000, // organization | Any time a user is added, removed, or invited to an Organization.
-    0, // orgBlock | Any time an organization blocks or unblocks a user. Organization hooks only.
-    1000, // pageBuild | Any time a Pages site is built or results in a failed build.
-    0, // projectCard | Any time a Project Card is created, edited, moved, converted to an issue,
-    0, // projectColumn | Any time a Project Column is created, edited, moved, or deleted.
-    1000, // ping | Use when setting up the webhook for github
-  ]
+  rewardEnum: (type) => {
+    let filteredList = Object.keys(REWARD_VALUES).sort((a, b) => {
+      return a.localeCompare(b)
+    }).map((_type) => {
+      return _type
+    })
+
+    return filteredList.indexOf(type)
+  },
+  rewardValues: () => {
+    return Object.keys(REWARD_VALUES).sort((a, b) => {
+      return a.localeCompare(b)
+    }).map((_type) => {
+      return REWARD_VALUES[_type]
+    })
+  }
+
 }

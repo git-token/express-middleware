@@ -15,6 +15,10 @@ function createGitTokenContract() {
   var _this = this;
 
   return new _bluebird2.default(function (resolve, reject) {
+    var _gittokenContract = _this.gittokenContract,
+        abi = _gittokenContract.abi,
+        unlinked_binary = _gittokenContract.unlinked_binary;
+
     _bluebird2.default.resolve().then(function () {
       var _eth$contract$new;
 
@@ -23,12 +27,11 @@ function createGitTokenContract() {
           symbol = _config.symbol,
           decimals = _config.decimals,
           rewardValues = _config.rewardValues;
-      var _gittokenContract = _this.gittokenContract,
-          abi = _gittokenContract.abi,
-          unlinked_binary = _gittokenContract.unlinked_binary;
+      // console.log('createGitTokenContract::rewardValues()', rewardValues())
 
-      var params = [name, symbol, decimals, rewardValues];
-
+      var rewards = rewardValues();
+      var params = [name, symbol, decimals, rewards];
+      console.log('createGitTokenContract::params', params);
       return (_eth$contract$new = _this.eth.contract(abi).new).getData.apply(_eth$contract$new, params.concat([{
         data: unlinked_binary
       }]));
@@ -45,9 +48,19 @@ function createGitTokenContract() {
     }).then(function (txHash) {
       return _this.getTransactionReceipt(txHash);
     }).then(function (txReceipt) {
-      _this.contractDetails = { txReceipt: txReceipt };
+      return _this.eth.contract(abi).at(txReceipt['contractAddress']);
+    }).then(function (gittokenContract) {
+      _this.gittokenContract = gittokenContract;
+      var rewardEnum = _this.config.rewardEnum;
+
+      return (0, _bluebird.join)(_this.generateReward({
+        rewardType: 'ping',
+        contributorAddress: '0xf1dca2634b48a8a22f1fd73918f4db5aa86d3efb' // get this programmatically from ping event
+      }));
+    }).then(function (data) {
+      console.log('createGitTokenContract::data', data);
       return _this.saveContractDetails({
-        contractDetails: _this.contractDetails
+        contractDetails: null
       });
     }).then(function (details) {
       resolve(details);

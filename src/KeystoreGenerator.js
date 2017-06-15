@@ -57,6 +57,22 @@ export default class KeystoreGenerator {
     })
   }
 
+  createAndSaveKeystore (password) {
+    return new Promise((resolve, reject) => {
+      this.createKeystore(password).then((_ks) => {
+        return this.getDerivedKey(password)
+      }).then((_derivedKey) => {
+        return this.ks.generateNewAddress(_derivedKey, 1)
+      }).then(() => {
+        return this.saveKeystore()
+      }).then(() => {
+        resolve(this.ks)
+      }).catch((error) => {
+        reject(error)
+      })
+    })
+  }
+
   // getPrivateKey (address) {
   //   return new Promise((resolve, reject) => {
   //

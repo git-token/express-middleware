@@ -102,6 +102,25 @@ var KeystoreGenerator = function () {
         }
       });
     }
+  }, {
+    key: 'createAndSaveKeystore',
+    value: function createAndSaveKeystore(password) {
+      var _this3 = this;
+
+      return new _bluebird2.default(function (resolve, reject) {
+        _this3.createKeystore(password).then(function (_ks) {
+          return _this3.getDerivedKey(password);
+        }).then(function (_derivedKey) {
+          return _this3.ks.generateNewAddress(_derivedKey, 1);
+        }).then(function () {
+          return _this3.saveKeystore();
+        }).then(function () {
+          resolve(_this3.ks);
+        }).catch(function (error) {
+          reject(error);
+        });
+      });
+    }
 
     // getPrivateKey (address) {
     //   return new Promise((resolve, reject) => {
@@ -112,14 +131,14 @@ var KeystoreGenerator = function () {
   }, {
     key: 'importKeystore',
     value: function importKeystore(options) {
-      var _this3 = this;
+      var _this4 = this;
 
       return new _bluebird2.default(function (resolve, reject) {
-        jsonfile.readFileAsync(_this3.dirPath + '/' + _this3.keystoreFileName).then(function (savedKeystore) {
-          _this3.ks = _ethLightwallet.keystore.deserialize(savedKeystore['keystore']);
-          _this3.password = savedKeystore['password'];
+        jsonfile.readFileAsync(_this4.dirPath + '/' + _this4.keystoreFileName).then(function (savedKeystore) {
+          _this4.ks = _ethLightwallet.keystore.deserialize(savedKeystore['keystore']);
+          _this4.password = savedKeystore['password'];
           // console.log('importKeystore::this.ks', this.ks)
-          resolve(_this3.ks);
+          resolve(_this4.ks);
         }).catch(function (error) {
           if (error.code == 'ENOENT') {
             resolve(null);
@@ -132,13 +151,13 @@ var KeystoreGenerator = function () {
   }, {
     key: 'saveKeystore',
     value: function saveKeystore() {
-      var _this4 = this;
+      var _this5 = this;
 
       return new _bluebird2.default(function (resolve, reject) {
-        var serialized = _this4.ks.serialize();
+        var serialized = _this5.ks.serialize();
 
-        jsonfile.writeFileAsync(_this4.dirPath + '/' + _this4.keystoreFileName, {
-          password: _this4.password,
+        jsonfile.writeFileAsync(_this5.dirPath + '/' + _this5.keystoreFileName, {
+          password: _this5.password,
           keystore: serialized
         }).then(function () {
           resolve(true);
@@ -150,7 +169,7 @@ var KeystoreGenerator = function () {
   }, {
     key: 'saveAccounts',
     value: function saveAccounts(accounts) {
-      var _this5 = this;
+      var _this6 = this;
 
       return new _bluebird2.default(function (resolve, reject) {
         // let Accounts
@@ -160,7 +179,7 @@ var KeystoreGenerator = function () {
         //     `${this.dirPath}/${this.fileName}`,
         //     Accounts
         //   )
-        jsonfile.writeFileAsync(_this5.dirPath + '/' + _this5.accountsPath, [].concat((0, _toConsumableArray3.default)(accounts)), { flag: 'a' }).then(function () {
+        jsonfile.writeFileAsync(_this6.dirPath + '/' + _this6.accountsPath, [].concat((0, _toConsumableArray3.default)(accounts)), { flag: 'a' }).then(function () {
           resolve(Accounts);
         }).catch(function (error) {
           reject(error);
@@ -170,7 +189,7 @@ var KeystoreGenerator = function () {
   }, {
     key: 'signTransaction',
     value: function signTransaction(_ref) {
-      var _this6 = this;
+      var _this7 = this;
 
       var from = _ref.from,
           to = _ref.to,
@@ -182,7 +201,7 @@ var KeystoreGenerator = function () {
           chainId = _ref.chainId;
 
       return new _bluebird2.default(function (resolve, reject) {
-        join(_this6.eth.getTransactionCountAsync(from), _this6.eth.getGasPriceAsync(), _this6.getDerivedKey(_this6.password)).then(function (data) {
+        join(_this7.eth.getTransactionCountAsync(from), _this7.eth.getGasPriceAsync(), _this7.getDerivedKey(_this7.password)).then(function (data) {
           var tx = new _ethereumjsTx2.default({
             nonce: nonce ? nonce : data[0],
             gasPrice: gasPrice ? gasPrice : data[1].toNumber(),
@@ -192,7 +211,7 @@ var KeystoreGenerator = function () {
             data: data,
             chainId: chainId
           });
-          return _ethLightwallet.signing.signTx(_this6.ks, data[2], tx.serialize(), from);
+          return _ethLightwallet.signing.signTx(_this7.ks, data[2], tx.serialize(), from);
         }).then(function (signedTx) {
           resolve(signedTx);
         }).catch(function (error) {
@@ -203,18 +222,18 @@ var KeystoreGenerator = function () {
   }, {
     key: 'getTransactionReceipt',
     value: function getTransactionReceipt(txHash, count) {
-      var _this7 = this;
+      var _this8 = this;
 
       return new _bluebird2.default(function (resolve, reject) {
         if (count > 20000) {
           var error = new Error('Could not find transaction receipt after 20000 iterations');
           reject(error);
         } else {
-          _this7.eth.getTransactionReceiptAsync(txHash).then(function (txReceipt) {
+          _this8.eth.getTransactionReceiptAsync(txHash).then(function (txReceipt) {
             if (txReceipt['blockNumber']) {
               resolve(txReceipt);
             } else {
-              return _bluebird2.default.delay(1000, _this7.getTransactionReceipt(txHash, count++));
+              return _bluebird2.default.delay(1000, _this8.getTransactionReceipt(txHash, count++));
             }
           }).then(function (txReceipt) {
             resolve(txReceipt);

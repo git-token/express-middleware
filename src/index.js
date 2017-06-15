@@ -2,8 +2,14 @@ import Promise, { promisifyAll } from 'bluebird'
 import Web3 from 'web3'
 import KeystoreGenerator from './KeystoreGenerator'
 import defaultConfig from './defaultConfig'
+import { retrieveDetails } from './utils/index'
 import { ping, push } from './events/index'
-import { getSavedContract, createGitTokenContract, saveContractDetails } from './contract/index'
+import {
+  getSavedContract,
+  createGitTokenContract,
+  saveContractDetails,
+  generateReward
+} from './contract/index'
 import GitTokenContract from '../build/contracts/GitToken.json'
 
 export default class GitTokenMiddleware extends KeystoreGenerator {
@@ -33,7 +39,8 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     this.getSavedContract = getSavedContract.bind(this)
     this.createGitTokenContract = createGitTokenContract.bind(this)
     this.saveContractDetails = saveContractDetails.bind(this)
-
+    this.retrieveDetails = retrieveDetails.bind(this)
+    this.generateReward = generateReward.bind(this)
     //
     this.middlewareState = {
       accounts: {},

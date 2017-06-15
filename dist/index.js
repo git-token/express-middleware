@@ -44,9 +44,11 @@ var _defaultConfig = require('./defaultConfig');
 
 var _defaultConfig2 = _interopRequireDefault(_defaultConfig);
 
-var _index = require('./events/index');
+var _index = require('./utils/index');
 
-var _index2 = require('./contract/index');
+var _index2 = require('./events/index');
+
+var _index3 = require('./contract/index');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -61,7 +63,6 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
     var _this
 
     // bind utility methods to class scope
-
 
     //
     = (0, _possibleConstructorReturn3.default)(this, (GitTokenMiddleware.__proto__ || (0, _getPrototypeOf2.default)(GitTokenMiddleware)).call(this, options));
@@ -85,10 +86,12 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
     // this.eth = promisifyAll(this.web3.eth)
 
     // Bind event methods to class scope
-    _this.ping = _index.ping.bind(_this);
-    _this.push = _index.push.bind(_this);_this.getSavedContract = _index2.getSavedContract.bind(_this);
-    _this.createGitTokenContract = _index2.createGitTokenContract.bind(_this);
-    _this.saveContractDetails = _index2.saveContractDetails.bind(_this);_this.middlewareState = {
+    _this.ping = _index2.ping.bind(_this);
+    _this.push = _index2.push.bind(_this);_this.getSavedContract = _index3.getSavedContract.bind(_this);
+    _this.createGitTokenContract = _index3.createGitTokenContract.bind(_this);
+    _this.saveContractDetails = _index3.saveContractDetails.bind(_this);
+    _this.retrieveDetails = _index.retrieveDetails.bind(_this);
+    _this.generateReward = _index3.generateReward.bind(_this);_this.middlewareState = {
       accounts: {},
       contract: {},
       blockchain: {}
