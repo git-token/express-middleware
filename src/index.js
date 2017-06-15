@@ -56,10 +56,9 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     let router = Router()
     router.post('/', (req, res, next) => {
       const { headers, body } = req
-      console.log(`routeRequests::headers['x-github-event']`, headers['x-github-event'])
       Promise.resolve().then(() => {
         if (this.isGitHubHook) {
-          console.log('GitHub WebHook Request')
+          // console.log('GitHub WebHook Request')
           return this.handleGitHubWebHookEvent({
             event: headers['x-github-event'],
             data: body
@@ -68,10 +67,10 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
           throw new Error('Request not yet configured')
         }
       }).then((response) => {
-        res.status(200).send(response)
+        res.status(200).send(JSON.stringify(response, null, 2))
       }).catch((error) => {
         console.log('routeRequests::error', error)
-        res.status(500).send(error)
+        res.status(500).send(JSON.stringify(error, null, 2))
       })
     })
     return router
@@ -79,10 +78,9 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
 
   handleGitHubWebHookEvent ({ event, data }) {
     return new Promise((resolve, reject) => {
-      console.log('handleGitHubWebHookEvent::event', event)
+      // console.log('handleGitHubWebHookEvent::event', event)
       switch(event) {
         case 'ping':
-        console.log('Entered the Ping event')
           resolve(this.ping(data))
         default:
           let error = new Error('Invalid Event Found')

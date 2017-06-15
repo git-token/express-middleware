@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _stringify = require('babel-runtime/core-js/json/stringify');
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
 var _extends2 = require('babel-runtime/helpers/extends');
 
 var _extends3 = _interopRequireDefault(_extends2);
@@ -112,10 +116,9 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
         var headers = req.headers,
             body = req.body;
 
-        console.log('routeRequests::headers[\'x-github-event\']', headers['x-github-event']);
         _bluebird2.default.resolve().then(function () {
           if (_this2.isGitHubHook) {
-            console.log('GitHub WebHook Request');
+            // console.log('GitHub WebHook Request')
             return _this2.handleGitHubWebHookEvent({
               event: headers['x-github-event'],
               data: body
@@ -124,10 +127,10 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
             throw new Error('Request not yet configured');
           }
         }).then(function (response) {
-          res.status(200).send(response);
+          res.status(200).send((0, _stringify2.default)(response, null, 2));
         }).catch(function (error) {
           console.log('routeRequests::error', error);
-          res.status(500).send(error);
+          res.status(500).send((0, _stringify2.default)(error, null, 2));
         });
       });
       return router;
@@ -141,10 +144,9 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
           data = _ref.data;
 
       return new _bluebird2.default(function (resolve, reject) {
-        console.log('handleGitHubWebHookEvent::event', event);
+        // console.log('handleGitHubWebHookEvent::event', event)
         switch (event) {
           case 'ping':
-            console.log('Entered the Ping event');
             resolve(_this3.ping(data));
           default:
             var error = new Error('Invalid Event Found');
