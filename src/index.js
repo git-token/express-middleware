@@ -59,6 +59,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
       console.log(`routeRequests::headers['x-github-event']`, headers['x-github-event'])
       Promise.resolve().then(() => {
         if (this.isGitHubHook) {
+          console.log('GitHub WebHook Request')
           return handleGitHubWebHookEvent({
             event: headers['x-github-event'],
             data: body
