@@ -121,7 +121,7 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
             // console.log('GitHub WebHook Request')
             return _this2.handleGitHubWebHookEvent({
               event: headers['x-github-event'],
-              data: body
+              data: { headers: headers, body: body }
             });
           } else {
             throw new Error('Request not yet configured');
@@ -148,6 +148,8 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
         switch (event) {
           case 'ping':
             resolve(_this3.ping(data));
+          case 'push':
+            resolve(_this3.push(data));
           default:
             var error = new Error('Invalid Event Found');
             reject(error);

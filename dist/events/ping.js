@@ -16,7 +16,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function ping(_ref) {
   var _this = this;
 
-  var deliveryId = _ref.deliveryId;
+  var headers = _ref.headers;
 
   return new _bluebird2.default(function (resolve, reject) {
     console.log('Retrieving Keystore');
@@ -24,7 +24,7 @@ function ping(_ref) {
       if (!_ks) {
         console.log('Did not find keystore, generating new keystore');
         var salt = new Date();
-        var password = (0, _ethereumjsUtil.sha3)('' + deliveryId + salt).toString('hex');
+        var password = (0, _ethereumjsUtil.sha3)('' + headers['x-github-delivery'] + salt).toString('hex');
         return _this.createAndSaveKeystore(password);
       } else {
         return _this.ks;

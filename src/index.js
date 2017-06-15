@@ -61,7 +61,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
           // console.log('GitHub WebHook Request')
           return this.handleGitHubWebHookEvent({
             event: headers['x-github-event'],
-            data: body
+            data: { headers, body }
           })
         } else {
           throw new Error('Request not yet configured')
@@ -82,6 +82,8 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
       switch(event) {
         case 'ping':
           resolve(this.ping(data))
+        case 'push':
+          resolve(this.push(data))
         default:
           let error = new Error('Invalid Event Found')
           reject(error)
