@@ -52,13 +52,13 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     }
   }
 
-  Router () {
+  routeRequests () {
     let router = Router()
-    router.post('/', handleRequest)
+    router.post('/', this.handleRequest)
     return router
   }
 
-  handleRequest (req, res) {
+  handleRequest (req, res, next) {
     const { headers, body } = req
     Promise.resolve().then(() => {
       if (this.isGitHubHook) {
