@@ -32,7 +32,6 @@ function generateReward(_ref) {
     }).then(function (signedTx) {
       return _this.eth.sendRawTransactionAsync(signedTx);
     }).then(function (txHash) {
-      console.log('generateReward::txHash', txHash);
       return _this.getTransactionReceipt(txHash);
     }).then(function (txReceipt) {
       resolve(txReceipt);

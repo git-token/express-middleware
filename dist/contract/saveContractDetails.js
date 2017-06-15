@@ -22,9 +22,9 @@ function saveContractDetails(_ref) {
 
   return new _bluebird2.default(function (resolve, reject) {
     var path = (dirPath ? dirPath : _this.dirPath) + '/' + (contractFile ? contractFile : _this.contractFile);
-    var data = contractDetails ? contractDetails : _this.contractDetails;
-    jsonfile.writeFileAsync(path, data, { flags: 'a' }).then(function () {
-      resolve(data);
+    _this.contractDetails = contractDetails ? contractDetails : _this.contractDetails;
+    jsonfile.writeFileAsync(path, _this.contractDetails, { flags: 'a' }).then(function () {
+      resolve(_this.contractDetails);
     }).catch(function (error) {
       reject(error);
     });

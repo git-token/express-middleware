@@ -12,6 +12,8 @@ import {
 } from './contract/index'
 import GitTokenContract from '../build/contracts/GitToken.json'
 
+import { Router } from 'express'
+
 export default class GitTokenMiddleware extends KeystoreGenerator {
   constructor(options) {
     super(options)
@@ -41,12 +43,19 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     this.saveContractDetails = saveContractDetails.bind(this)
     this.retrieveDetails = retrieveDetails.bind(this)
     this.generateReward = generateReward.bind(this)
+
     //
     this.middlewareState = {
       accounts: {},
       contract: {},
       blockchain: {}
     }
+  }
+
+  Router () {
+    let router = Router()
+    router.post('/', handleRequest)
+    return router
   }
 
   handleRequest (req, res) {

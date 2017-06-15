@@ -64,6 +64,7 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
 
     // bind utility methods to class scope
 
+
     //
     = (0, _possibleConstructorReturn3.default)(this, (GitTokenMiddleware.__proto__ || (0, _getPrototypeOf2.default)(GitTokenMiddleware)).call(this, options));
 

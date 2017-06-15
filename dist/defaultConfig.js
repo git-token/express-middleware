@@ -35,6 +35,7 @@ module.exports = {
   name: 'GitToken',
   symbol: 'GTK',
   decimals: 8,
+  rewardValues: REWARD_VALUES,
   rewardEnum: function rewardEnum(type) {
     var filteredList = (0, _keys2.default)(REWARD_VALUES).sort(function (a, b) {
       return a.localeCompare(b);
@@ -44,11 +45,11 @@ module.exports = {
 
     return filteredList.indexOf(type);
   },
-  rewardValues: function rewardValues() {
-    return (0, _keys2.default)(REWARD_VALUES).sort(function (a, b) {
+  getRewardValues: function getRewardValues(values) {
+    return (0, _keys2.default)(values).sort(function (a, b) {
       return a.localeCompare(b);
     }).map(function (_type) {
-      return REWARD_VALUES[_type];
+      return values[_type];
     });
   }
 
