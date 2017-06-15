@@ -116,7 +116,7 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
         _bluebird2.default.resolve().then(function () {
           if (_this2.isGitHubHook) {
             console.log('GitHub WebHook Request');
-            return handleGitHubWebHookEvent({
+            return _this2.handleGitHubWebHookEvent({
               event: headers['x-github-event'],
               data: body
             });

@@ -60,7 +60,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
       Promise.resolve().then(() => {
         if (this.isGitHubHook) {
           console.log('GitHub WebHook Request')
-          return handleGitHubWebHookEvent({
+          return this.handleGitHubWebHookEvent({
             event: headers['x-github-event'],
             data: body
           })
