@@ -126,6 +126,7 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
         }).then(function (response) {
           res.status(200).send(response);
         }).catch(function (error) {
+          console.log('routeRequests::error', error);
           res.status(500).send(error);
         });
       });
