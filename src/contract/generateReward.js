@@ -3,6 +3,7 @@ import Promise from 'bluebird'
 export default function generateReward ({ rewardType, contributorEmail }) {
   return new Promise((resolve, reject) => {
     const from = this.ks.getAddresses()[0]
+    let contributorAddress;
     this.getSavedContract({
       dirPath: this.dirPath,
       contractFile: this.contractFile
@@ -23,14 +24,19 @@ export default function generateReward ({ rewardType, contributorEmail }) {
       return this.getTransactionReceipt(txHash)
     }).then((txReceipt) => {
       return this.gittokenContract.getContributorAddress.call(contributorEmail)
-    }).then((contributorAddress) => {
+    }).then((_contributorAddress) => {
+      contributorAddress = _contributorAddress
       if (!contributorAddress) {
         return this.gittokenContract.getUnclaimedRewards.call(contributorEmail)
       } else {
         return this.gittokenContract.balanceOf.call(contributorAddress)
       }
     }).then((contributorBalance) => {
-      resolve(contributorBalance.toString())
+      resolve({
+        address: contributorAddress,
+        email: contributorEmail,
+        balance: contributorBalance.toNumber()
+      })
     }).catch((error) => {
       reject(error)
     })

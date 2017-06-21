@@ -71,7 +71,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
         res.status(200).send(JSON.stringify(response, null, 2))
       }).catch((error) => {
         console.log('routeRequests::error', error)
-        res.status(500).send(JSON.stringify(error, null, 2))
+        res.status(500).send(error.message)
       })
     })
     return router
