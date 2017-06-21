@@ -18,9 +18,21 @@ function createGitTokenContract() {
     var _gittokenContract = _this.gittokenContract,
         abi = _gittokenContract.abi,
         unlinked_binary = _gittokenContract.unlinked_binary;
+    // console.log('createGitTokenContract::abi, unlinked_binary', abi, unlinked_binary)
 
-    console.log('createGitTokenContract::abi, unlinked_binary', abi, unlinked_binary);
-    resolve({});
+    _this.eth.getBalanceAsync(_this.ks.getAddresses()[0]).then(function (balance) {
+      if (balance.toNumber() < 18e14) {
+        // console.log('call faucet')
+        return _this.faucet();
+      } else {
+        return null;
+      }
+    }).then(function () {
+      // return this.eth.contract(abi).new.getData()
+      resolve({});
+    }).catch(function (error) {
+      reject(error);
+    });
   });
 }
 
@@ -31,14 +43,14 @@ function createGitTokenContract() {
 //     const {
 //       name, symbol, decimals, rewardValues, getRewardValues, rewardEnum
 //     } = this.config
-//     this.eth.getBalanceAsync(this.ks.getAddresses()[0]).then((balance) => {
-//       if (balance.toNumber() < 18e14) {
-//         // console.log('call faucet')
-//         return this.faucet()
-//       } else {
-//         return null
-//       }
-//     }).then(() => {
+// this.eth.getBalanceAsync(this.ks.getAddresses()[0]).then((balance) => {
+//   if (balance.toNumber() < 18e14) {
+//     // console.log('call faucet')
+//     return this.faucet()
+//   } else {
+//     return null
+//   }
+// }).then(() => {
 //       const rewards = getRewardValues(rewardValues)
 //       const params = [
 //         name,

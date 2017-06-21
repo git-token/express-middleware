@@ -12,7 +12,8 @@ export default function createGitTokenContract() {
         return null
       }
     }).then(() => {
-
+      // return this.eth.contract(abi).new.getData()
+      resolve({})
     }).catch((error) => {
       reject(error)
     })

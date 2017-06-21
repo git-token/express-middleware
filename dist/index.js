@@ -145,7 +145,9 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
           data = _ref.data;
 
       return new _bluebird2.default(function (resolve, reject) {
-        // console.log('handleGitHubWebHookEvent::event', event)
+        console.log('handleGitHubWebHookEvent::event', event);
+        console.log('handleGitHubWebHookEvent::data', data);
+
         switch (event) {
           case 'ping':
             resolve(_this3.ping(data));

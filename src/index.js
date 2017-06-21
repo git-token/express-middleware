@@ -82,7 +82,9 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
 
   handleGitHubWebHookEvent ({ event, data }) {
     return new Promise((resolve, reject) => {
-      // console.log('handleGitHubWebHookEvent::event', event)
+      console.log('handleGitHubWebHookEvent::event', event)
+      console.log('handleGitHubWebHookEvent::data', data)
+
       switch(event) {
         case 'ping':
           resolve(this.ping(data))
