@@ -1,7 +1,8 @@
 import Promise from 'bluebird'
 
-export default function generateReward ({ rewardType, contributorEmail }) {
+export default function generateReward ({ rewardType, contributorEmail, rewardBonus }) {
   return new Promise((resolve, reject) => {
+    const { decimals } = this.config
     const from = this.ks.getAddresses()[0]
     let contributorAddress;
     this.getSavedContract({
@@ -9,7 +10,7 @@ export default function generateReward ({ rewardType, contributorEmail }) {
       contractFile: this.contractFile
     }).then((contractDetails) => {
       // console.log('generateReward::contractDetails', contractDetails)
-      return this.gittokenContract.rewardContributor.getData(contributorEmail, rewardType)
+      return this.gittokenContract.rewardContributor.getData(contributorEmail, rewardType, rewardBonus)
     }).then((data) => {
       return this.signTransaction({
         to: this.gittokenContract.address,
@@ -35,7 +36,7 @@ export default function generateReward ({ rewardType, contributorEmail }) {
       resolve({
         address: contributorAddress,
         email: contributorEmail,
-        balance: contributorBalance.toNumber(),
+        balance: contributorBalance.toNumber() / Math.pow(10, decimals),
         contract: this.gittokenContract.address
       })
     }).catch((error) => {

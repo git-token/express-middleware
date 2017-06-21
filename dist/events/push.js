@@ -3,6 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends2 = require('babel-runtime/helpers/extends');
+
+var _extends3 = _interopRequireDefault(_extends2);
+
 exports.default = push;
 
 var _bluebird = require('bluebird');
@@ -17,16 +22,20 @@ function push(_ref) {
   var body = _ref.body;
 
   return new _bluebird2.default(function (resolve, reject) {
-    var pusher = body.pusher,
-        commits = body.commits,
+    var commits = body.commits,
         head_commit = body.head_commit;
+    var author = head_commit.author;
+    // console.log('push::commits', commits)
+    // console.log('push::head_commit', head_commit)
+    // console.log('push::author', author)
 
-    console.log('push::commits', commits);
-    console.log('push::head_commit', head_commit);
     _this.importKeystore({}).then(function (_ks) {
+      return _this.calculateRewardBonus((0, _extends3.default)({}, body));
+    }).then(function (rewardBonus) {
       return _this.generateReward({
         rewardType: 'push',
-        contributorEmail: pusher['email']
+        contributorEmail: author['email'],
+        rewardBonus: rewardBonus
       });
     }).then(function (contributorDetails) {
       resolve(contributorDetails);

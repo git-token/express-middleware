@@ -8,6 +8,7 @@ library GitTokenLib {
 
   struct Data {
     uint totalSupply;
+    uint decimals;
     string organization;
     string repoUri;
     mapping(string => uint256) rewardValues;
@@ -52,9 +53,10 @@ library GitTokenLib {
   function _rewardContributor (
     Data storage self,
     string _email,
-    string _rewardType
+    string _rewardType,
+    uint _rewardBonus
   ) internal returns (bool) {
-    uint _value = self.rewardValues[_rewardType];
+    uint _value = self.rewardValues[_rewardType].add(_rewardBonus);
     address _contributor = self.contributorAddresses[_email];
 
     if(_value == 0) {

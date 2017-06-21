@@ -10,7 +10,7 @@ module.exports = function(deployer, network, accounts) {
   let email = 'ryan.michael.tate@gmail.com'
   deployer.deploy(GitTokenLib);
   deployer.link(GitTokenLib, GitToken);
-  GitToken.new(email, 'GitToken', 'http://gittoken.org').then((instance) => {
+  GitToken.new(email, 'GitToken', 'http://gittoken.org', 8).then((instance) => {
     gittoken = instance
   //   return join(
   //     gittoken.setRewardValue(2500, 'ping'),
@@ -26,10 +26,11 @@ module.exports = function(deployer, network, accounts) {
   }).then((data) => {
     console.log('data', data)
     return join(
-      gittoken.rewardContributor(email, 'ping'),
-      gittoken.rewardContributor('test@test.com', 'push'),
-      gittoken.rewardContributor('test@test.com', 'projectCard'),
-      gittoken.rewardContributor('test@test.com', 'create')
+      gittoken.rewardContributor(email, 'ping', 100 * Math.pow(10, 8)),
+      gittoken.rewardContributor('test@test.com', 'push', 600 * Math.pow(10, 8)),
+      gittoken.rewardContributor('test@test.com', 'projectCard', 800 * Math.pow(10, 8)),
+      gittoken.rewardContributor('test@test.com', 'create', 34892300 * Math.pow(10, 8)),
+      gittoken.rewardContributor('test@test.com', 'create', 0 * Math.pow(10, 8))
     );
   }).then((txReceipts) => {
     console.log('txReceipts::2', txReceipts)

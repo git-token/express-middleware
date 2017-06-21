@@ -4,12 +4,13 @@ import KeystoreGenerator from './KeystoreGenerator'
 import defaultConfig from './defaultConfig'
 import {
   retrieveDetails,
-  faucet
+  faucet,
+  calculateRewardBonus
 } from './utils/index'
 import {
   ping,
   push,
-  pullRequest 
+  pullRequest
 } from './events/index'
 import {
   getSavedContract,
@@ -49,7 +50,8 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     this.retrieveDetails = retrieveDetails.bind(this)
     this.faucet = faucet.bind(this)
     this.generateReward = generateReward.bind(this)
-
+    this.calculateRewardBonus = calculateRewardBonus.bind(this)
+    
     //
     this.middlewareState = {
       accounts: {},
