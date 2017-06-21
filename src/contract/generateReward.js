@@ -3,8 +3,13 @@ import Promise from 'bluebird'
 export default function generateReward ({ rewardType, contributorAddress }) {
   return new Promise((resolve, reject) => {
     const { rewardEnum } = this.config
-    const rawData = this.gittokenContract.generateReward.getData(rewardEnum(rewardType), contributorAddress)
-    Promise.resolve(rawData).then((data) => {
+    this.getSavedContract({
+      dirPath: this.dirPath,
+      contractFile: this.contractFile
+    }).then((contractDetails) => {
+      const rawData = this.gittokenContract.generateReward.getData(rewardEnum(rewardType), contributorAddress)
+      return rawData
+    }).then((data) => {
       return this.signTransaction({
         to: this.gittokenContract.address,
         from: this.ks.getAddresses()[0],

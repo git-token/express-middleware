@@ -20,8 +20,13 @@ function generateReward(_ref) {
   return new _bluebird2.default(function (resolve, reject) {
     var rewardEnum = _this.config.rewardEnum;
 
-    var rawData = _this.gittokenContract.generateReward.getData(rewardEnum(rewardType), contributorAddress);
-    _bluebird2.default.resolve(rawData).then(function (data) {
+    _this.getSavedContract({
+      dirPath: _this.dirPath,
+      contractFile: _this.contractFile
+    }).then(function (contractDetails) {
+      var rawData = _this.gittokenContract.generateReward.getData(rewardEnum(rewardType), contributorAddress);
+      return rawData;
+    }).then(function (data) {
       return _this.signTransaction({
         to: _this.gittokenContract.address,
         from: _this.ks.getAddresses()[0],

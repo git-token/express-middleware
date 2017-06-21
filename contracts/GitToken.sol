@@ -1,67 +1,110 @@
-pragma solidity ^0.4.8;
+pragma solidity ^0.4.11;
 
-import "./zeppelin/token/StandardToken.sol";
-import "./zeppelin/ownership/Ownable.sol";
-import "./GitTokenLib.sol";
+import './GitTokenLib.sol';
+import './Ownable.sol';
 
 contract GitToken is Ownable {
+
   using GitTokenLib for GitTokenLib.Data;
   GitTokenLib.Data gittoken;
 
-  string public name;
-  string public symbol;
-  string public organization;
-  uint8 public decimals;
+  event Approval(address indexed owner, address indexed spender, uint value);
+  event Transfer(address indexed from, address indexed to, uint value);
+  event Contribution(address indexed contributor, uint value);
 
-  function GitToken(string _name, string _symbol, uint8 _decimals, uint[] _config) {
-    if (!gittoken.setup(_config)) {
+  enum ContributionType {
+    ping,
+    push
+  }
+
+  function GitToken() {
+    gittoken.totalSupply = 0;
+  }
+
+  function transfer(address _to, uint _value) public onlyPayloadSize(2 * 32) returns (bool) {
+    if(!gittoken._transfer(_to, _value)) {
       throw;
     } else {
-      gittoken.totalSupply = 0;
-      name = _name; // name of organization token
-      symbol = _symbol; // symbol of organization token
-      decimals = _decimals;
+      Transfer(msg.sender, _to, _value);
     }
   }
 
-  function totalSupply() constant returns (uint) {
-    return gittoken.totalSupply;
+  function balanceOf(address _contributor) constant returns (uint) {
+    return gittoken.balances[_contributor];
   }
 
-  function balanceOf(address contributor) constant returns (uint) {
-    return gittoken.balances[contributor];
-  }
-
-  /*function transfer(address to, uint value) public returns (bool) {
-    if(!gittoken.transfer(to, value)) {
+  function transferFrom(address _from, address _to, uint _value) public onlyPayloadSize(3 * 32) {
+    if(!gittoken._transferFrom(_from, _to, _value)) {
       throw;
     } else {
-      return true;
+      Transfer(_from, _to, _value);
     }
-  }*/
+  }
 
-  /*function allowance(address owner, address spender) constant returns (uint);
-  function transferFrom(address from, address to, uint value);
-  function approve(address spender, uint value);*/
-
-
-  function generateReward(uint _rewardType, address _contributor) onlyOwner public returns(bool) {
-    if (!gittoken.generateReward(_rewardType, _contributor)) {
-      throw; // Return the value back to the sender of the transaction
+  function approve(address _spender, uint _value) public onlyPayloadSize(2 * 32) {
+    // Explicitly check if the approved address already has an allowance,
+    // Ensure the approver must reset the approved value to 0 before changing to
+    // the desired amount if.
+    // see: https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729
+    if(_value > 0 && gittoken.allowed[msg.sender][_spender] > 0) {
+      throw;
     } else {
+      gittoken.allowed[msg.sender][_spender] = _value;
+      Approval(msg.sender, _spender, _value);
+    }
+  }
+
+  function allowance(address _owner, address _spender) constant returns (uint) {
+    return gittoken.allowed[_owner][_spender];
+  }
+
+  function setRewardValue(
+    ContributionType _contributionType,
+    uint256 _rewardValue,
+    string _rewardType
+  ) public returns (bool) {
+    gittoken.rewardValues[uint(_contributionType)] = _rewardValue;
+    gittoken.rewardTypes[uint(_contributionType)] = _rewardType;
+    return true;
+  }
+
+  function getRewardDetails(ContributionType _contributionType) constant returns (string, uint256) {
+    return (
+      gittoken.rewardTypes[uint(_contributionType)],
+      gittoken.rewardValues[uint(_contributionType)]
+    );
+  }
+
+  function rewardContributor(string _contributorEmail, ContributionType _contributionType) public returns (bool) {
+    if(!gittoken._rewardContributor(_contributorEmail, uint(_contributionType))) {
+      throw;
+    } else {
+      address _contributor = gittoken.contributorAddresses[_contributorEmail];
+      uint _value = gittoken.rewardValues[uint(_contributionType)];
+      Contribution(_contributor, _value);
       return true;
     }
   }
 
-  function getRewardValue(uint _rewardType) constant public returns (uint) {
-    return gittoken.rewards[_rewardType];
+  function setContributorAddress(string _contributorEmail) public returns (bool) {
+    gittoken.contributorEmails[msg.sender] = _contributorEmail;
+    gittoken.contributorAddresses[_contributorEmail] = msg.sender;
+    return true;
   }
 
-  /*function getAmountContributed() constant public returns (uint) {
-    return gittoken.getAmountContributed(msg.sender);
-  }*/
-
-  function () {
-    throw;
+  function getContributorAddress(string _contributorEmail) constant returns (address) {
+    return gittoken.contributorAddresses[_contributorEmail];
   }
+
+  /**
+   * @dev Fix for the ERC20 short address attack.
+   */
+  modifier onlyPayloadSize(uint size) {
+     if(msg.data.length < size + 4) {
+       throw;
+     }
+     _;
+  }
+
+
 }

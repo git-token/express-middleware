@@ -21,6 +21,7 @@ const REWARD_VALUES = {
   projectCard: 0,               // | Any time a Project Card is created, edited, moved, converted to an issue,
   projectColumn: 0,             // | Any time a Project Column is created, edited, moved, or deleted.
   ping: 1000,                      // | Use when setting up the webhook for github
+  push: 1000
 }
 
 

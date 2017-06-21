@@ -28,13 +28,14 @@ function retrieveDetails() {
       dirPath: _this.dirPath,
       contractFile: _this.contractFile
     }).then(function (savedContract) {
-      if (!savedContract) {
-        return _this.createGitTokenContract();
-      } else {
-        return savedContract;
-      }
-    }).then(function (contractDetails) {
-      _this.middlewareState['contract'] = contractDetails;
+      console.log('retrieveDetails::savedContract', savedContract
+      //   if (!savedContract) {
+      //     return this.createGitTokenContract()
+      //   } else {
+      //     return savedContract
+      //   }
+      // }).then((contractDetails) => {
+      );_this.middlewareState['contract'] = _this.contractDetails;
       return _this.ks.getAddresses();
     }).map(function (address) {
       return (0, _bluebird.join)(address, _this.eth.getBalanceAsync(address), _this.eth.getBlockAsync('latest'

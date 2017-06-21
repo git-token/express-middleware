@@ -4,7 +4,7 @@ import { sha3 } from 'ethereumjs-util'
 export default function ping ({ headers }) {
   return new Promise((resolve, reject) => {
     console.log('Retrieving Keystore')
-    this.importKeystore().then((_ks) => {
+    this.importKeystore({}).then((_ks) => {
        if (!_ks) {
          console.log('Did not find keystore, generating new keystore')
          let salt = new Date()

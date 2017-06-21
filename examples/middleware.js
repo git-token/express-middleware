@@ -17,10 +17,24 @@ gittoken = new GitTokenMiddleware({
 gittoken.handleGitHubWebHookEvent({
   event: 'ping',
   data: {
-    deliveryId: 'random github id'
+    body: {},
+    headers: {
+      'x-github-delivery': 'randomTestMsg'
+    }
   }
 }).then((result) => {
-  console.log('result', JSON.stringify(result, null, 2))
+  // console.log('result', JSON.stringify(result, null, 2))
+//   return gittoken.handleGitHubWebHookEvent({
+//     event: 'push',
+//     data: {
+//       body: {},
+//       headers: {
+//         'x-github-delivery': 'randomTestMsg'
+//       }
+//     }
+//   })
+// }).then((result) => {
+//   console.log('result', JSON.stringify(result, null, 2))
 }).catch((error) => {
   console.log('error', error)
 })

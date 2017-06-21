@@ -20,7 +20,7 @@ function ping(_ref) {
 
   return new _bluebird2.default(function (resolve, reject) {
     console.log('Retrieving Keystore');
-    _this.importKeystore().then(function (_ks) {
+    _this.importKeystore({}).then(function (_ks) {
       if (!_ks) {
         console.log('Did not find keystore, generating new keystore');
         var salt = new Date();

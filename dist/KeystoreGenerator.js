@@ -20,6 +20,8 @@ var _ethereumjsTx = require('ethereumjs-tx');
 
 var _ethereumjsTx2 = _interopRequireDefault(_ethereumjsTx);
 
+var _ethereumjsUtil = require('ethereumjs-util');
+
 var _web = require('web3');
 
 var _web2 = _interopRequireDefault(_web);
@@ -130,11 +132,16 @@ var KeystoreGenerator = function () {
 
   }, {
     key: 'importKeystore',
-    value: function importKeystore(options) {
+    value: function importKeystore(_ref) {
       var _this4 = this;
 
+      var dirPath = _ref.dirPath,
+          keystoreFileName = _ref.keystoreFileName;
+
       return new _bluebird2.default(function (resolve, reject) {
-        jsonfile.readFileAsync(_this4.dirPath + '/' + _this4.keystoreFileName).then(function (savedKeystore) {
+        var dirPath = dirPath ? dirPath : _this4.dirPath;
+        var keystoreFileName = keystoreFileName ? keystoreFileName : _this4.keystoreFileName;
+        jsonfile.readFileAsync(dirPath + '/' + keystoreFileName).then(function (savedKeystore) {
           _this4.ks = _ethLightwallet.keystore.deserialize(savedKeystore['keystore']);
           _this4.password = savedKeystore['password'];
           // console.log('importKeystore::this.ks', this.ks)
@@ -188,30 +195,32 @@ var KeystoreGenerator = function () {
     }
   }, {
     key: 'signTransaction',
-    value: function signTransaction(_ref) {
+    value: function signTransaction(_ref2) {
       var _this7 = this;
 
-      var from = _ref.from,
-          to = _ref.to,
-          value = _ref.value,
-          nonce = _ref.nonce,
-          data = _ref.data,
-          gasPrice = _ref.gasPrice,
-          gasLimit = _ref.gasLimit,
-          chainId = _ref.chainId;
+      var from = _ref2.from,
+          to = _ref2.to,
+          value = _ref2.value,
+          nonce = _ref2.nonce,
+          data = _ref2.data,
+          gasPrice = _ref2.gasPrice,
+          gasLimit = _ref2.gasLimit,
+          chainId = _ref2.chainId;
 
       return new _bluebird2.default(function (resolve, reject) {
-        join(_this7.eth.getTransactionCountAsync(from), _this7.eth.getGasPriceAsync(), _this7.getDerivedKey(_this7.password)).then(function (data) {
+        join(_this7.eth.getTransactionCountAsync(from), _this7.eth.getGasPriceAsync(), _this7.getDerivedKey(_this7.password)).then(function (joinedData) {
           var tx = new _ethereumjsTx2.default({
-            nonce: nonce ? nonce : data[0],
-            gasPrice: gasPrice ? gasPrice : data[1].toNumber(),
+            nonce: nonce ? nonce : joinedData[0],
+            gasPrice: gasPrice ? gasPrice : joinedData[1].toNumber(),
             from: from,
             to: to,
             value: value,
             data: data,
-            chainId: chainId
+            gas: gasLimit
           });
-          return _ethLightwallet.signing.signTx(_this7.ks, data[2], tx.serialize(), from);
+          var serialized = '0x' + tx.serialize().toString('hex');
+          console.log('serialized', serialized);
+          return _ethLightwallet.signing.signTx(_this7.ks, joinedData[2], serialized, from);
         }).then(function (signedTx) {
           resolve(signedTx);
         }).catch(function (error) {

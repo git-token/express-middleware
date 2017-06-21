@@ -2,7 +2,10 @@ import Promise, { promisifyAll } from 'bluebird'
 import Web3 from 'web3'
 import KeystoreGenerator from './KeystoreGenerator'
 import defaultConfig from './defaultConfig'
-import { retrieveDetails } from './utils/index'
+import {
+  retrieveDetails,
+  faucet
+} from './utils/index'
 import { ping, push } from './events/index'
 import {
   getSavedContract,
@@ -42,6 +45,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     this.createGitTokenContract = createGitTokenContract.bind(this)
     this.saveContractDetails = saveContractDetails.bind(this)
     this.retrieveDetails = retrieveDetails.bind(this)
+    this.faucet = faucet.bind(this)
     this.generateReward = generateReward.bind(this)
 
     //
@@ -82,8 +86,10 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
       switch(event) {
         case 'ping':
           resolve(this.ping(data))
+          break;
         case 'push':
           resolve(this.push(data))
+          break;
         default:
           let error = new Error('Invalid Event Found')
           reject(error)
