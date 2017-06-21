@@ -22,7 +22,15 @@ export default function generateReward ({ rewardType, contributorEmail }) {
     }).then((txHash) => {
       return this.getTransactionReceipt(txHash)
     }).then((txReceipt) => {
-      resolve(txReceipt)
+      return this.gittokenContract.getContributorAddress.call(contributorEmail)
+    }).then((contributorAddress) => {
+      if (!contributorAddress) {
+        return this.gittokenContract.getUnclaimedRewards.call(contributorEmail)
+      } else {
+        return this.gittokenContract.balanceOf.call(contributorAddress)
+      }
+    }).then((contributorBalance) => {
+      resolve(contributorBalance.toString())
     }).catch((error) => {
       reject(error)
     })

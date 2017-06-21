@@ -38,7 +38,15 @@ function generateReward(_ref) {
     }).then(function (txHash) {
       return _this.getTransactionReceipt(txHash);
     }).then(function (txReceipt) {
-      resolve(txReceipt);
+      return _this.gittokenContract.getContributorAddress.call(contributorEmail);
+    }).then(function (contributorAddress) {
+      if (!contributorAddress) {
+        return _this.gittokenContract.getUnclaimedRewards.call(contributorEmail);
+      } else {
+        return _this.gittokenContract.balanceOf.call(contributorAddress);
+      }
+    }).then(function (contributorBalance) {
+      resolve(contributorBalance.toString());
     }).catch(function (error) {
       reject(error);
     });
