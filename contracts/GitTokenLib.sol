@@ -75,7 +75,7 @@ library GitTokenLib {
   function _setContributor(
     Data storage self,
     string _email,
-    bytes32 _code
+    string _code
   ) internal returns (bool) {
     if (self.emailVerification[_email] != keccak256(_code)) {
       throw;

@@ -21,7 +21,32 @@ contract GitToken is Ownable {
     gittoken.contributorEmails[msg.sender] = _email;
     gittoken.contributorAddresses[_email] = msg.sender;
 
-    // Set default rewardValues
+    // Set default rewardValues -- Note, these values are not solidified and are untested as to their effectiveness of incentivization;
+    // These values are customizable using setRewardValue(uint256 value, string type)
+    gittoken.rewardValues['ping']                     = 2500; // Use when setting up the webhook for github
+    gittoken.rewardValues['push']                     = 1000;
+    gittoken.rewardValues['commitComment']            = 250; // Any time a Commit is commented on.
+    gittoken.rewardValues['create']                   = 2500; // Any time a Branch or Tag is created.
+    gittoken.rewardValues['delete']                   = 0; // Any time a Branch or Tag is deleted.
+    gittoken.rewardValues['deployment']               = 5000; // Any time a Repository has a new deployment created from the API.
+    gittoken.rewardValues['deploymentStatus']         = 100; // Any time a deployment for a Repository has a status update
+    gittoken.rewardValues['fork']                     = 5000; // Any time a Repository is forked.
+    gittoken.rewardValues['gollum']                   = 250; // Any time a Wiki page is updated.
+    gittoken.rewardValues['installation']             = 250; // Any time a GitHub App is installed or uninstalled.
+    gittoken.rewardValues['installationRepositories'] = 1000; // Any time a repository is added or removed from an organization (? check this)
+    gittoken.rewardValues['issueComment']             = 250; // Any time a comment on an issue is created, edited, or deleted.
+    gittoken.rewardValues['issues']                   = 100; // Any time an Issue is assigned, unassigned, labeled, unlabeled, opened, edited,
+    gittoken.rewardValues['label']                    = 100; // Any time a Label is created, edited, or deleted.
+    gittoken.rewardValues['marketplacePurchase']      = 0; // Any time a user purchases, cancels, or changes their GitHub
+    gittoken.rewardValues['member']                   = 1000; // Any time a User is added or removed as a collaborator to a Repository, or has
+    gittoken.rewardValues['membership']               = 1000; // Any time a User is added or removed from a team. Organization hooks only.
+    gittoken.rewardValues['milestone']                = 15000; // Any time a Milestone is created, closed, opened, edited, or deleted.
+    gittoken.rewardValues['organization']             = 1000; // Any time a user is added, removed, or invited to an Organization.
+    gittoken.rewardValues['orgBlock']                 = 0; // Any time an organization blocks or unblocks a user. Organization hooks only.
+    gittoken.rewardValues['pageBuild']                = 500; // Any time a Pages site is built or results in a failed build.
+    gittoken.rewardValues['projectCard']              = 250; // Any time a Project Card is created, edited, moved, converted to an issue,
+    gittoken.rewardValues['projectColumn']            = 250; // Any time a Project Column is created, edited, moved, or deleted.
+
 
   }
 
@@ -85,7 +110,7 @@ contract GitToken is Ownable {
     gittoken.emailVerification[_email] = _hashedCode;
   }
 
-  function setContributor(string _email, bytes32 _code) public returns (bool) {
+  function setContributor(string _email, string _code) public returns (bool) {
     if (!gittoken._setContributor(_email, _code)) {
       throw;
     } else {
