@@ -35,7 +35,8 @@ export default function generateReward ({ rewardType, contributorEmail }) {
       resolve({
         address: contributorAddress,
         email: contributorEmail,
-        balance: contributorBalance.toNumber()
+        balance: contributorBalance.toNumber(),
+        contract: this.gittokenContract.address
       })
     }).catch((error) => {
       reject(error)

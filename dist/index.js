@@ -90,7 +90,8 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
 
     // Bind event methods to class scope
     _this.ping = _index2.ping.bind(_this);
-    _this.push = _index2.push.bind(_this);_this.getSavedContract = _index3.getSavedContract.bind(_this);
+    _this.push = _index2.push.bind(_this);
+    _this.pullRequest = _index2.pullRequest.bind(_this);_this.getSavedContract = _index3.getSavedContract.bind(_this);
     _this.createGitTokenContract = _index3.createGitTokenContract.bind(_this);
     _this.saveContractDetails = _index3.saveContractDetails.bind(_this);
     _this.retrieveDetails = _index.retrieveDetails.bind(_this);
@@ -150,6 +151,9 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
             break;
           case 'push':
             resolve(_this3.push(data));
+            break;
+          case 'pull_request':
+            resolve(_this3.pullRequest(data));
             break;
           default:
             var error = new Error('Invalid Event Found');

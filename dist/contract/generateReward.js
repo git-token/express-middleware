@@ -51,7 +51,8 @@ function generateReward(_ref) {
       resolve({
         address: contributorAddress,
         email: contributorEmail,
-        balance: contributorBalance.toNumber()
+        balance: contributorBalance.toNumber(),
+        contract: _this.gittokenContract.address
       });
     }).catch(function (error) {
       reject(error);

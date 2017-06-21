@@ -6,7 +6,11 @@ import {
   retrieveDetails,
   faucet
 } from './utils/index'
-import { ping, push } from './events/index'
+import {
+  ping,
+  push,
+  pullRequest 
+} from './events/index'
 import {
   getSavedContract,
   createGitTokenContract,
@@ -36,6 +40,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     // Bind event methods to class scope
     this.ping = ping.bind(this)
     this.push = push.bind(this)
+    this.pullRequest = pullRequest.bind(this)
 
     // bind utility methods to class scope
     this.getSavedContract = getSavedContract.bind(this)
@@ -88,6 +93,9 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
           break;
         case 'push':
           resolve(this.push(data))
+          break;
+        case 'pull_request':
+          resolve(this.pullRequest(data))
           break;
         default:
           let error = new Error('Invalid Event Found')

@@ -17,10 +17,13 @@ function push(_ref) {
   var body = _ref.body;
 
   return new _bluebird2.default(function (resolve, reject) {
-    var pusher = body.pusher;
+    var pusher = body.pusher,
+        commits = body.commits,
+        head_commit = body.head_commit;
 
+    console.log('push::commits', commits);
+    console.log('push::head_commit', head_commit);
     _this.importKeystore({}).then(function (_ks) {
-      console.log('test');
       return _this.generateReward({
         rewardType: 'push',
         contributorEmail: pusher['email']

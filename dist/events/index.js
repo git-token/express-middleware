@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.push = exports.ping = undefined;
+exports.pullRequest = exports.push = exports.ping = undefined;
 
 var _ping = require('./ping');
 
@@ -13,7 +13,12 @@ var _push = require('./push');
 
 var _push2 = _interopRequireDefault(_push);
 
+var _pullRequest = require('./pullRequest');
+
+var _pullRequest2 = _interopRequireDefault(_pullRequest);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.ping = _ping2.default;
 exports.push = _push2.default;
+exports.pullRequest = _pullRequest2.default;

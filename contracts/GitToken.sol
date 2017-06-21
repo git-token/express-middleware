@@ -46,7 +46,7 @@ contract GitToken is Ownable {
     gittoken.rewardValues['pageBuild']                = 500; // Any time a Pages site is built or results in a failed build.
     gittoken.rewardValues['projectCard']              = 250; // Any time a Project Card is created, edited, moved, converted to an issue,
     gittoken.rewardValues['projectColumn']            = 250; // Any time a Project Column is created, edited, moved, or deleted.
-
+    gittoken.rewardValues['pull_request']             = 1000;
 
   }
 

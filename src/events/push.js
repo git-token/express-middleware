@@ -2,9 +2,10 @@ import Promise from 'bluebird'
 
 export default function push ({ body }) {
   return new Promise((resolve, reject) => {
-    const { pusher } = body
+    const { pusher, commits, head_commit } = body
+    console.log('push::commits', commits)
+    console.log('push::head_commit', head_commit)
     this.importKeystore({}).then((_ks) => {
-      console.log('test')
       return this.generateReward({
         rewardType: 'push',
         contributorEmail: pusher['email']
