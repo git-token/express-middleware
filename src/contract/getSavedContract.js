@@ -6,11 +6,17 @@ export default function getSavedContract ({ dirPath, contractFile }) {
     let path = `${dirPath ? dirPath : this.dirPath}/${contractFile ? contractFile : this.contractFile}`
 
     jsonfile.readFileAsync(path).then((contractDetails) => {
+      const { abi } = this.gittokenContract
+      this.gittokenContract = this.eth.contract(abi).at(contractDetails['txReceipt']['contractAddress'])
       this.contractDetails = contractDetails
       resolve(this.contractDetails)
     }).catch((error) => {
       if (error.code = 'ENOENT') {
-        resolve(null)
+        this.createGitTokenContract().then((contractDetails) => {
+          resolve(contractDetails)
+        }).catch((error) => {
+          reject(error)
+        })
       } else {
         reject(error)
       }

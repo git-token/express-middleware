@@ -1,13 +1,18 @@
 import Promise from 'bluebird'
 
-export default function generateReward ({ rewardType, contributorAddress }) {
+export default function generateReward ({ rewardType, contributorEmail }) {
   return new Promise((resolve, reject) => {
-    const { rewardEnum } = this.config
-    const rawData = this.gittokenContract.generateReward.getData(rewardEnum(rewardType), contributorAddress)
-    Promise.resolve(rawData).then((data) => {
+    const from = this.ks.getAddresses()[0]
+    this.getSavedContract({
+      dirPath: this.dirPath,
+      contractFile: this.contractFile
+    }).then((contractDetails) => {
+      // console.log('generateReward::contractDetails', contractDetails)
+      return this.gittokenContract.rewardContributor.getData(contributorEmail, rewardType)
+    }).then((data) => {
       return this.signTransaction({
         to: this.gittokenContract.address,
-        from: this.ks.getAddresses()[0],
+        from,
         value: 0,
         gasLimit: 3e6,
         data

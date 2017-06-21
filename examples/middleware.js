@@ -9,7 +9,10 @@ gittoken = new GitTokenMiddleware({
   config: {
     name: 'TestToken',
     symbol: 'T',
-    decimals: 8
+    decimals: 8,
+    email: 'ryan.michael.tate@gmail.com',
+    organization: 'GitToken',
+    repoUri: 'git://github.com/git-token/api-middleware.git'
   }
 })
 
@@ -17,8 +20,26 @@ gittoken = new GitTokenMiddleware({
 gittoken.handleGitHubWebHookEvent({
   event: 'ping',
   data: {
-    deliveryId: 'random github id'
+    body: {},
+    headers: {
+      'x-github-delivery': 'randomTestMsg'
+    }
   }
+}).then((result) => {
+  console.log('result', JSON.stringify(result, null, 2))
+  return gittoken.handleGitHubWebHookEvent({
+    event: 'push',
+    data: {
+      body: {
+        pusher: {
+          email: 'ryan.michael.tate@gmail.com'
+        }
+      },
+      headers: {
+        'x-github-delivery': 'randomTestMsg'
+      }
+    }
+  })
 }).then((result) => {
   console.log('result', JSON.stringify(result, null, 2))
 }).catch((error) => {

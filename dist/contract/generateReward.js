@@ -15,16 +15,20 @@ function generateReward(_ref) {
   var _this = this;
 
   var rewardType = _ref.rewardType,
-      contributorAddress = _ref.contributorAddress;
+      contributorEmail = _ref.contributorEmail;
 
   return new _bluebird2.default(function (resolve, reject) {
-    var rewardEnum = _this.config.rewardEnum;
-
-    var rawData = _this.gittokenContract.generateReward.getData(rewardEnum(rewardType), contributorAddress);
-    _bluebird2.default.resolve(rawData).then(function (data) {
+    var from = _this.ks.getAddresses()[0];
+    _this.getSavedContract({
+      dirPath: _this.dirPath,
+      contractFile: _this.contractFile
+    }).then(function (contractDetails) {
+      // console.log('generateReward::contractDetails', contractDetails)
+      return _this.gittokenContract.rewardContributor.getData(contributorEmail, rewardType);
+    }).then(function (data) {
       return _this.signTransaction({
         to: _this.gittokenContract.address,
-        from: _this.ks.getAddresses()[0],
+        from: from,
         value: 0,
         gasLimit: 3e6,
         data: data
@@ -32,7 +36,6 @@ function generateReward(_ref) {
     }).then(function (signedTx) {
       return _this.eth.sendRawTransactionAsync(signedTx);
     }).then(function (txHash) {
-      console.log('generateReward::txHash', txHash);
       return _this.getTransactionReceipt(txHash);
     }).then(function (txReceipt) {
       resolve(txReceipt);

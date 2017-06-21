@@ -28,13 +28,15 @@ var REWARD_VALUES = {
   pageBuild: 1000, // | Any time a Pages site is built or results in a failed build.
   projectCard: 0, // | Any time a Project Card is created, edited, moved, converted to an issue,
   projectColumn: 0, // | Any time a Project Column is created, edited, moved, or deleted.
-  ping: 1000 // | Use when setting up the webhook for github
+  ping: 1000, // | Use when setting up the webhook for github
+  push: 1000
 };
 
 module.exports = {
   name: 'GitToken',
   symbol: 'GTK',
   decimals: 8,
+  rewardValues: REWARD_VALUES,
   rewardEnum: function rewardEnum(type) {
     var filteredList = (0, _keys2.default)(REWARD_VALUES).sort(function (a, b) {
       return a.localeCompare(b);
@@ -44,11 +46,11 @@ module.exports = {
 
     return filteredList.indexOf(type);
   },
-  rewardValues: function rewardValues() {
-    return (0, _keys2.default)(REWARD_VALUES).sort(function (a, b) {
+  getRewardValues: function getRewardValues(values) {
+    return (0, _keys2.default)(values).sort(function (a, b) {
       return a.localeCompare(b);
     }).map(function (_type) {
-      return REWARD_VALUES[_type];
+      return values[_type];
     });
   }
 

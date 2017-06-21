@@ -1,70 +1,15 @@
 {
   "contract_name": "GitTokenLib",
-  "abi": [
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "name": "success",
-          "type": "bool"
-        },
-        {
-          "indexed": false,
-          "name": "amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "Test",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "from",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "name": "to",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "value",
-          "type": "uint256"
-        }
-      ],
-      "name": "Transfer",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "name": "owner",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "name": "spender",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "value",
-          "type": "uint256"
-        }
-      ],
-      "name": "Approval",
-      "type": "event"
+  "abi": [],
+  "unlinked_binary": "0x60606040523415600b57fe5b5b60338060196000396000f30060606040525bfe00a165627a7a723058206c06908d98625b76da5121d2af052a00ae8e26911285e9a0f70a3f53169ca3550029",
+  "networks": {
+    "1497988935987": {
+      "events": {},
+      "links": {},
+      "address": "0x09ab0f5c17782dc24aaa9b8e56ea453092626189",
+      "updated_at": 1498014791368
     }
-  ],
-  "unlinked_binary": "0x60606040523415600b57fe5b5b60338060196000396000f30060606040525bfe00a165627a7a7230582049a431fd149627eb08287afb771d3455650a28b883de84f09800ca3288e4890d0029",
-  "networks": {},
+  },
   "schema_version": "0.0.5",
-  "updated_at": 1497477650455
+  "updated_at": 1498014791368
 }

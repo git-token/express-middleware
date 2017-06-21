@@ -3,16 +3,10 @@ import Promise, { join } from 'bluebird'
 export default function retrieveDetails() {
   return new Promise((resolve, reject) => {
     this.getSavedContract({
-        dirPath: this.dirPath,
-        contractFile: this.contractFile
-    }).then((savedContract) => {
-      if (!savedContract) {
-        return this.createGitTokenContract()
-      } else {
-        return savedContract
-      }
+      dirPath: this.dirPath,
+      contractFile: this.contractFile
     }).then((contractDetails) => {
-      this.middlewareState['contract'] = contractDetails
+      this.middlewareState['contract'] = this.contractDetails
       return this.ks.getAddresses()
     }).map((address) => {
       return join(

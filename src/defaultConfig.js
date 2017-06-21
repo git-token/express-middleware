@@ -21,6 +21,7 @@ const REWARD_VALUES = {
   projectCard: 0,               // | Any time a Project Card is created, edited, moved, converted to an issue,
   projectColumn: 0,             // | Any time a Project Column is created, edited, moved, or deleted.
   ping: 1000,                      // | Use when setting up the webhook for github
+  push: 1000
 }
 
 
@@ -29,6 +30,7 @@ module.exports = {
   name: 'GitToken',
   symbol: 'GTK',
   decimals: 8,
+  rewardValues: REWARD_VALUES,
   rewardEnum: (type) => {
     let filteredList = Object.keys(REWARD_VALUES).sort((a, b) => {
       return a.localeCompare(b)
@@ -38,11 +40,11 @@ module.exports = {
 
     return filteredList.indexOf(type)
   },
-  rewardValues: () => {
-    return Object.keys(REWARD_VALUES).sort((a, b) => {
+  getRewardValues: (values) => {
+    return Object.keys(values).sort((a, b) => {
       return a.localeCompare(b)
     }).map((_type) => {
-      return REWARD_VALUES[_type]
+      return values[_type]
     })
   }
 

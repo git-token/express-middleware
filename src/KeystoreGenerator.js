@@ -1,4 +1,5 @@
 import Tx from 'ethereumjs-tx'
+import { ecsign } from 'ethereumjs-util'
 import Web3 from 'web3'
 import { keystore, signing } from 'eth-lightwallet'
 import Promise from 'bluebird'
@@ -79,9 +80,11 @@ export default class KeystoreGenerator {
   //   })
   // }
 
-  importKeystore (options) {
+  importKeystore ({ dirPath, keystoreFileName }) {
     return new Promise((resolve, reject) => {
-      jsonfile.readFileAsync(`${this.dirPath}/${this.keystoreFileName}`).then((savedKeystore) => {
+      let dirPath = dirPath ? dirPath : this.dirPath
+      let keystoreFileName = keystoreFileName ? keystoreFileName : this.keystoreFileName
+      jsonfile.readFileAsync(`${dirPath}/${keystoreFileName}`).then((savedKeystore) => {
         this.ks = keystore.deserialize(savedKeystore['keystore'])
         this.password = savedKeystore['password']
         // console.log('importKeystore::this.ks', this.ks)
@@ -140,17 +143,19 @@ export default class KeystoreGenerator {
         this.eth.getTransactionCountAsync(from),
         this.eth.getGasPriceAsync(),
         this.getDerivedKey(this.password)
-      ).then((data) => {
+      ).then((joinedData) => {
         let tx = new Tx({
-          nonce: nonce ? nonce : data[0],
-          gasPrice: gasPrice ? gasPrice : data[1].toNumber(),
+          nonce: nonce ? nonce : joinedData[0],
+          gasPrice: gasPrice ? gasPrice : joinedData[1].toNumber(),
           from,
           to,
           value,
           data,
-          chainId
+          gas: gasLimit,
         })
-        return signing.signTx(this.ks, data[2], tx.serialize(), from)
+        const serialized = `0x${tx.serialize().toString('hex')}`
+        // console.log('signTransaction::serialized', serialized)
+        return signing.signTx(this.ks, joinedData[2], serialized, from)
       }).then((signedTx) => {
         resolve(signedTx)
       }).catch((error) => {

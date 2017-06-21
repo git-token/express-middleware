@@ -23,11 +23,18 @@ function getSavedContract(_ref) {
     var path = (dirPath ? dirPath : _this.dirPath) + '/' + (contractFile ? contractFile : _this.contractFile);
 
     jsonfile.readFileAsync(path).then(function (contractDetails) {
+      var abi = _this.gittokenContract.abi;
+
+      _this.gittokenContract = _this.eth.contract(abi).at(contractDetails['txReceipt']['contractAddress']);
       _this.contractDetails = contractDetails;
       resolve(_this.contractDetails);
     }).catch(function (error) {
       if (error.code = 'ENOENT') {
-        resolve(null);
+        _this.createGitTokenContract().then(function (contractDetails) {
+          resolve(contractDetails);
+        }).catch(function (error) {
+          reject(error);
+        });
       } else {
         reject(error);
       }

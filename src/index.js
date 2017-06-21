@@ -2,7 +2,10 @@ import Promise, { promisifyAll } from 'bluebird'
 import Web3 from 'web3'
 import KeystoreGenerator from './KeystoreGenerator'
 import defaultConfig from './defaultConfig'
-import { retrieveDetails } from './utils/index'
+import {
+  retrieveDetails,
+  faucet
+} from './utils/index'
 import { ping, push } from './events/index'
 import {
   getSavedContract,
@@ -11,6 +14,8 @@ import {
   generateReward
 } from './contract/index'
 import GitTokenContract from '../build/contracts/GitToken.json'
+
+import { Router } from 'express'
 
 export default class GitTokenMiddleware extends KeystoreGenerator {
   constructor(options) {
@@ -21,10 +26,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     this.contractFile = contractFile
     this.gittokenContract = JSON.parse(GitTokenContract)
     this.isGitHubHook = isGitHubHook
-    this.config = {
-      ...config,
-      ...defaultConfig
-    }
+    this.config = config
 
     // this.dirPath = dirPath
     // this.web3Provider = web3Provider
@@ -40,7 +42,9 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     this.createGitTokenContract = createGitTokenContract.bind(this)
     this.saveContractDetails = saveContractDetails.bind(this)
     this.retrieveDetails = retrieveDetails.bind(this)
+    this.faucet = faucet.bind(this)
     this.generateReward = generateReward.bind(this)
+
     //
     this.middlewareState = {
       accounts: {},
@@ -49,30 +53,42 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     }
   }
 
-  handleRequest (req, res) {
-    const { headers, body } = req
-    Promise.resolve().then(() => {
-      if (this.isGitHubHook) {
-        return handleGitHubWebHookEvent({
-          event: headers['x-github-event'],
-          data: body
-        })
-      } else {
-        throw new Error('Request not yet configured')
-      }
-    }).then((response) => {
-      res.status(200).send(response)
-    }).catch((error) => {
-      res.status(500).send(error)
+  routeRequests () {
+    let router = Router()
+    router.post('/', (req, res, next) => {
+      const { headers, body } = req
+      Promise.resolve().then(() => {
+        if (this.isGitHubHook) {
+          // console.log('GitHub WebHook Request')
+          return this.handleGitHubWebHookEvent({
+            event: headers['x-github-event'],
+            data: { headers, body }
+          })
+        } else {
+          throw new Error('Request not yet configured')
+        }
+      }).then((response) => {
+        res.status(200).send(JSON.stringify(response, null, 2))
+      }).catch((error) => {
+        console.log('routeRequests::error', error)
+        res.status(500).send(JSON.stringify(error, null, 2))
+      })
     })
+    return router
   }
-
 
   handleGitHubWebHookEvent ({ event, data }) {
     return new Promise((resolve, reject) => {
+      console.log('handleGitHubWebHookEvent::event', event)
+      console.log('handleGitHubWebHookEvent::data', data)
+
       switch(event) {
         case 'ping':
           resolve(this.ping(data))
+          break;
+        case 'push':
+          resolve(this.push(data))
+          break;
         default:
           let error = new Error('Invalid Event Found')
           reject(error)
