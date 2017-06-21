@@ -25,7 +25,7 @@ export default function generateReward ({ rewardType, contributorEmail }) {
       return this.gittokenContract.getContributorAddress.call(contributorEmail)
     }).then((contributorAddress) => {
       if (!contributorAddress) {
-        return this.gittokenContract.getUnclaimedRewards(contributorEmail)
+        return this.gittokenContract.getUnclaimedRewards.call(contributorEmail)
       } else {
         return this.gittokenContract.balanceOf.call(contributorAddress)
       }
