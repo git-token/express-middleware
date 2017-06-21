@@ -23,7 +23,7 @@ gittoken.handleGitHubWebHookEvent({
     }
   }
 }).then((result) => {
-  // console.log('result', JSON.stringify(result, null, 2))
+  console.log('result', JSON.stringify(result, null, 2))
 //   return gittoken.handleGitHubWebHookEvent({
 //     event: 'push',
 //     data: {
