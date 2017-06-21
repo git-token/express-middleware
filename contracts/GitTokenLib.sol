@@ -8,13 +8,15 @@ library GitTokenLib {
 
   struct Data {
     uint totalSupply;
-    mapping(uint256 => uint256) rewardValues;
-    mapping(uint256 => string) rewardTypes;
-    mapping(string => uint256) rewardEnum;
+    string organization;
+    string repoUri;
+    mapping(string => uint256) rewardValues;
     mapping(address => string) contributorEmails;
     mapping(string => address) contributorAddresses;
     mapping(address => mapping(address => uint)) allowed;
     mapping(address => uint) balances;
+    mapping(string => uint) unclaimedRewards;
+    mapping(string => bytes32) emailVerification;
   }
 
   /**/
@@ -49,20 +51,43 @@ library GitTokenLib {
 
   function _rewardContributor (
     Data storage self,
-    string _contributorEmail,
-    uint _contributionType
+    string _email,
+    string _rewardType
   ) internal returns (bool) {
-    uint _value = self.rewardValues[_contributionType];
-    address _contributor = self.contributorAddresses[_contributorEmail];
+    uint _value = self.rewardValues[_rewardType];
+    address _contributor = self.contributorAddresses[_email];
 
-    if(_value == 0 || _contributor == 0x0) {
+    if(_value == 0) {
       throw;
     } else {
       self.totalSupply = self.totalSupply.add(_value);
-      self.balances[_contributor] = self.balances[_contributor].add(_value);
+
+      if (_contributor == 0x0){
+        self.unclaimedRewards[_email] = self.unclaimedRewards[_email].add(_value);
+      } else {
+        self.balances[_contributor] = self.balances[_contributor].add(_value);
+      }
+
       return true;
     }
+  }
 
+  function _setContributor(
+    Data storage self,
+    string _email,
+    bytes32 _code
+  ) internal returns (bool) {
+    if (self.emailVerification[_email] != keccak256(_code)) {
+      throw;
+    } else if (self.unclaimedRewards[_email] > 0) {
+      // Transfer all previously unclaimed rewards of an email to an address;
+      // Add to existing balance in case contributor has multiple emails
+      self.balances[msg.sender] = self.balances[msg.sender].add(self.unclaimedRewards[_email]);
+      self.unclaimedRewards[_email] = 0;
+    }
+    self.contributorEmails[msg.sender] = _email;
+    self.contributorAddresses[_email] = msg.sender;
+    return true;
   }
 
 }
