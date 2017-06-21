@@ -26,10 +26,11 @@ module.exports = function(deployer, network, accounts) {
   }).then((data) => {
     console.log('data', data)
     return join(
-      gittoken.rewardContributor(email, 'ping'),
-      gittoken.rewardContributor('test@test.com', 'push'),
-      gittoken.rewardContributor('test@test.com', 'projectCard'),
-      gittoken.rewardContributor('test@test.com', 'create')
+      gittoken.rewardContributor(email, 'ping', 100),
+      gittoken.rewardContributor('test@test.com', 'push', 600),
+      gittoken.rewardContributor('test@test.com', 'projectCard', 800),
+      gittoken.rewardContributor('test@test.com', 'create', 34892300),
+      gittoken.rewardContributor('test@test.com', 'create', 0)
     );
   }).then((txReceipts) => {
     console.log('txReceipts::2', txReceipts)

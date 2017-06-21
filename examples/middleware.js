@@ -31,9 +31,13 @@ gittoken.handleGitHubWebHookEvent({
     event: 'push',
     data: {
       body: {
-        pusher: {
-          email: 'ryan.michael.tate@gmail.com'
-        }
+        commits: [],
+        head_commit: {
+          author: {
+            email: 'ryan.michael.tate@gmail.com'
+          },
+        },
+        repository: {}
       },
       headers: {
         'x-github-delivery': 'randomTestMsg'

@@ -1,10 +1,12 @@
 pragma solidity ^0.4.11;
 
+import './SafeMath.sol';
 import './GitTokenLib.sol';
 import './Ownable.sol';
 
 contract GitToken is Ownable {
 
+  using SafeMath for uint;
   using GitTokenLib for GitTokenLib.Data;
   GitTokenLib.Data gittoken;
 
@@ -119,13 +121,14 @@ contract GitToken is Ownable {
 
   function rewardContributor(
     string _email,
-    string _rewardType
+    string _rewardType,
+    uint _rewardBonus
   ) public returns (bool) {
-    if(!gittoken._rewardContributor(_email, _rewardType)) {
+    if(!gittoken._rewardContributor(_email, _rewardType, _rewardBonus)) {
       throw;
     } else {
       address _contributor = gittoken.contributorAddresses[_email];
-      uint _value = gittoken.rewardValues[_rewardType];
+      uint _value = gittoken.rewardValues[_rewardType].add(_rewardBonus);
       Contribution(_contributor, _value);
       return true;
     }

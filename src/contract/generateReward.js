@@ -1,6 +1,6 @@
 import Promise from 'bluebird'
 
-export default function generateReward ({ rewardType, contributorEmail }) {
+export default function generateReward ({ rewardType, contributorEmail, rewardBonus }) {
   return new Promise((resolve, reject) => {
     const from = this.ks.getAddresses()[0]
     let contributorAddress;
@@ -9,7 +9,7 @@ export default function generateReward ({ rewardType, contributorEmail }) {
       contractFile: this.contractFile
     }).then((contractDetails) => {
       // console.log('generateReward::contractDetails', contractDetails)
-      return this.gittokenContract.rewardContributor.getData(contributorEmail, rewardType)
+      return this.gittokenContract.rewardContributor.getData(contributorEmail, rewardType, rewardBonus)
     }).then((data) => {
       return this.signTransaction({
         to: this.gittokenContract.address,
