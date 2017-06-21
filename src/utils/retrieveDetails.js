@@ -5,14 +5,7 @@ export default function retrieveDetails() {
     this.getSavedContract({
       dirPath: this.dirPath,
       contractFile: this.contractFile
-    }).then((savedContract) => {
-      console.log('retrieveDetails::savedContract', savedContract)
-    //   if (!savedContract) {
-    //     return this.createGitTokenContract()
-    //   } else {
-    //     return savedContract
-    //   }
-    // }).then((contractDetails) => {
+    }).then((contractDetails) => {
       this.middlewareState['contract'] = this.contractDetails
       return this.ks.getAddresses()
     }).map((address) => {

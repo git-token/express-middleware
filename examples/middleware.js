@@ -27,17 +27,21 @@ gittoken.handleGitHubWebHookEvent({
   }
 }).then((result) => {
   console.log('result', JSON.stringify(result, null, 2))
-//   return gittoken.handleGitHubWebHookEvent({
-//     event: 'push',
-//     data: {
-//       body: {},
-//       headers: {
-//         'x-github-delivery': 'randomTestMsg'
-//       }
-//     }
-//   })
-// }).then((result) => {
-//   console.log('result', JSON.stringify(result, null, 2))
+  return gittoken.handleGitHubWebHookEvent({
+    event: 'push',
+    data: {
+      body: {
+        pusher: {
+          email: 'ryan.michael.tate@gmail.com'
+        }
+      },
+      headers: {
+        'x-github-delivery': 'randomTestMsg'
+      }
+    }
+  })
+}).then((result) => {
+  console.log('result', JSON.stringify(result, null, 2))
 }).catch((error) => {
   console.log('error', error)
 })

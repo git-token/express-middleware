@@ -219,7 +219,7 @@ var KeystoreGenerator = function () {
             gas: gasLimit
           });
           var serialized = '0x' + tx.serialize().toString('hex');
-          console.log('serialized', serialized);
+          // console.log('signTransaction::serialized', serialized)
           return _ethLightwallet.signing.signTx(_this7.ks, joinedData[2], serialized, from);
         }).then(function (signedTx) {
           resolve(signedTx);

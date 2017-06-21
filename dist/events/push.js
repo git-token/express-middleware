@@ -14,9 +14,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function push(_ref) {
   var _this = this;
 
-  var pusher = _ref.pusher;
+  var body = _ref.body;
 
   return new _bluebird2.default(function (resolve, reject) {
+    var pusher = body.pusher;
+
     _this.importKeystore({}).then(function (_ks) {
       console.log('test');
       return _this.generateReward({

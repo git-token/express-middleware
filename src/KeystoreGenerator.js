@@ -154,7 +154,7 @@ export default class KeystoreGenerator {
           gas: gasLimit,
         })
         const serialized = `0x${tx.serialize().toString('hex')}`
-        console.log('serialized', serialized)
+        // console.log('signTransaction::serialized', serialized)
         return signing.signTx(this.ks, joinedData[2], serialized, from)
       }).then((signedTx) => {
         resolve(signedTx)

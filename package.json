@@ -1,7 +1,7 @@
 {
   "name": "gittoken-api-middleware",
-  "version": "0.0.13",
-  "description": "Express middleware for GitToken GitHub Webhook endpoints",
+  "version": "0.0.14",
+  "description": "GitToken Express Middleware for GitHub Webhook Endpoints",
   "main": "./src/index.js",
   "scripts": {
     "test": "mocha",

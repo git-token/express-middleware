@@ -18,31 +18,27 @@ function generateReward(_ref) {
       contributorEmail = _ref.contributorEmail;
 
   return new _bluebird2.default(function (resolve, reject) {
-    var rewardEnum = _this.config.rewardEnum;
-
+    var from = _this.ks.getAddresses()[0];
     _this.getSavedContract({
       dirPath: _this.dirPath,
       contractFile: _this.contractFile
     }).then(function (contractDetails) {
-      console.log('generateReward::contractDetails', contractDetails);
-      resolve({}
-      //   const rawData = this.gittokenContract.generateReward.getData(rewardEnum(rewardType), contributorEmail)
-      //   return rawData
-      // }).then((data) => {
-      //   return this.signTransaction({
-      //     to: this.gittokenContract.address,
-      //     from: this.ks.getAddresses()[0],
-      //     value: 0,
-      //     gasLimit: 3e6,
-      //     data
-      //   })
-      // }).then((signedTx) => {
-      //   return this.eth.sendRawTransactionAsync(signedTx)
-      // }).then((txHash) => {
-      //   return this.getTransactionReceipt(txHash)
-      // }).then((txReceipt) => {
-      //   resolve(txReceipt)
-      );
+      // console.log('generateReward::contractDetails', contractDetails)
+      return _this.gittokenContract.rewardContributor.getData(contributorEmail, rewardType);
+    }).then(function (data) {
+      return _this.signTransaction({
+        to: _this.gittokenContract.address,
+        from: from,
+        value: 0,
+        gasLimit: 3e6,
+        data: data
+      });
+    }).then(function (signedTx) {
+      return _this.eth.sendRawTransactionAsync(signedTx);
+    }).then(function (txHash) {
+      return _this.getTransactionReceipt(txHash);
+    }).then(function (txReceipt) {
+      resolve(txReceipt);
     }).catch(function (error) {
       reject(error);
     });
