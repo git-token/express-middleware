@@ -9,7 +9,10 @@ gittoken = new GitTokenMiddleware({
   config: {
     name: 'TestToken',
     symbol: 'T',
-    decimals: 8
+    decimals: 8,
+    email: 'ryan.michael.tate@gmail.com',
+    organization: 'GitToken',
+    repoUri: 'git://github.com/git-token/api-middleware.git'
   }
 })
 

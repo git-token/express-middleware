@@ -8,10 +8,6 @@ var _stringify = require('babel-runtime/core-js/json/stringify');
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
-var _extends2 = require('babel-runtime/helpers/extends');
-
-var _extends3 = _interopRequireDefault(_extends2);
-
 var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
 
 var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
@@ -85,7 +81,7 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
     _this.contractFile = contractFile;
     _this.gittokenContract = JSON.parse(GitTokenContract);
     _this.isGitHubHook = isGitHubHook;
-    _this.config = (0, _extends3.default)({}, config, _defaultConfig2.default);
+    _this.config = config;
 
     // this.dirPath = dirPath
     // this.web3Provider = web3Provider

@@ -3,8 +3,9 @@ import Promise, { promisifyAll } from 'bluebird'
 export default function createGitTokenContract() {
   return new Promise((resolve, reject) => {
     const { abi, unlinked_binary } = this.gittokenContract
-    // console.log('createGitTokenContract::abi, unlinked_binary', abi, unlinked_binary)
-    this.eth.getBalanceAsync(this.ks.getAddresses()[0]).then((balance) => {
+    const from = this.ks.getAddresses()[0];
+
+    this.eth.getBalanceAsync(from).then((balance) => {
       if (balance.toNumber() < 18e14) {
         // console.log('call faucet')
         return this.faucet()
@@ -12,8 +13,29 @@ export default function createGitTokenContract() {
         return null
       }
     }).then(() => {
-      // return this.eth.contract(abi).new.getData()
-      resolve({})
+      const { email, organization, repoUri } = this.config
+      const params = [ email, organization, repoUri ]
+
+      return this.eth.contract(abi).new.getData(...params, {
+        from,
+        data: unlinked_binary
+      })
+    }).then((data) => {
+      return this.signTransaction({
+        from,
+        data,
+        gasLimit: 4e6,
+        value: 0
+      })
+    }).then((signedTx) => {
+      return this.eth.sendRawTransactionAsync(signedTx)
+    }).then((txHash) => {
+      return this.getTransactionReceipt(txHash)
+    }).then((txReceipt) => {
+      this.contractDetails = { txReceipt }
+      return this.saveContractDetails({})
+    }).then((contractDetails) => {
+      resolve(contractDetails)
     }).catch((error) => {
       reject(error)
     })

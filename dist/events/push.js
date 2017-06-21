@@ -14,14 +14,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function push(_ref) {
   var _this = this;
 
-  var body = _ref.body;
+  var pusher = _ref.pusher;
 
   return new _bluebird2.default(function (resolve, reject) {
     _this.importKeystore({}).then(function (_ks) {
       console.log('test');
       return _this.generateReward({
         rewardType: 'push',
-        contributorAddress: '0x0' // TODO: Grab this from the commit notes
+        contributorEmail: pusher['email']
       });
     }).then(function (txReceipt) {
       resolve(txReceipt);

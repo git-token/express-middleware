@@ -26,10 +26,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     this.contractFile = contractFile
     this.gittokenContract = JSON.parse(GitTokenContract)
     this.isGitHubHook = isGitHubHook
-    this.config = {
-      ...config,
-      ...defaultConfig
-    }
+    this.config = config
 
     // this.dirPath = dirPath
     // this.web3Provider = web3Provider

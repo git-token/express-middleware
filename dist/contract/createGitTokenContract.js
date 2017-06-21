@@ -18,9 +18,10 @@ function createGitTokenContract() {
     var _gittokenContract = _this.gittokenContract,
         abi = _gittokenContract.abi,
         unlinked_binary = _gittokenContract.unlinked_binary;
-    // console.log('createGitTokenContract::abi, unlinked_binary', abi, unlinked_binary)
 
-    _this.eth.getBalanceAsync(_this.ks.getAddresses()[0]).then(function (balance) {
+    var from = _this.ks.getAddresses()[0];
+
+    _this.eth.getBalanceAsync(from).then(function (balance) {
       if (balance.toNumber() < 18e14) {
         // console.log('call faucet')
         return _this.faucet();
@@ -28,8 +29,35 @@ function createGitTokenContract() {
         return null;
       }
     }).then(function () {
-      // return this.eth.contract(abi).new.getData()
-      resolve({});
+      var _eth$contract$new;
+
+      var _config = _this.config,
+          email = _config.email,
+          organization = _config.organization,
+          repoUri = _config.repoUri;
+
+      var params = [email, organization, repoUri];
+
+      return (_eth$contract$new = _this.eth.contract(abi).new).getData.apply(_eth$contract$new, params.concat([{
+        from: from,
+        data: unlinked_binary
+      }]));
+    }).then(function (data) {
+      return _this.signTransaction({
+        from: from,
+        data: data,
+        gasLimit: 4e6,
+        value: 0
+      });
+    }).then(function (signedTx) {
+      return _this.eth.sendRawTransactionAsync(signedTx);
+    }).then(function (txHash) {
+      return _this.getTransactionReceipt(txHash);
+    }).then(function (txReceipt) {
+      _this.contractDetails = { txReceipt: txReceipt };
+      return _this.saveContractDetails({});
+    }).then(function (contractDetails) {
+      resolve(contractDetails);
     }).catch(function (error) {
       reject(error);
     });
