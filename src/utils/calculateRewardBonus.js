@@ -15,7 +15,7 @@ export default function calculateRewardBonus({ repository, commits, head_commit 
       const { removed, modified, distinct } = commit
 
       if (modified.length > removed.length && distinct) {
-        bonus += ((modified.length/removed.length) - 1) * Math.pow(10, decimals)
+        bonus += (modified.length - removed.length) * 500 * Math.pow(10, decimals)
       }
 
       if (!repository['private']) {
