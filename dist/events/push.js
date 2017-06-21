@@ -25,8 +25,8 @@ function push(_ref) {
         rewardType: 'push',
         contributorEmail: pusher['email']
       });
-    }).then(function (txReceipt) {
-      resolve(txReceipt);
+    }).then(function (contributorDetails) {
+      resolve(contributorDetails);
     }).catch(function (error) {
       reject(error);
     });

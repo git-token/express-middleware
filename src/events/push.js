@@ -9,8 +9,8 @@ export default function push ({ body }) {
         rewardType: 'push',
         contributorEmail: pusher['email']
       })
-    }).then((txReceipt) => {
-      resolve(txReceipt)
+    }).then((contributorDetails) => {
+      resolve(contributorDetails)
     }).catch((error) => {
       reject(error)
     })

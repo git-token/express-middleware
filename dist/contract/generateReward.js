@@ -19,6 +19,7 @@ function generateReward(_ref) {
 
   return new _bluebird2.default(function (resolve, reject) {
     var from = _this.ks.getAddresses()[0];
+    var contributorAddress = void 0;
     _this.getSavedContract({
       dirPath: _this.dirPath,
       contractFile: _this.contractFile
@@ -39,14 +40,19 @@ function generateReward(_ref) {
       return _this.getTransactionReceipt(txHash);
     }).then(function (txReceipt) {
       return _this.gittokenContract.getContributorAddress.call(contributorEmail);
-    }).then(function (contributorAddress) {
+    }).then(function (_contributorAddress) {
+      contributorAddress = _contributorAddress;
       if (!contributorAddress) {
         return _this.gittokenContract.getUnclaimedRewards.call(contributorEmail);
       } else {
         return _this.gittokenContract.balanceOf.call(contributorAddress);
       }
     }).then(function (contributorBalance) {
-      resolve(contributorBalance.toString());
+      resolve({
+        address: contributorAddress,
+        email: contributorEmail,
+        balance: contributorBalance.toNumber()
+      });
     }).catch(function (error) {
       reject(error);
     });
