@@ -79,8 +79,7 @@ contract GitToken is Ownable {
 
   function approve(address _spender, uint _value) public onlyPayloadSize(2 * 32) {
     // Explicitly check if the approved address already has an allowance,
-    // Ensure the approver must reset the approved value to 0 before changing to
-    // the desired amount if.
+    // Ensure the approver must reset the approved value to 0 before changing to the desired amount.
     // see: https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729
     if(_value > 0 && gittoken.allowed[msg.sender][_spender] > 0) {
       throw;

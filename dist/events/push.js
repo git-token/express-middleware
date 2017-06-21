@@ -20,9 +20,11 @@ function push(_ref) {
     var pusher = body.pusher,
         commits = body.commits,
         head_commit = body.head_commit;
+    var author = head_commit.author;
 
     console.log('push::commits', commits);
     console.log('push::head_commit', head_commit);
+    console.log('push::author', author);
     _this.importKeystore({}).then(function (_ks) {
       return _this.generateReward({
         rewardType: 'push',
