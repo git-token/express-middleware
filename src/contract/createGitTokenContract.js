@@ -13,8 +13,8 @@ export default function createGitTokenContract() {
         return null
       }
     }).then(() => {
-      const { email, organization, repoUri } = this.config
-      const params = [ email, organization, repoUri ]
+      const { email, organization, repoUri, decimals } = this.config
+      const params = [ email, organization, repoUri, decimals ]
 
       return this.eth.contract(abi).new.getData(...params, {
         from,

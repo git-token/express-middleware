@@ -8,6 +8,7 @@ library GitTokenLib {
 
   struct Data {
     uint totalSupply;
+    uint decimals;
     string organization;
     string repoUri;
     mapping(string => uint256) rewardValues;

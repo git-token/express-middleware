@@ -19,6 +19,8 @@ function generateReward(_ref) {
       rewardBonus = _ref.rewardBonus;
 
   return new _bluebird2.default(function (resolve, reject) {
+    var decimals = _this.config.decimals;
+
     var from = _this.ks.getAddresses()[0];
     var contributorAddress = void 0;
     _this.getSavedContract({
@@ -52,7 +54,7 @@ function generateReward(_ref) {
       resolve({
         address: contributorAddress,
         email: contributorEmail,
-        balance: contributorBalance.toNumber(),
+        balance: contributorBalance.toNumber() / Math.pow(10, decimals),
         contract: _this.gittokenContract.address
       });
     }).catch(function (error) {
