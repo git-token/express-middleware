@@ -113,6 +113,7 @@ contract GitToken is Ownable {
 
   function verifyContributor(string _email, bytes32 _hashedCode) onlyOwner public returns (bool) {
     gittoken.emailVerification[_email] = _hashedCode;
+    return true;
   }
 
   function setContributor(string _email, string _code) public returns (bool) {
