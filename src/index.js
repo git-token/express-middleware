@@ -1,26 +1,21 @@
-import Promise, { promisifyAll } from 'bluebird'
 import Web3 from 'web3'
-import KeystoreGenerator from './KeystoreGenerator'
+import { Router } from 'express'
+import Promise, { promisifyAll } from 'bluebird'
+
 import defaultConfig from './defaultConfig'
+import KeystoreGenerator from './KeystoreGenerator'
+import { smtpServer, smtpHandleAuth } from './smtp/index'
+import { socketHandler, socketRouter } from './websocket/index'
+import { retrieveDetails, faucet, calculateRewardBonus } from './utils/index'
+import { gittokenHyperlog, logMessage, logExchange, logVote } from './hyperlog/index'
+import { handleLogin, handleVerification, handleAuthentication, ping, push, pullRequest } from './events/index'
 import {
-  retrieveDetails,
-  faucet,
-  calculateRewardBonus
-} from './utils/index'
-import {
-  ping,
-  push,
-  pullRequest
-} from './events/index'
-import {
-  getSavedContract,
-  createGitTokenContract,
-  saveContractDetails,
-  generateReward
+  getSavedContract, createGitTokenContract, saveContractDetails, generateReward, verifyContributor 
 } from './contract/index'
+
 import GitTokenContract from '../build/contracts/GitToken.json'
 
-import { Router } from 'express'
+
 
 export default class GitTokenMiddleware extends KeystoreGenerator {
   constructor(options) {
@@ -37,8 +32,28 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     // this.web3Provider = web3Provider
     // this.web3 = new Web3(new Web3.providers.HttpProvider(web3Provider))
     // this.eth = promisifyAll(this.web3.eth)
+    // this.smtpHandleAuth = smtpHandleAuth.bind(this)
+    // this.smtpServer = smtpServer.bind(this)
+    // this.smtpServer({
+    //   onAuth: this.smtpHandleAuth
+    // })
+    this.verifyContributor = verifyContributor.bind(this)
+
+    this.gittokenHyperlog = gittokenHyperlog.bind(this)
+    this.logMessage = logMessage.bind(this)
+    this.logExchange = logExchange.bind(this)
+    this.logVote = logVote.bind(this)
+    this.handleLogin = handleLogin.bind(this)
+    this.handleVerification = handleVerification.bind(this)
+    this.handleAuthentication = handleAuthentication.bind(this)
+    this.gittokenHyperlog({})
+
+    this.socketHandler = socketHandler.bind(this)
+    this.socketRouter = socketRouter.bind(this)
+    this.socketHandler({})
 
     // Bind event methods to class scope
+
     this.ping = ping.bind(this)
     this.push = push.bind(this)
     this.pullRequest = pullRequest.bind(this)
@@ -51,7 +66,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     this.faucet = faucet.bind(this)
     this.generateReward = generateReward.bind(this)
     this.calculateRewardBonus = calculateRewardBonus.bind(this)
-    
+
     //
     this.middlewareState = {
       accounts: {},

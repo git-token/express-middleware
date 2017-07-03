@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.generateReward = exports.saveContractDetails = exports.createGitTokenContract = exports.getSavedContract = undefined;
+exports.verifyContributor = exports.generateReward = exports.saveContractDetails = exports.createGitTokenContract = exports.getSavedContract = undefined;
 
 var _getSavedContract = require('./getSavedContract');
 
@@ -21,9 +21,14 @@ var _generateReward = require('./generateReward');
 
 var _generateReward2 = _interopRequireDefault(_generateReward);
 
+var _verifyContributor = require('./verifyContributor');
+
+var _verifyContributor2 = _interopRequireDefault(_verifyContributor);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.getSavedContract = _getSavedContract2.default;
 exports.createGitTokenContract = _createGitTokenContract2.default;
 exports.saveContractDetails = _saveContractDetails2.default;
 exports.generateReward = _generateReward2.default;
+exports.verifyContributor = _verifyContributor2.default;

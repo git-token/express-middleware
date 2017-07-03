@@ -32,12 +32,13 @@ function createGitTokenContract() {
       var _eth$contract$new;
 
       var _config = _this.config,
+          contributor = _config.contributor,
           email = _config.email,
           organization = _config.organization,
-          repoUri = _config.repoUri,
+          symbol = _config.symbol,
           decimals = _config.decimals;
 
-      var params = [email, organization, repoUri, decimals];
+      var params = [contributor, email, organization, symbol, decimals];
 
       return (_eth$contract$new = _this.eth.contract(abi).new).getData.apply(_eth$contract$new, params.concat([{
         from: from,
