@@ -12,16 +12,26 @@ contract GitToken is Ownable {
 
   event Approval(address indexed owner, address indexed spender, uint value);
   event Transfer(address indexed from, address indexed to, uint value);
-  event Contribution(address indexed contributor, uint value);
+  event Contribution(address indexed contributor, uint value, uint date, string rewardType);
+  event ContributorVerified(address indexed contributor, uint date);
+  /*event ConfigUpdated();*/
 
-  function GitToken(string _email, string _organization, string _repoUri, uint _decimals) {
-    gittoken.organization = _organization;
-    gittoken.repoUri = _repoUri;
+  function GitToken(
+    address _contributor,
+    string _email,
+    string _organization,
+    string _symbol,
+    uint _decimals
+  ) {
+    if (_contributor != 0x0) { owner[_contributor] = true; }
     gittoken.totalSupply = 0;
+    gittoken.organization = _organization;
+    gittoken.symbol = _symbol;
     gittoken.decimals = _decimals;
     // Set initial contributor email & address
     gittoken.contributorEmails[msg.sender] = _email;
-    gittoken.contributorAddresses[_email] = msg.sender;
+    gittoken.contributorEmails[_contributor] = _email;
+    gittoken.contributorAddresses[_email] = _contributor;
 
     // Set default rewardValues -- Note, these values are not solidified and are untested as to their effectiveness of incentivization;
     // These values are customizable using setRewardValue(uint256 value, string type)
@@ -60,6 +70,13 @@ contract GitToken is Ownable {
     return gittoken.decimals;
   }
 
+  function organization() constant returns (string) {
+    return gittoken.organization;
+  }
+
+  function symbol() constant returns (string) {
+    return gittoken.symbol;
+  }
   /*
    * ERC20 Methods
    */
@@ -106,16 +123,24 @@ contract GitToken is Ownable {
   function setRewardValue(
     uint256 _rewardValue,
     string _rewardType
-  ) public returns (bool) {
+  ) onlyOwner public returns (bool) {
     gittoken.rewardValues[_rewardType] = _rewardValue;
     return true;
   }
 
-  function verifyContributor(string _email, bytes32 _hashedCode) onlyOwner public returns (bool) {
-    gittoken.emailVerification[_email] = _hashedCode;
+  function verifyContributor(address _contributor, string _email) onlyOwner public returns (bool) {
+    /*gittoken.emailVerification[_email] = keccak256(_code);
+    return true;*/
+    if(!gittoken._verifyContributor(_contributor, _email)) {
+      throw;
+    } else {
+      ContributorVerified(_contributor, now);
+      return true;
+    }
+
   }
 
-  function setContributor(string _email, string _code) public returns (bool) {
+  function setContributor(string _email, bytes _code) public returns (bool) {
     if (!gittoken._setContributor(_email, _code)) {
       throw;
     } else {
@@ -127,13 +152,13 @@ contract GitToken is Ownable {
     string _email,
     string _rewardType,
     uint _rewardBonus
-  ) public returns (bool) {
+  ) onlyOwner public returns (bool) {
     if(!gittoken._rewardContributor(_email, _rewardType, _rewardBonus)) {
       throw;
     } else {
       address _contributor = gittoken.contributorAddresses[_email];
       uint _value = gittoken.rewardValues[_rewardType].add(_rewardBonus);
-      Contribution(_contributor, _value);
+      Contribution(_contributor, _value, now, _rewardType);
       return true;
     }
   }
@@ -153,6 +178,10 @@ contract GitToken is Ownable {
 
   function getUnclaimedRewards(string _email) constant returns (uint) {
     return gittoken.unclaimedRewards[_email];
+  }
+
+  function getOrganization() constant returns (string) {
+    return gittoken.organization;
   }
 
   /**

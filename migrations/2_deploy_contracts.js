@@ -10,7 +10,7 @@ module.exports = function(deployer, network, accounts) {
   let email = 'ryan.michael.tate@gmail.com'
   deployer.deploy(GitTokenLib);
   deployer.link(GitTokenLib, GitToken);
-  GitToken.new(email, 'GitToken', 'http://gittoken.org', 8).then((instance) => {
+  GitToken.new(accounts[0], email, 'GitToken', 'GTK', 8).then((instance) => {
     gittoken = instance
   //   return join(
   //     gittoken.setRewardValue(2500, 'ping'),
@@ -40,15 +40,15 @@ module.exports = function(deployer, network, accounts) {
       gittoken.totalSupply(),
       gittoken.balanceOf(accounts[0]),
       gittoken.getUnclaimedRewards('test@test.com'),
-      gittoken.verifyContributor('test@test.com', '0x9c22ff5f21f0b81b113e63f7db6da94fedef11b2119b4088b89664fb9a3cb658')
+      gittoken.verifyContributor(accounts[0], 'test@test.com')
     )
   }).then((data) => {
     console.log('data', data)
-    return join(
-      gittoken.setContributor('test@test.com', 'test')
-    )
-  }).then((data) => {
-    console.log('data', data)
+  //   return join(
+  //     gittoken.setContributor('test@test.com', '0x9c22ff5f21f0b81b113e63f7db6da94fedef11b2119b4088b89664fb9a3cb658')
+  //   )
+  // }).then((data) => {
+  //   console.log('data', data)
     return join(
       gittoken.balanceOf(accounts[0])
     )

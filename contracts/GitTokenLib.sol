@@ -10,7 +10,7 @@ library GitTokenLib {
     uint totalSupply;
     uint decimals;
     string organization;
-    string repoUri;
+    string symbol;
     mapping(string => uint256) rewardValues;
     mapping(address => string) contributorEmails;
     mapping(string => address) contributorAddresses;
@@ -74,14 +74,37 @@ library GitTokenLib {
     }
   }
 
+  function _verifyContributor(
+    Data storage self,
+    address _contributor,
+    string _email
+  ) internal returns (bool) {
+    if (_contributor == 0x0) {
+      throw;
+    }
+
+    if (self.unclaimedRewards[_email] > 0) {
+      // Transfer all previously unclaimed rewards of an email to an address;
+      // Add to existing balance in case contributor has multiple emails
+      self.balances[_contributor] = self.balances[_contributor].add(self.unclaimedRewards[_email]);
+      self.unclaimedRewards[_email] = 0;
+    }
+    self.contributorEmails[_contributor] = _email;
+    self.contributorAddresses[_email] = _contributor;
+    return true;
+  }
+
+
   function _setContributor(
     Data storage self,
     string _email,
-    string _code
+    bytes _code
   ) internal returns (bool) {
     if (self.emailVerification[_email] != keccak256(_code)) {
       throw;
-    } else if (self.unclaimedRewards[_email] > 0) {
+    }
+
+    if (self.unclaimedRewards[_email] > 0) {
       // Transfer all previously unclaimed rewards of an email to an address;
       // Add to existing balance in case contributor has multiple emails
       self.balances[msg.sender] = self.balances[msg.sender].add(self.unclaimedRewards[_email]);
