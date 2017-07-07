@@ -140,7 +140,7 @@ export default class KeystoreGenerator {
   signTransaction({ from, to, value, nonce, data, gasPrice, gasLimit, chainId }) {
     return new Promise((resolve, reject) => {
       join(
-        this.eth.getTransactionCountAsync(from),
+        this.eth.getTransactionCountAsync(`0x${from}`),
         this.eth.getGasPriceAsync(),
         this.getDerivedKey(this.password)
       ).then((joinedData) => {
@@ -151,7 +151,7 @@ export default class KeystoreGenerator {
           to,
           value,
           data,
-          gas: gasLimit,
+          gas: gasLimit
         })
         const serialized = `0x${tx.serialize().toString('hex')}`
         // console.log('signTransaction::serialized', serialized)

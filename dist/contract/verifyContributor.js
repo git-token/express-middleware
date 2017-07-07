@@ -21,13 +21,13 @@ function verifyContributor(_ref) {
     var decimals = _this.config.decimals;
 
     var from = '0x' + _this.ks.getAddresses()[0];
-    console.log('from', from);
+    // console.log('from', from)
     _this.getSavedContract({
       dirPath: _this.dirPath,
       contractFile: _this.contractFile
     }).then(function (contractDetails) {
       // console.log('generateReward::contractDetails', contractDetails)
-      console.log('verifyContributor::email, contributorAddress', email, contributorAddress);
+      // console.log('verifyContributor::email, contributorAddress', email, contributorAddress)
       return _this.gittokenContract.verifyContributor.getData(contributorAddress, email);
     }).then(function (data) {
       return _this.signTransaction({
@@ -42,7 +42,7 @@ function verifyContributor(_ref) {
     }).then(function (txHash) {
       return _this.getTransactionReceipt(txHash);
     }).then(function (txReceipt) {
-      console.log('txReceipt', txReceipt);
+      // console.log('txReceipt', txReceipt)
       resolve(txReceipt);
     }).catch(function (error) {
       reject(error);

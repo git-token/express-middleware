@@ -30,7 +30,6 @@ function handleVerification(_ref) {
 
     var txReceipt = void 0;
     _this.verifyContributor({ email: email, contributorAddress: contributorAddress }).then(function (_txReceipt) {
-      console.log('handleVerification::txReceipt', txReceipt);
       txReceipt = _txReceipt;
       return _this.gittokenContract.getContributorAddress(email);
     }).then(function (_contributorAddress) {

@@ -1,8 +1,10 @@
 import WebSocket from 'ws'
 
 export default function socketHandler ({ }) {
-  console.log('Socket Server Listening')
-  this.webSocketServer = new WebSocket.Server({ port: 1751 })
+
+  const WebSocketPort = 1325
+  this.webSocketServer = new WebSocket.Server({ port: WebSocketPort })
+  console.log(`GitToken WebSocket Server Listening on Port ${WebSocketPort}`)
   this.webSocketServer.on('connection', (connection, req) => {
     // console.log('connection', connection)
     // console.log('req.connection.remoteAddress', req.connection.remoteAddress)

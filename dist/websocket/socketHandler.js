@@ -21,8 +21,10 @@ function socketHandler(_ref) {
 
   (0, _objectDestructuringEmpty3.default)(_ref);
 
-  console.log('Socket Server Listening');
-  this.webSocketServer = new _ws2.default.Server({ port: 1751 });
+
+  var WebSocketPort = 1325;
+  this.webSocketServer = new _ws2.default.Server({ port: WebSocketPort });
+  console.log('GitToken WebSocket Server Listening on Port ' + WebSocketPort);
   this.webSocketServer.on('connection', function (connection, req) {
     // console.log('connection', connection)
     // console.log('req.connection.remoteAddress', req.connection.remoteAddress)

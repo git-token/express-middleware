@@ -16,7 +16,7 @@ var _hyperlog2 = _interopRequireDefault(_hyperlog);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function gittokenHyperlog() {
-  var dbPath = this.dirPath + '/gittoken';
+  var dbPath = '' + this.dirPath;
   this.gittokenDB = (0, _level2.default)(dbPath);
   this.gittokenLog = (0, _hyperlog2.default)(this.gittokenDB);
   console.log('GitToken Hyperlog Instance Running');

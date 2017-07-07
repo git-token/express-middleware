@@ -1,9 +1,9 @@
 const GitTokenMiddleware = require('../dist/index').default
 
 gittoken = new GitTokenMiddleware({
-  web3Provider: 'http://138.68.225.133:8545',
+  web3Provider: 'http://192.168.0.17:8545',
   isGitHubHook: true,
-  dirPath: `${process.cwd()}`,
+  dirPath: `${process.cwd()}/gittoken`,
   keystoreFileName: `.keystore`,
   contractFile: 'contract.json',
   config: {

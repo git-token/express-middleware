@@ -208,7 +208,7 @@ var KeystoreGenerator = function () {
           chainId = _ref2.chainId;
 
       return new _bluebird2.default(function (resolve, reject) {
-        join(_this7.eth.getTransactionCountAsync(from), _this7.eth.getGasPriceAsync(), _this7.getDerivedKey(_this7.password)).then(function (joinedData) {
+        join(_this7.eth.getTransactionCountAsync('0x' + from), _this7.eth.getGasPriceAsync(), _this7.getDerivedKey(_this7.password)).then(function (joinedData) {
           var tx = new _ethereumjsTx2.default({
             nonce: nonce ? nonce : joinedData[0],
             gasPrice: gasPrice ? gasPrice : joinedData[1].toNumber(),
