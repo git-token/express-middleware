@@ -21,15 +21,16 @@ function generateReward(_ref) {
   return new _bluebird2.default(function (resolve, reject) {
     var decimals = _this.config.decimals;
 
-    var from = _this.ks.getAddresses()[0];
+    var from = '0x' + _this.ks.getAddresses()[0];
     var contributorAddress = void 0;
     _this.getSavedContract({
       dirPath: _this.dirPath,
       contractFile: _this.contractFile
     }).then(function (contractDetails) {
-      // console.log('generateReward::contractDetails', contractDetails)
+      console.log('generateReward::contractDetails', contractDetails);
       return _this.gittokenContract.rewardContributor.getData(contributorEmail, rewardType, rewardBonus);
     }).then(function (data) {
+      console.log('generateReward::data', data);
       return _this.signTransaction({
         to: _this.gittokenContract.address,
         from: from,
@@ -38,6 +39,7 @@ function generateReward(_ref) {
         data: data
       });
     }).then(function (signedTx) {
+      console.log('generateReward::signedTx', signedTx);
       return _this.eth.sendRawTransactionAsync('0x' + signedTx);
     }).then(function (txHash) {
       return _this.getTransactionReceipt(txHash);

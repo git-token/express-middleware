@@ -3,15 +3,16 @@ import Promise from 'bluebird'
 export default function generateReward ({ rewardType, contributorEmail, rewardBonus }) {
   return new Promise((resolve, reject) => {
     const { decimals } = this.config
-    const from = this.ks.getAddresses()[0]
+    const from = `0x${this.ks.getAddresses()[0]}`
     let contributorAddress;
     this.getSavedContract({
       dirPath: this.dirPath,
       contractFile: this.contractFile
     }).then((contractDetails) => {
-      // console.log('generateReward::contractDetails', contractDetails)
+      console.log('generateReward::contractDetails', contractDetails)
       return this.gittokenContract.rewardContributor.getData(contributorEmail, rewardType, rewardBonus)
     }).then((data) => {
+      console.log('generateReward::data', data)
       return this.signTransaction({
         to: this.gittokenContract.address,
         from,
@@ -20,6 +21,7 @@ export default function generateReward ({ rewardType, contributorEmail, rewardBo
         data
       })
     }).then((signedTx) => {
+      console.log('generateReward::signedTx', signedTx)
       return this.eth.sendRawTransactionAsync(`0x${signedTx}`)
     }).then((txHash) => {
       return this.getTransactionReceipt(txHash)
