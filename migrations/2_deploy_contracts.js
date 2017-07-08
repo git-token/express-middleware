@@ -39,6 +39,7 @@ module.exports = function(deployer, network, accounts) {
     return join(
       gittoken.totalSupply(),
       gittoken.balanceOf(accounts[0]),
+      gittoken.decimals(accounts[0]),
       gittoken.getUnclaimedRewards('test@test.com'),
       gittoken.verifyContributor(accounts[0], 'test@test.com')
     )
