@@ -27,7 +27,7 @@ function verifyContributor(_ref) {
       contractFile: _this.contractFile
     }).then(function (contractDetails) {
       // console.log('generateReward::contractDetails', contractDetails)
-      // console.log('verifyContributor::email, contributorAddress', email, contributorAddress)
+      console.log('verifyContributor::email, contributorAddress', email, contributorAddress);
       return _this.gittokenContract.verifyContributor.getData(contributorAddress, email);
     }).then(function (data) {
       return _this.signTransaction({

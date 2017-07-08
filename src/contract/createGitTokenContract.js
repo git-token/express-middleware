@@ -3,9 +3,9 @@ import Promise, { promisifyAll } from 'bluebird'
 export default function createGitTokenContract() {
   return new Promise((resolve, reject) => {
     const { abi, unlinked_binary } = this.gittokenContract
-    const from = this.ks.getAddresses()[0];
+    const from = `0x${this.ks.getAddresses()[0]}`;
     // console.log('from', from)
-    this.eth.getBalanceAsync(`0x${from}`).then((balance) => {
+    this.eth.getBalanceAsync(from).then((balance) => {
       if (balance.toNumber() < 18e14) {
         // console.log('call faucet')
         return this.faucet()
@@ -15,7 +15,7 @@ export default function createGitTokenContract() {
     }).then(() => {
       const { contributor, email, organization, symbol, decimals } = this.config
       const params = [ contributor, email, organization, symbol, decimals ]
-      console.log('params', params)
+      // console.log('params', params)
       return this.eth.contract(abi).new.getData(...params, {
         from,
         data: unlinked_binary

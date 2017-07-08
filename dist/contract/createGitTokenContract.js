@@ -19,9 +19,9 @@ function createGitTokenContract() {
         abi = _gittokenContract.abi,
         unlinked_binary = _gittokenContract.unlinked_binary;
 
-    var from = _this.ks.getAddresses()[0];
+    var from = '0x' + _this.ks.getAddresses()[0];
     // console.log('from', from)
-    _this.eth.getBalanceAsync('0x' + from).then(function (balance) {
+    _this.eth.getBalanceAsync(from).then(function (balance) {
       if (balance.toNumber() < 18e14) {
         // console.log('call faucet')
         return _this.faucet();
@@ -39,7 +39,7 @@ function createGitTokenContract() {
           decimals = _config.decimals;
 
       var params = [contributor, email, organization, symbol, decimals];
-      console.log('params', params);
+      // console.log('params', params)
       return (_eth$contract$new = _this.eth.contract(abi).new).getData.apply(_eth$contract$new, params.concat([{
         from: from,
         data: unlinked_binary

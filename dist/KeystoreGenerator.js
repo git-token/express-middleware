@@ -64,7 +64,6 @@ var KeystoreGenerator = function () {
     this.dirPath = dirPath;
     this.accountsPath = accountsPath;
     this.keystoreFileName = keystoreFileName;
-    console.log('KeystoreGenerator::web3Provider', web3Provider);
     this.web3 = new _web2.default(new _web2.default.providers.HttpProvider(web3Provider));
     this.eth = _bluebird2.default.promisifyAll(this.web3.eth);
   }
@@ -209,7 +208,8 @@ var KeystoreGenerator = function () {
           chainId = _ref2.chainId;
 
       return new _bluebird2.default(function (resolve, reject) {
-        join(_this7.eth.getTransactionCountAsync('0x' + from), _this7.eth.getGasPriceAsync(), _this7.getDerivedKey(_this7.password)).then(function (joinedData) {
+        console.log('signTransaction::from', from);
+        join(_this7.eth.getTransactionCountAsync(from), _this7.eth.getGasPriceAsync(), _this7.getDerivedKey(_this7.password)).then(function (joinedData) {
           var tx = new _ethereumjsTx2.default({
             nonce: nonce ? nonce : joinedData[0],
             gasPrice: gasPrice ? gasPrice : joinedData[1].toNumber(),

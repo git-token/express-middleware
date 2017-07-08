@@ -10,7 +10,7 @@ export default function verifyContributor({ contributorAddress, email }) {
       contractFile: this.contractFile
     }).then((contractDetails) => {
       // console.log('generateReward::contractDetails', contractDetails)
-      // console.log('verifyContributor::email, contributorAddress', email, contributorAddress)
+      console.log('verifyContributor::email, contributorAddress', email, contributorAddress)
       return this.gittokenContract.verifyContributor.getData(contributorAddress, email)
     }).then((data) => {
       return this.signTransaction({
