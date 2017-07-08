@@ -11,6 +11,7 @@ export default function getSavedContract ({ dirPath, contractFile }) {
       this.contractDetails = contractDetails
       resolve(this.contractDetails)
     }).catch((error) => {
+      console.log('error', error)
       if (error.code = 'ENOENT') {
         this.createGitTokenContract().then((contractDetails) => {
           resolve(contractDetails)
