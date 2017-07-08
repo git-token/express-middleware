@@ -14,6 +14,7 @@ export default function ping ({ headers }) {
          return this.ks
        }
      }).then((_ks) => {
+       console.log('Retrieving Details')
         return this.retrieveDetails()
      }).then((details) => {
        resolve(details)

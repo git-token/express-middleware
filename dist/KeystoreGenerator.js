@@ -64,6 +64,7 @@ var KeystoreGenerator = function () {
     this.dirPath = dirPath;
     this.accountsPath = accountsPath;
     this.keystoreFileName = keystoreFileName;
+    console.log('KeystoreGenerator::web3Provider', web3Provider);
     this.web3 = new _web2.default(new _web2.default.providers.HttpProvider(web3Provider));
     this.eth = _bluebird2.default.promisifyAll(this.web3.eth);
   }
