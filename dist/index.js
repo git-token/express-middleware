@@ -80,9 +80,11 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
         config = options.config,
         web3Provider = options.web3Provider,
         dirPath = options.dirPath,
-        contractFile = options.contractFile;
+        contractFile = options.contractFile,
+        faucetActive = options.faucetActive;
 
 
+    _this.faucetActive = faucetActive;
     _this.dirPath = dirPath;
     _this.contractFile = contractFile;
     _this.gittokenContract = JSON.parse(GitTokenContract);
@@ -159,39 +161,45 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
         });
       });
       router.post('/faucet/:address', function (req, res, next) {
-        var from = void 0;
-        _this2.importKeystore({}).then(function (_ks) {
-          from = '0x' + _this2.ks.getAddresses()[0];
-          return _this2.eth.getBalanceAsync(from);
-        }).then(function (balance) {
-          console.log('Balance of ' + from + '::balance', balance);
-          if (balance.toNumber() > 2e16) {
-            return _this2.signTransaction({
-              to: '0x' + req.params.address,
-              from: from,
-              value: 2e16,
-              gasLimit: 4e6,
-              data: null
-            });
-          } else {
-            res.status(500).send((0, _stringify2.default)({
-              message: 'Faucet does not have enough funds! Send funds to ' + from,
-              balance: balance
-            }));
-          }
-        }).then(function (signedTx) {
-          console.log('`0x${signedTx}`', '0x' + signedTx);
-          return _this2.eth.sendRawTransactionAsync('0x' + signedTx);
-        }).then(function (txHash) {
-          console.log('txHash', txHash);
-          return _this2.getTransactionReceipt(txHash);
-        }).then(function (txReceipt) {
-          console.log('txReceipt', txReceipt);
-          res.status(200).send(txReceipt);
-        }).catch(function (error) {
-          console.log('error', error);
-          res.status(500).send((0, _stringify2.default)(error, null, 2));
-        });
+        if (!_this2.faucetActive) {
+          res.status(500).send((0, _stringify2.default)({
+            message: 'Faucet is not active! Set { faucetActive: true } to enable'
+          }, null, 2));
+        } else {
+          var from = void 0;
+          _this2.importKeystore({}).then(function (_ks) {
+            from = '0x' + _this2.ks.getAddresses()[0];
+            return _this2.eth.getBalanceAsync(from);
+          }).then(function (balance) {
+            console.log('Balance of ' + from + '::balance', balance);
+            if (balance.toNumber() > 2e16) {
+              return _this2.signTransaction({
+                to: '0x' + req.params.address,
+                from: from,
+                value: 2e16,
+                gasLimit: 4e6,
+                data: null
+              });
+            } else {
+              res.status(500).send((0, _stringify2.default)({
+                message: 'Faucet does not have enough funds! Send funds to ' + from,
+                balance: balance
+              }, null, 2));
+            }
+          }).then(function (signedTx) {
+            console.log('`0x${signedTx}`', '0x' + signedTx);
+            return _this2.eth.sendRawTransactionAsync('0x' + signedTx);
+          }).then(function (txHash) {
+            console.log('txHash', txHash);
+            return _this2.getTransactionReceipt(txHash);
+          }).then(function (txReceipt) {
+            console.log('txReceipt', txReceipt);
+            res.status(200).send(txReceipt);
+          }).catch(function (error) {
+            console.log('error', error);
+            res.status(500).send((0, _stringify2.default)(error, null, 2));
+          });
+        }
       });
 
       return router;

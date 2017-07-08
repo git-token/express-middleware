@@ -20,8 +20,9 @@ import GitTokenContract from '../build/contracts/GitToken.json'
 export default class GitTokenMiddleware extends KeystoreGenerator {
   constructor(options) {
     super(options)
-    const { isGitHubHook, config, web3Provider, dirPath, contractFile } = options
+    const { isGitHubHook, config, web3Provider, dirPath, contractFile, faucetActive } = options
 
+    this.faucetActive = faucetActive
     this.dirPath = dirPath
     this.contractFile = contractFile
     this.gittokenContract = JSON.parse(GitTokenContract)
@@ -97,39 +98,45 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
       })
     })
     router.post('/faucet/:address', (req, res, next) => {
-      let from
-      this.importKeystore({}).then((_ks) => {
-        from = `0x${this.ks.getAddresses()[0]}`
-        return this.eth.getBalanceAsync(from)
-      }).then((balance) => {
-        console.log(`Balance of ${from}::balance`, balance)
-        if (balance.toNumber() > 2e16) {
-          return this.signTransaction({
-            to: `0x${req.params.address}`,
-            from,
-            value: 2e16,
-            gasLimit: 4e6,
-            data: null
-          })
-        } else {
-          res.status(500).send(JSON.stringify({
-            message: `Faucet does not have enough funds! Send funds to ${from}`,
-            balance
-          }))
-        }
-      }).then((signedTx) => {
-        console.log('`0x${signedTx}`', `0x${signedTx}`)
-        return this.eth.sendRawTransactionAsync(`0x${signedTx}`)
-      }).then((txHash) => {
-        console.log('txHash', txHash)
-        return this.getTransactionReceipt(txHash)
-      }).then((txReceipt) => {
-        console.log('txReceipt', txReceipt)
-        res.status(200).send(txReceipt)
-      }).catch((error) => {
-        console.log('error', error)
-        res.status(500).send(JSON.stringify(error, null, 2))
-      })
+      if (!this.faucetActive) {
+        res.status(500).send(JSON.stringify({
+          message: `Faucet is not active! Set { faucetActive: true } to enable`
+        }, null, 2))
+      } else {
+        let from
+        this.importKeystore({}).then((_ks) => {
+          from = `0x${this.ks.getAddresses()[0]}`
+          return this.eth.getBalanceAsync(from)
+        }).then((balance) => {
+          console.log(`Balance of ${from}::balance`, balance)
+          if (balance.toNumber() > 2e16) {
+            return this.signTransaction({
+              to: `0x${req.params.address}`,
+              from,
+              value: 2e16,
+              gasLimit: 4e6,
+              data: null
+            })
+          } else {
+            res.status(500).send(JSON.stringify({
+              message: `Faucet does not have enough funds! Send funds to ${from}`,
+              balance
+            }, null, 2))
+          }
+        }).then((signedTx) => {
+          console.log('`0x${signedTx}`', `0x${signedTx}`)
+          return this.eth.sendRawTransactionAsync(`0x${signedTx}`)
+        }).then((txHash) => {
+          console.log('txHash', txHash)
+          return this.getTransactionReceipt(txHash)
+        }).then((txReceipt) => {
+          console.log('txReceipt', txReceipt)
+          res.status(200).send(txReceipt)
+        }).catch((error) => {
+          console.log('error', error)
+          res.status(500).send(JSON.stringify(error, null, 2))
+        })
+      }
     })
 
     return router
