@@ -11,6 +11,7 @@ export default function faucet() {
       console.log('faucet::response', response)
       resolve(response)
     }).catch((error) => {
+      console.log('faucet::error', error)
       reject(error)
     })
   })
