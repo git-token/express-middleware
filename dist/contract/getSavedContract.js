@@ -29,7 +29,6 @@ function getSavedContract(_ref) {
       _this.contractDetails = contractDetails;
       resolve(_this.contractDetails);
     }).catch(function (error) {
-      console.log('error', error);
       if (error.code = 'ENOENT') {
         _this.createGitTokenContract().then(function (contractDetails) {
           resolve(contractDetails);

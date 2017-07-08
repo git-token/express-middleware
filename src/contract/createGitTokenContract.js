@@ -4,7 +4,7 @@ export default function createGitTokenContract() {
   return new Promise((resolve, reject) => {
     const { abi, unlinked_binary } = this.gittokenContract
     const from = this.ks.getAddresses()[0];
-    console.log('from', from)
+    // console.log('from', from)
     this.eth.getBalanceAsync(`0x${from}`).then((balance) => {
       if (balance.toNumber() < 18e14) {
         // console.log('call faucet')
@@ -37,6 +37,7 @@ export default function createGitTokenContract() {
     }).then((contractDetails) => {
       resolve(contractDetails)
     }).catch((error) => {
+      console.log('createGitTokenContract::error', error)
       reject(error)
     })
   })

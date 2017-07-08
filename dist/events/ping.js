@@ -30,7 +30,6 @@ function ping(_ref) {
         return _this.ks;
       }
     }).then(function (_ks) {
-      console.log('Retrieving Details');
       return _this.retrieveDetails();
     }).then(function (details) {
       resolve(details);

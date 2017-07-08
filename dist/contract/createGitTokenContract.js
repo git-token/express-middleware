@@ -20,7 +20,7 @@ function createGitTokenContract() {
         unlinked_binary = _gittokenContract.unlinked_binary;
 
     var from = _this.ks.getAddresses()[0];
-    console.log('from', from);
+    // console.log('from', from)
     _this.eth.getBalanceAsync('0x' + from).then(function (balance) {
       if (balance.toNumber() < 18e14) {
         // console.log('call faucet')
@@ -61,6 +61,7 @@ function createGitTokenContract() {
     }).then(function (contractDetails) {
       resolve(contractDetails);
     }).catch(function (error) {
+      console.log('createGitTokenContract::error', error);
       reject(error);
     });
   });
