@@ -20,7 +20,7 @@ export default function generateReward ({ rewardType, contributorEmail, rewardBo
         data
       })
     }).then((signedTx) => {
-      return this.eth.sendRawTransactionAsync(signedTx)
+      return this.eth.sendRawTransactionAsync(`0x${signedTx}`)
     }).then((txHash) => {
       return this.getTransactionReceipt(txHash)
     }).then((txReceipt) => {

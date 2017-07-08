@@ -38,7 +38,7 @@ function generateReward(_ref) {
         data: data
       });
     }).then(function (signedTx) {
-      return _this.eth.sendRawTransactionAsync(signedTx);
+      return _this.eth.sendRawTransactionAsync('0x' + signedTx);
     }).then(function (txHash) {
       return _this.getTransactionReceipt(txHash);
     }).then(function (txReceipt) {
