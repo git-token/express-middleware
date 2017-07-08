@@ -24,6 +24,7 @@ function retrieveDetails() {
   var _this = this;
 
   return new _bluebird2.default(function (resolve, reject) {
+    console.log('Testing');
     _this.getSavedContract({
       dirPath: _this.dirPath,
       contractFile: _this.contractFile

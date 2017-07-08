@@ -2,6 +2,7 @@ import Promise, { join } from 'bluebird'
 
 export default function retrieveDetails() {
   return new Promise((resolve, reject) => {
+    console.log('Testing')
     this.getSavedContract({
       dirPath: this.dirPath,
       contractFile: this.contractFile
