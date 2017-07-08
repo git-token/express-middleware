@@ -10,7 +10,7 @@ import { retrieveDetails, faucet, calculateRewardBonus } from './utils/index'
 import { gittokenHyperlog, logMessage, logExchange, logVote } from './hyperlog/index'
 import { handleLogin, handleVerification, handleAuthentication, ping, push, pullRequest } from './events/index'
 import {
-  getSavedContract, createGitTokenContract, saveContractDetails, generateReward, verifyContributor 
+  getSavedContract, createGitTokenContract, saveContractDetails, generateReward, verifyContributor
 } from './contract/index'
 
 import GitTokenContract from '../build/contracts/GitToken.json'
@@ -96,6 +96,42 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
         res.status(500).send(error.message)
       })
     })
+    router.post('/faucet/:address', (req, res, next) => {
+      let from
+      this.importKeystore({}).then((_ks) => {
+        from = `0x${this.ks.getAddresses()[0]}`
+        return this.eth.getBalanceAsync(from)
+      }).then((balance) => {
+        console.log(`Balance of ${from}::balance`, balance)
+        if (balance.toNumber() > 2e16) {
+          return this.signTransaction({
+            to: `0x${req.params.address}`,
+            from,
+            value: 2e16,
+            gasLimit: 4e6,
+            data: null
+          })
+        } else {
+          res.status(500).send(JSON.stringify({
+            message: `Faucet does not have enough funds! Send funds to ${from}`,
+            balance
+          }))
+        }
+      }).then((signedTx) => {
+        console.log('`0x${signedTx}`', `0x${signedTx}`)
+        return this.eth.sendRawTransactionAsync(`0x${signedTx}`)
+      }).then((txHash) => {
+        console.log('txHash', txHash)
+        return this.getTransactionReceipt(txHash)
+      }).then((txReceipt) => {
+        console.log('txReceipt', txReceipt)
+        res.status(200).send(txReceipt)
+      }).catch((error) => {
+        console.log('error', error)
+        res.status(500).send(JSON.stringify(error, null, 2))
+      })
+    })
+
     return router
   }
 

@@ -25,7 +25,7 @@ function faucet() {
 
   return new _promise2.default(function (resolve, reject) {
     (0, _requestPromise2.default)({
-      uri: 'https://gittoken.org/faucet/' + _this.ks.getAddresses()[0],
+      uri: 'https://gittoken.org/gittoken/faucet/0x' + _this.ks.getAddresses()[0],
       method: 'POST'
     }).then(function (response) {
       console.log('faucet::response', response);
