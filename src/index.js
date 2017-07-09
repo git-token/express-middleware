@@ -7,7 +7,15 @@ import { smtpServer, smtpHandleAuth } from './smtp/index'
 import { socketHandler, socketRouter } from './websocket/index'
 import { retrieveDetails, faucet, calculateRewardBonus } from './utils/index'
 import { gittokenHyperlog, logMessage, logExchange, logVote } from './hyperlog/index'
-import { handleLogin, handleVerification, handleAuthentication, ping, push, pullRequest } from './events/index'
+import {
+  handleLogin,
+  handleVerification,
+  handleContractDetails,
+  handleAuthentication,
+  ping,
+  push,
+  pullRequest
+} from './events/index'
 import {
   getSavedContract, createGitTokenContract, saveContractDetails, generateReward, verifyContributor
 } from './contract/index'
@@ -46,6 +54,8 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     this.handleLogin = handleLogin.bind(this)
     this.handleVerification = handleVerification.bind(this)
     this.handleAuthentication = handleAuthentication.bind(this)
+    this.handleContractDetails = handleContractDetails.bind(this)
+
     this.gittokenHyperlog({})
 
     this.socketHandler = socketHandler.bind(this)
