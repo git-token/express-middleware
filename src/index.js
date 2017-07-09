@@ -78,7 +78,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
 
   routeRequests () {
     let router = Router()
-    router.get('/', static(`../messenger-ui`))
+    router.get('/', static(`${process.cwd()}/node_modules/gittoken-api-middleware/messenger-ui`))
     router.post('/', (req, res, next) => {
       const { headers, body } = req
       Promise.resolve().then(() => {
