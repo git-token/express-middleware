@@ -1,5 +1,5 @@
 import Web3 from 'web3'
-import { Router } from 'express'
+import { Router, static } from 'express'
 import Promise, { promisifyAll } from 'bluebird'
 
 import defaultConfig from './defaultConfig'
@@ -78,6 +78,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
 
   routeRequests () {
     let router = Router()
+    router.get('/', static(`../messenger-ui`))
     router.post('/', (req, res, next) => {
       const { headers, body } = req
       Promise.resolve().then(() => {
