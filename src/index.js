@@ -1,8 +1,7 @@
 import Web3 from 'web3'
-import { Router, static } from 'express'
+import { Router } from 'express'
 import Promise, { promisifyAll } from 'bluebird'
 
-import defaultConfig from './defaultConfig'
 import KeystoreGenerator from './KeystoreGenerator'
 import { smtpServer, smtpHandleAuth } from './smtp/index'
 import { socketHandler, socketRouter } from './websocket/index'
@@ -13,7 +12,7 @@ import {
   getSavedContract, createGitTokenContract, saveContractDetails, generateReward, verifyContributor
 } from './contract/index'
 
-import GitTokenContract from '../build/contracts/GitToken.json'
+import GitTokenContract from 'gittoken-contracts/build/contracts/GitToken.json'
 
 
 
@@ -78,7 +77,6 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
 
   routeRequests () {
     let router = Router()
-    router.get('/', static(`${process.cwd()}/node_modules/gittoken-api-middleware/messenger-ui`))
     router.post('/', (req, res, next) => {
       const { headers, body } = req
       Promise.resolve().then(() => {

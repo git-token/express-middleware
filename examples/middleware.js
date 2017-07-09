@@ -12,8 +12,7 @@ gittoken = new GitTokenMiddleware({
     decimals: 8,
     contributor: "0xc7bd4ea12519088160dcdaa652d864f77d32c7db",
     email: 'ryan.michael.tate@gmail.com',
-    organization: 'GitToken',
-    repoUri: 'git://github.com/git-token/api-middleware.git'
+    organization: 'GitToken'
   }
 })
 
