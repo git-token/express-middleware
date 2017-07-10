@@ -32,54 +32,66 @@ exports.default = function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.t0 = event;
-            _context.next = _context.t0 === 'contractDetails' ? 3 : _context.t0 === 'authenticate' ? 4 : _context.t0 === 'verify' ? 5 : _context.t0 === 'login' ? 6 : _context.t0 === 'message' ? 9 : _context.t0 === 'exchange' ? 12 : _context.t0 === 'vote' ? 15 : 18;
+            _context.next = _context.t0 === 'contractDetails' ? 3 : _context.t0 === 'authenticate' ? 6 : _context.t0 === 'verify' ? 9 : _context.t0 === 'login' ? 12 : _context.t0 === 'message' ? 15 : _context.t0 === 'exchange' ? 18 : _context.t0 === 'vote' ? 21 : 24;
             break;
 
           case 3:
-            return _context.abrupt('return', this.handleContractDetails({ connection: connection }));
-
-          case 4:
-            return _context.abrupt('return', this.handleAuthentication({ connection: connection, data: data }));
+            _context.next = 5;
+            return this.handleContractDetails({ connection: connection });
 
           case 5:
-            return _context.abrupt('return', this.handleVerification({ connection: connection, data: data }));
+            return _context.abrupt('return', _context.sent);
 
           case 6:
             _context.next = 8;
-            return this.handleLogin({ connection: connection, data: data });
+            return this.handleAuthentication({ connection: connection, data: data });
 
           case 8:
             return _context.abrupt('return', _context.sent);
 
           case 9:
             _context.next = 11;
-            return this.logMessage({ connection: connection, data: data });
+            return this.handleVerification({ connection: connection, data: data });
 
           case 11:
             return _context.abrupt('return', _context.sent);
 
           case 12:
             _context.next = 14;
-            return this.logExchange({ connection: connection, data: data });
+            return this.handleLogin({ connection: connection, data: data });
 
           case 14:
             return _context.abrupt('return', _context.sent);
 
           case 15:
             _context.next = 17;
-            return this.logVote({ connection: connection, data: data });
+            return this.logMessage({ connection: connection, data: data });
 
           case 17:
             return _context.abrupt('return', _context.sent);
 
           case 18:
+            _context.next = 20;
+            return this.logExchange({ connection: connection, data: data });
+
+          case 20:
+            return _context.abrupt('return', _context.sent);
+
+          case 21:
+            _context.next = 23;
+            return this.logVote({ connection: connection, data: data });
+
+          case 23:
+            return _context.abrupt('return', _context.sent);
+
+          case 24:
             connection.send((0, _stringify2.default)({
               event: 'Error',
               message: 'Invalid event, ' + event + ', requested'
             }));
             return _context.abrupt('return', null);
 
-          case 20:
+          case 26:
           case 'end':
             return _context.stop();
         }

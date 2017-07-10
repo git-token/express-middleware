@@ -3,11 +3,11 @@ import Promise from 'bluebird'
 export default async function socketRouter({ connection, event, data }) {
   switch(event) {
     case 'contractDetails':
-      return this.handleContractDetails({ connection })
+      return await this.handleContractDetails({ connection })
     case 'authenticate':
-      return this.handleAuthentication({ connection, data })
+      return await this.handleAuthentication({ connection, data })
     case 'verify':
-      return this.handleVerification({ connection, data })
+      return await this.handleVerification({ connection, data })
     case 'login':
       return await this.handleLogin({ connection, data })
     case 'message':
