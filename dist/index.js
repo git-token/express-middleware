@@ -168,7 +168,7 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
         res.redirect('/messenger');
       });
 
-      app.post('/verify/:address', function (req, res) {
+      router.post('/verify/:address', function (req, res) {
         console.log('gittoken::verify::req.user', req.user);
         res.send(true);
       });

@@ -110,13 +110,14 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     let router = Router()
     router.use(passport.initialize());
     router.use(passport.session());
-    router.use('/messenger', express.static(`${process.cwd()}/node_modules/gittoken-messenger-ui/`))
+    router.use('/messenger',
+      express.static(`${process.cwd()}/node_modules/gittoken-messenger-ui/`))
     router.get('/auth', passport.authenticate('github'))
     router.get('/auth/callback',
       passport.authenticate('github', { failureRedirect: '/' }),
       (req, res) => { res.redirect('/messenger') })
 
-    app.post('/verify/:address', (req, res) => {
+    router.post('/verify/:address', (req, res) => {
       console.log('gittoken::verify::req.user', req.user)
       res.send(true)
     })
