@@ -89,6 +89,7 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
         faucetActive = options.faucetActive;
 
 
+    _this.githubCredentials = githubCredentials;
     _this.faucetActive = faucetActive;
     _this.dirPath = dirPath;
     _this.contractFile = contractFile;
@@ -149,7 +150,7 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
 
       var router = (0, _express.Router)();
 
-      _passport2.default.use(new _passportGithub.Strategy(githubCredentials, function (accessToken, refreshToken, profile, cb) {
+      _passport2.default.use(new _passportGithub.Strategy(this.githubCredentials, function (accessToken, refreshToken, profile, cb) {
         cb(null, { accessToken: accessToken, profile: profile });
       }));
 

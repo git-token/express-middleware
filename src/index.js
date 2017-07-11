@@ -34,6 +34,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     super(options)
     const { githubCredentials, isGitHubHook, config, web3Provider, dirPath, contractFile, faucetActive } = options
 
+    this.githubCredentials = githubCredentials
     this.faucetActive = faucetActive
     this.dirPath = dirPath
     this.contractFile = contractFile
@@ -95,7 +96,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
   routeRequests () {
     let router = Router()
 
-    passport.use(new Strategy(githubCredentials,
+    passport.use(new Strategy(this.githubCredentials,
       function(accessToken, refreshToken, profile, cb) {
         cb(null, { accessToken, profile });
       })
