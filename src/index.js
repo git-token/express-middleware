@@ -1,8 +1,6 @@
 import Web3 from 'web3'
 import express, { Router } from 'express'
 import Promise, { promisifyAll } from 'bluebird'
-import passport from 'passport'
-import { Strategy } from 'passport-github'
 import KeystoreGenerator from './KeystoreGenerator'
 import { smtpServer, smtpHandleAuth } from './smtp/index'
 import { socketHandler, socketRouter } from './websocket/index'
@@ -32,9 +30,8 @@ import GitTokenContract from 'gittoken-contracts/build/contracts/GitToken.json'
 export default class GitTokenMiddleware extends KeystoreGenerator {
   constructor(options) {
     super(options)
-    const { githubCredentials, isGitHubHook, config, web3Provider, dirPath, contractFile, faucetActive } = options
+    const { isGitHubHook, config, web3Provider, dirPath, contractFile, faucetActive } = options
 
-    this.githubCredentials = githubCredentials
     this.faucetActive = faucetActive
     this.dirPath = dirPath
     this.contractFile = contractFile
@@ -95,29 +92,6 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
 
   routeRequests () {
     let router = Router()
-
-    passport.use(new Strategy(this.githubCredentials,
-      function(accessToken, refreshToken, profile, cb) {
-        cb(null, { accessToken, profile });
-      })
-    );
-
-    passport.serializeUser((user, cb) => {
-      cb(null, user)
-    })
-
-    passport.deserializeUser((user, cb) => {
-      cb(null, user)
-    })
-
-    router.use(passport.initialize());
-    router.use(passport.session());
-    router.use('/messenger',
-      express.static(`${process.cwd()}/node_modules/gittoken-messenger-ui/`))
-    router.get('/auth', passport.authenticate('github'))
-    router.get('/auth/callback',
-      passport.authenticate('github', { failureRedirect: '/' }),
-      (req, res) => { res.redirect('/messenger') })
 
     router.post('/verify/:address', (req, res) => {
       console.log('gittoken::verify::req.user', req.user)

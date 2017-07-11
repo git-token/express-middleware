@@ -40,12 +40,6 @@ var _bluebird = require('bluebird');
 
 var _bluebird2 = _interopRequireDefault(_bluebird);
 
-var _passport = require('passport');
-
-var _passport2 = _interopRequireDefault(_passport);
-
-var _passportGithub = require('passport-github');
-
 var _KeystoreGenerator2 = require('./KeystoreGenerator');
 
 var _KeystoreGenerator3 = _interopRequireDefault(_KeystoreGenerator2);
@@ -80,8 +74,7 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
     //
     = (0, _possibleConstructorReturn3.default)(this, (GitTokenMiddleware.__proto__ || (0, _getPrototypeOf2.default)(GitTokenMiddleware)).call(this, options));
 
-    var githubCredentials = options.githubCredentials,
-        isGitHubHook = options.isGitHubHook,
+    var isGitHubHook = options.isGitHubHook,
         config = options.config,
         web3Provider = options.web3Provider,
         dirPath = options.dirPath,
@@ -89,7 +82,6 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
         faucetActive = options.faucetActive;
 
 
-    _this.githubCredentials = githubCredentials;
     _this.faucetActive = faucetActive;
     _this.dirPath = dirPath;
     _this.contractFile = contractFile;
@@ -149,26 +141,6 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
       var _this2 = this;
 
       var router = (0, _express.Router)();
-
-      _passport2.default.use(new _passportGithub.Strategy(this.githubCredentials, function (accessToken, refreshToken, profile, cb) {
-        cb(null, { accessToken: accessToken, profile: profile });
-      }));
-
-      _passport2.default.serializeUser(function (user, cb) {
-        cb(null, user);
-      });
-
-      _passport2.default.deserializeUser(function (user, cb) {
-        cb(null, user);
-      });
-
-      router.use(_passport2.default.initialize());
-      router.use(_passport2.default.session());
-      router.use('/messenger', _express2.default.static(process.cwd() + '/node_modules/gittoken-messenger-ui/'));
-      router.get('/auth', _passport2.default.authenticate('github'));
-      router.get('/auth/callback', _passport2.default.authenticate('github', { failureRedirect: '/' }), function (req, res) {
-        res.redirect('/messenger');
-      });
 
       router.post('/verify/:address', function (req, res) {
         console.log('gittoken::verify::req.user', req.user);
