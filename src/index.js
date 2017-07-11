@@ -1,11 +1,18 @@
 import Web3 from 'web3'
 import { Router } from 'express'
 import Promise, { promisifyAll } from 'bluebird'
-
+import passport from 'passport'
+import { Strategy } from 'passport-github'
 import KeystoreGenerator from './KeystoreGenerator'
 import { smtpServer, smtpHandleAuth } from './smtp/index'
 import { socketHandler, socketRouter } from './websocket/index'
-import { retrieveDetails, faucet, calculateRewardBonus } from './utils/index'
+import {
+  retrieveDetails,
+  faucet,
+  calculateRewardBonus,
+  parseGitHubEvents,
+  parsePushEvent
+} from './utils/index'
 import { gittokenHyperlog, logMessage, logExchange, logVote } from './hyperlog/index'
 import {
   handleLogin,
@@ -22,7 +29,19 @@ import {
 
 import GitTokenContract from 'gittoken-contracts/build/contracts/GitToken.json'
 
+passport.use(new Strategy(githubCredentials,
+  function(accessToken, refreshToken, profile, cb) {
+    cb(null, { accessToken, profile });
+  })
+);
 
+passport.serializeUser((user, cb) => {
+  cb(null, user)
+})
+
+passport.deserializeUser((user, cb) => {
+  cb(null, user)
+})
 
 export default class GitTokenMiddleware extends KeystoreGenerator {
   constructor(options) {
@@ -73,6 +92,8 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     this.createGitTokenContract = createGitTokenContract.bind(this)
     this.saveContractDetails = saveContractDetails.bind(this)
     this.retrieveDetails = retrieveDetails.bind(this)
+    this.parsePushEvent = parsePushEvent.bind(this)
+    this.parseGitHubEvents = parseGitHubEvents.bind(this)
     this.faucet = faucet.bind(this)
     this.generateReward = generateReward.bind(this)
     this.calculateRewardBonus = calculateRewardBonus.bind(this)
@@ -87,6 +108,19 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
 
   routeRequests () {
     let router = Router()
+    router.use(passport.initialize());
+    router.use(passport.session());
+    router.use('/messenger', express.static(`${process.cwd()}/node_modules/gittoken-messenger-ui/`))
+    router.get('/auth', passport.authenticate('github'))
+    router.get('/auth/callback',
+      passport.authenticate('github', { failureRedirect: '/' }),
+      (req, res) => { res.redirect('/messenger') })
+
+    app.post('/verify/:address', (req, res) => {
+      console.log('gittoken::verify::req.user', req.user)
+      res.send(true)
+    })
+
     router.post('/', (req, res, next) => {
       const { headers, body } = req
       Promise.resolve().then(() => {
@@ -106,6 +140,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
         res.status(500).send(error.message)
       })
     })
+
     router.post('/faucet/:address', (req, res, next) => {
       if (!this.faucetActive) {
         res.status(500).send(JSON.stringify({

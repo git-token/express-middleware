@@ -7,12 +7,11 @@ gittoken = new GitTokenMiddleware({
   keystoreFileName: `.keystore`,
   contractFile: 'contract.json',
   config: {
-    name: 'TestToken',
-    symbol: 'T',
+    symbol: 'GTK',
     decimals: 8,
     contributor: "0xc7bd4ea12519088160dcdaa652d864f77d32c7db",
     email: 'ryan.michael.tate@gmail.com',
-    organization: 'GitToken'
+    organization: 'git-token'
   }
 })
 
@@ -25,40 +24,11 @@ gittoken.handleGitHubWebHookEvent({
       'x-github-delivery': 'randomTestMsg'
     }
   }
-// }).then((result) => {
-//   console.log('result', JSON.stringify(result, null, 2))
-//   return gittoken.handleGitHubWebHookEvent({
-//     event: 'push',
-//     data: {
-//       body: {
-//         commits: [{
-//           distinct: true,
-//           modified: [0, 1],
-//           removed: [0, 1]
-//         },{
-//           distinct: true,
-//           modified: [0, 1, 1, 1, 2, 5],
-//           removed: [0, 1]
-//         },{
-//           distinct: true,
-//           modified: [0, 1, 1, 1, 2, 5],
-//           removed: [0, 1, 4, 5]
-//         }],
-//         head_commit: {
-//           author: {
-//             email: 'ryan.michael.tate@gmail.com'
-//           },
-//         },
-//         repository: {
-//           private: false,
-//
-//         }
-//       },
-//       headers: {
-//         'x-github-delivery': 'randomTestMsg'
-//       }
-//     }
-//   })
+}).then((result) => {
+  console.log('result', JSON.stringify(result, null, 2))
+  return gittoken.parseGitHubEvents({
+    eventsURL: 'https://api.github.com/orgs/git-token/events'
+  })
 }).then((result) => {
   console.log('result', JSON.stringify(result, null, 2))
 }).catch((error) => {
