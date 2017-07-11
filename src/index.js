@@ -1,5 +1,5 @@
 import Web3 from 'web3'
-import { Router } from 'express'
+import express, { Router } from 'express'
 import Promise, { promisifyAll } from 'bluebird'
 import passport from 'passport'
 import { Strategy } from 'passport-github'
@@ -29,24 +29,24 @@ import {
 
 import GitTokenContract from 'gittoken-contracts/build/contracts/GitToken.json'
 
-passport.use(new Strategy(githubCredentials,
-  function(accessToken, refreshToken, profile, cb) {
-    cb(null, { accessToken, profile });
-  })
-);
-
-passport.serializeUser((user, cb) => {
-  cb(null, user)
-})
-
-passport.deserializeUser((user, cb) => {
-  cb(null, user)
-})
-
 export default class GitTokenMiddleware extends KeystoreGenerator {
   constructor(options) {
     super(options)
-    const { isGitHubHook, config, web3Provider, dirPath, contractFile, faucetActive } = options
+    const { githubCredentials, isGitHubHook, config, web3Provider, dirPath, contractFile, faucetActive } = options
+
+    passport.use(new Strategy(githubCredentials,
+      function(accessToken, refreshToken, profile, cb) {
+        cb(null, { accessToken, profile });
+      })
+    );
+
+    passport.serializeUser((user, cb) => {
+      cb(null, user)
+    })
+
+    passport.deserializeUser((user, cb) => {
+      cb(null, user)
+    })
 
     this.faucetActive = faucetActive
     this.dirPath = dirPath
