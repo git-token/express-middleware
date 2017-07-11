@@ -89,18 +89,6 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
         faucetActive = options.faucetActive;
 
 
-    _passport2.default.use(new _passportGithub.Strategy(githubCredentials, function (accessToken, refreshToken, profile, cb) {
-      cb(null, { accessToken: accessToken, profile: profile });
-    }));
-
-    _passport2.default.serializeUser(function (user, cb) {
-      cb(null, user);
-    });
-
-    _passport2.default.deserializeUser(function (user, cb) {
-      cb(null, user);
-    });
-
     _this.faucetActive = faucetActive;
     _this.dirPath = dirPath;
     _this.contractFile = contractFile;
@@ -160,6 +148,19 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
       var _this2 = this;
 
       var router = (0, _express.Router)();
+
+      _passport2.default.use(new _passportGithub.Strategy(githubCredentials, function (accessToken, refreshToken, profile, cb) {
+        cb(null, { accessToken: accessToken, profile: profile });
+      }));
+
+      _passport2.default.serializeUser(function (user, cb) {
+        cb(null, user);
+      });
+
+      _passport2.default.deserializeUser(function (user, cb) {
+        cb(null, user);
+      });
+
       router.use(_passport2.default.initialize());
       router.use(_passport2.default.session());
       router.use('/messenger', _express2.default.static(process.cwd() + '/node_modules/gittoken-messenger-ui/'));

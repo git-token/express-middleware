@@ -34,20 +34,6 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     super(options)
     const { githubCredentials, isGitHubHook, config, web3Provider, dirPath, contractFile, faucetActive } = options
 
-    passport.use(new Strategy(githubCredentials,
-      function(accessToken, refreshToken, profile, cb) {
-        cb(null, { accessToken, profile });
-      })
-    );
-
-    passport.serializeUser((user, cb) => {
-      cb(null, user)
-    })
-
-    passport.deserializeUser((user, cb) => {
-      cb(null, user)
-    })
-
     this.faucetActive = faucetActive
     this.dirPath = dirPath
     this.contractFile = contractFile
@@ -108,6 +94,21 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
 
   routeRequests () {
     let router = Router()
+
+    passport.use(new Strategy(githubCredentials,
+      function(accessToken, refreshToken, profile, cb) {
+        cb(null, { accessToken, profile });
+      })
+    );
+
+    passport.serializeUser((user, cb) => {
+      cb(null, user)
+    })
+
+    passport.deserializeUser((user, cb) => {
+      cb(null, user)
+    })
+
     router.use(passport.initialize());
     router.use(passport.session());
     router.use('/messenger',
