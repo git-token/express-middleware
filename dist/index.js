@@ -237,6 +237,13 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
           // case 'pull_request':
           //   resolve(this.pullRequest(data))
           //   break;
+          case 'repository':
+            resolve(_this3.generateReward({
+              rewardType: event,
+              contributorUsername: data['repository']['sender']['login'],
+              rewardBonus: 0
+            }));
+            break;
           default:
             resolve(_this3.generateReward({
               rewardType: event,

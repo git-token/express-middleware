@@ -182,6 +182,13 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
         // case 'pull_request':
         //   resolve(this.pullRequest(data))
         //   break;
+        case 'repository':
+          resolve(this.generateReward({
+            rewardType: event,
+            contributorUsername: data['repository']['sender']['login'],
+            rewardBonus: 0
+          }))
+          break;
         default:
           resolve(this.generateReward({
             rewardType: event,
