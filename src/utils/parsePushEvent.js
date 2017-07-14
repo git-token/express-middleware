@@ -18,14 +18,10 @@ export default function parsePushEvent({ event }) {
       })
     }).map((data) => {
       const { stats, commit: { author: { email } } } = data
-      let v0 = (Stats[email] ? Stats[email] : 0)
-      Stats = {
-        ...Stats,
-        [email]: v0 + stats
-      }
+      console.log('stats', stats)
       return null
     }).then(() => {
-      resolve(Stats)
+      resolve(null)
     }).catch((error) => {
       reject(error)
     })

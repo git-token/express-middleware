@@ -9,7 +9,9 @@ import {
   faucet,
   calculateRewardBonus,
   parseGitHubEvents,
-  parsePushEvent
+  parsePushEvent,
+  parseRepositoryStats,
+  retrieveGitHubUser
 } from './utils/index'
 import { gittokenHyperlog, logMessage, logExchange, logVote } from './hyperlog/index'
 import {
@@ -77,7 +79,9 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     this.saveContractDetails = saveContractDetails.bind(this)
     this.retrieveDetails = retrieveDetails.bind(this)
     this.parsePushEvent = parsePushEvent.bind(this)
+    this.parseRepositoryStats = parseRepositoryStats.bind(this)
     this.parseGitHubEvents = parseGitHubEvents.bind(this)
+    this.retrieveGitHubUser = retrieveGitHubUser.bind(this)
     this.faucet = faucet.bind(this)
     this.generateReward = generateReward.bind(this)
     this.calculateRewardBonus = calculateRewardBonus.bind(this)
@@ -172,15 +176,20 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
         case 'ping':
           resolve(this.ping(data))
           break;
-        case 'push':
-          resolve(this.push(data))
-          break;
-        case 'pull_request':
-          resolve(this.pullRequest(data))
-          break;
+        // case 'push':
+        //   resolve(this.push(data))
+        //   break;
+        // case 'pull_request':
+        //   resolve(this.pullRequest(data))
+        //   break;
         default:
-          let error = new Error('Invalid Event Found')
-          reject(error)
+          resolve(this.generateReward({
+            rewardType: event,
+            contributorUsername: data['head_commit']['author']['username'],
+            rewardBonus: 0
+          }))
+          // let error = new Error('Invalid Event Found')
+          // reject(error)
       }
     })
   }

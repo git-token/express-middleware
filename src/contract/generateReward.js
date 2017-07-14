@@ -1,6 +1,6 @@
 import Promise from 'bluebird'
 
-export default function generateReward ({ rewardType, contributorEmail, rewardBonus }) {
+export default function generateReward ({ rewardType, contributorUsername, rewardBonus }) {
   return new Promise((resolve, reject) => {
     const { decimals } = this.config
     const from = `0x${this.ks.getAddresses()[0]}`
@@ -10,7 +10,7 @@ export default function generateReward ({ rewardType, contributorEmail, rewardBo
       contractFile: this.contractFile
     }).then((contractDetails) => {
       console.log('generateReward::contractDetails', contractDetails)
-      return this.gittokenContract.rewardContributor.getData(contributorEmail, rewardType, rewardBonus)
+      return this.gittokenContract.rewardContributor.getData(contributorUsername, rewardType, rewardBonus)
     }).then((data) => {
       console.log('generateReward::data', data)
       return this.signTransaction({
@@ -26,18 +26,18 @@ export default function generateReward ({ rewardType, contributorEmail, rewardBo
     }).then((txHash) => {
       return this.getTransactionReceipt(txHash)
     }).then((txReceipt) => {
-      return this.gittokenContract.getContributorAddress.call(contributorEmail)
+      return this.gittokenContract.getContributorAddress.call(contributorUsername)
     }).then((_contributorAddress) => {
       contributorAddress = _contributorAddress
       if (!contributorAddress) {
-        return this.gittokenContract.getUnclaimedRewards.call(contributorEmail)
+        return this.gittokenContract.getUnclaimedRewards.call(contributorUsername)
       } else {
         return this.gittokenContract.balanceOf.call(contributorAddress)
       }
     }).then((contributorBalance) => {
       resolve({
         address: contributorAddress,
-        email: contributorEmail,
+        username: contributorUsername,
         balance: contributorBalance.toNumber() / Math.pow(10, decimals),
         contract: this.gittokenContract.address
       })

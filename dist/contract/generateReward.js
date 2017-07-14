@@ -15,7 +15,7 @@ function generateReward(_ref) {
   var _this = this;
 
   var rewardType = _ref.rewardType,
-      contributorEmail = _ref.contributorEmail,
+      contributorUsername = _ref.contributorUsername,
       rewardBonus = _ref.rewardBonus;
 
   return new _bluebird2.default(function (resolve, reject) {
@@ -28,7 +28,7 @@ function generateReward(_ref) {
       contractFile: _this.contractFile
     }).then(function (contractDetails) {
       console.log('generateReward::contractDetails', contractDetails);
-      return _this.gittokenContract.rewardContributor.getData(contributorEmail, rewardType, rewardBonus);
+      return _this.gittokenContract.rewardContributor.getData(contributorUsername, rewardType, rewardBonus);
     }).then(function (data) {
       console.log('generateReward::data', data);
       return _this.signTransaction({
@@ -44,18 +44,18 @@ function generateReward(_ref) {
     }).then(function (txHash) {
       return _this.getTransactionReceipt(txHash);
     }).then(function (txReceipt) {
-      return _this.gittokenContract.getContributorAddress.call(contributorEmail);
+      return _this.gittokenContract.getContributorAddress.call(contributorUsername);
     }).then(function (_contributorAddress) {
       contributorAddress = _contributorAddress;
       if (!contributorAddress) {
-        return _this.gittokenContract.getUnclaimedRewards.call(contributorEmail);
+        return _this.gittokenContract.getUnclaimedRewards.call(contributorUsername);
       } else {
         return _this.gittokenContract.balanceOf.call(contributorAddress);
       }
     }).then(function (contributorBalance) {
       resolve({
         address: contributorAddress,
-        email: contributorEmail,
+        username: contributorUsername,
         balance: contributorBalance.toNumber() / Math.pow(10, decimals),
         contract: _this.gittokenContract.address
       });

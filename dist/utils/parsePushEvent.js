@@ -3,15 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
-
-var _defineProperty3 = _interopRequireDefault(_defineProperty2);
-
-var _extends3 = require('babel-runtime/helpers/extends');
-
-var _extends4 = _interopRequireDefault(_extends3);
-
 exports.default = parsePushEvent;
 
 var _bluebird = require('bluebird');
@@ -47,11 +38,10 @@ function parsePushEvent(_ref) {
       var stats = data.stats,
           email = data.commit.author.email;
 
-      var v0 = Stats[email] ? Stats[email] : 0;
-      Stats = (0, _extends4.default)({}, Stats, (0, _defineProperty3.default)({}, email, v0 + stats));
+      console.log('stats', stats);
       return null;
     }).then(function () {
-      resolve(Stats);
+      resolve(null);
     }).catch(function (error) {
       reject(error);
     });

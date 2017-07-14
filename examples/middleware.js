@@ -1,5 +1,8 @@
 const GitTokenMiddleware = require('../dist/index').default
 
+const clientID = process.argv[2]
+const clientSecret = process.argv[3]
+
 gittoken = new GitTokenMiddleware({
   web3Provider: 'http://192.168.0.17:8545',
   isGitHubHook: true,
@@ -26,8 +29,11 @@ gittoken.handleGitHubWebHookEvent({
   }
 }).then((result) => {
   console.log('result', JSON.stringify(result, null, 2))
-  return gittoken.parseGitHubEvents({
-    eventsURL: 'https://api.github.com/orgs/git-token/events'
+  return gittoken.parseRepositoryStats({
+    owner: 'consensys',
+    repository: 'eth-lightwallet',
+    clientID,
+    clientSecret
   })
 }).then((result) => {
   console.log('result', JSON.stringify(result, null, 2))

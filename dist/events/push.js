@@ -34,7 +34,7 @@ function push(_ref) {
     }).then(function (rewardBonus) {
       return _this.generateReward({
         rewardType: 'push',
-        contributorEmail: author['email'],
+        contributorEmail: author['username'],
         rewardBonus: rewardBonus
       });
     }).then(function (contributorDetails) {

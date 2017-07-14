@@ -12,7 +12,7 @@ export default function push ({ body }) {
     }).then((rewardBonus) => {
       return this.generateReward({
         rewardType: 'push',
-        contributorEmail: author['email'],
+        contributorEmail: author['username'],
         rewardBonus
       })
     }).then((contributorDetails) => {
