@@ -231,38 +231,10 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
           case 'ping':
             resolve(_this3.ping(data));
             break;
-          case 'project_card':
-            resolve(_this3.generateReward({
-              rewardType: event,
-              contributorUsername: data['body']['sender']['login'],
-              rewardBonus: 0
-            }));
-            break;
-          case 'project_column':
-            resolve(_this3.generateReward({
-              rewardType: event,
-              contributorUsername: data['body']['sender']['login'],
-              rewardBonus: 0
-            }));
-            break;
-          case 'project':
-            resolve(_this3.generateReward({
-              rewardType: event,
-              contributorUsername: data['body']['sender']['login'],
-              rewardBonus: 0
-            }));
-            break;
-          case 'organization':
-            resolve(_this3.generateReward({
-              rewardType: event,
-              contributorUsername: data['body']['sender']['login'],
-              rewardBonus: 0
-            }));
-            break;
           default:
             resolve(_this3.generateReward({
               rewardType: event,
-              contributorUsername: data['body']['repository']['sender']['login'],
+              contributorUsername: data['body']['sender']['login'],
               rewardBonus: 0
             })
             // let error = new Error('Invalid Event Found')
