@@ -23,7 +23,7 @@ function socketHandler(_ref) {
 
 
   var WebSocketPort = 1325;
-  this.webSocketServer = new _ws2.default.Server({ port: WebSocketPort });
+  this.webSocketServer = new _ws2.default.Server({ port: WebSocketPort, origin: '*' });
   console.log('GitToken WebSocket Server Listening on Port ' + WebSocketPort);
   this.webSocketServer.on('connection', function (connection, req) {
     // console.log('connection', connection)
