@@ -14,7 +14,7 @@ import {
   retrieveGitHubUser
 } from './utils/index'
 import gittokenAPI from './api/index'
-import gittokenSQLite from '.sqlite/index'
+import gittokenSQLite from './sqlite/index'
 import { gittokenHyperlog, logMessage, logExchange, logVote } from './hyperlog/index'
 import {
   handleLogin,
