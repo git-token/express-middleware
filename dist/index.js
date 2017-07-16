@@ -50,11 +50,19 @@ var _index2 = require('./websocket/index');
 
 var _index3 = require('./utils/index');
 
-var _index4 = require('./hyperlog/index');
+var _index4 = require('./api/index');
 
-var _index5 = require('./events/index');
+var _index5 = _interopRequireDefault(_index4);
 
-var _index6 = require('./contract/index');
+var _index6 = require('.sqlite/index');
+
+var _index7 = _interopRequireDefault(_index6);
+
+var _index8 = require('./hyperlog/index');
+
+var _index9 = require('./events/index');
+
+var _index10 = require('./contract/index');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -69,9 +77,6 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
     var _this
 
     // bind utility methods to class scope
-
-
-    //
     = (0, _possibleConstructorReturn3.default)(this, (GitTokenMiddleware.__proto__ || (0, _getPrototypeOf2.default)(GitTokenMiddleware)).call(this, options));
 
     var isGitHubHook = options.isGitHubHook,
@@ -98,16 +103,18 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
     // this.smtpServer({
     //   onAuth: this.smtpHandleAuth
     // })
-    _this.verifyContributor = _index6.verifyContributor.bind(_this);
 
-    _this.gittokenHyperlog = _index4.gittokenHyperlog.bind(_this);
-    _this.logMessage = _index4.logMessage.bind(_this);
-    _this.logExchange = _index4.logExchange.bind(_this);
-    _this.logVote = _index4.logVote.bind(_this);
-    _this.handleLogin = _index5.handleLogin.bind(_this);
-    _this.handleVerification = _index5.handleVerification.bind(_this);
-    _this.handleAuthentication = _index5.handleAuthentication.bind(_this);
-    _this.handleContractDetails = _index5.handleContractDetails.bind(_this);
+
+    _this.gittokenSQLite = _index7.default.bind(_this);
+    _this.gittokenHyperlog = _index8.gittokenHyperlog.bind(_this);
+    _this.logMessage = _index8.logMessage.bind(_this);
+    _this.logExchange = _index8.logExchange.bind(_this);
+    _this.logVote = _index8.logVote.bind(_this);
+    _this.handleLogin = _index9.handleLogin.bind(_this);
+    _this.verifyContributor = _index10.verifyContributor.bind(_this);
+    _this.handleVerification = _index9.handleVerification.bind(_this);
+    _this.handleAuthentication = _index9.handleAuthentication.bind(_this);
+    _this.handleContractDetails = _index9.handleContractDetails.bind(_this);
 
     _this.gittokenHyperlog({});
 
@@ -117,23 +124,20 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
 
     // Bind event methods to class scope
 
-    );_this.ping = _index5.ping.bind(_this);
-    _this.push = _index5.push.bind(_this);
-    _this.pullRequest = _index5.pullRequest.bind(_this);_this.getSavedContract = _index6.getSavedContract.bind(_this);
-    _this.createGitTokenContract = _index6.createGitTokenContract.bind(_this);
-    _this.saveContractDetails = _index6.saveContractDetails.bind(_this);
+    );_this.ping = _index9.ping.bind(_this);
+    _this.push = _index9.push.bind(_this);
+    _this.pullRequest = _index9.pullRequest.bind(_this);_this.getSavedContract = _index10.getSavedContract.bind(_this);
+    _this.createGitTokenContract = _index10.createGitTokenContract.bind(_this);
+    _this.saveContractDetails = _index10.saveContractDetails.bind(_this);
     _this.retrieveDetails = _index3.retrieveDetails.bind(_this);
     _this.parsePushEvent = _index3.parsePushEvent.bind(_this);
     _this.parseRepositoryStats = _index3.parseRepositoryStats.bind(_this);
     _this.parseGitHubEvents = _index3.parseGitHubEvents.bind(_this);
     _this.retrieveGitHubUser = _index3.retrieveGitHubUser.bind(_this);
     _this.faucet = _index3.faucet.bind(_this);
-    _this.generateReward = _index6.generateReward.bind(_this);
-    _this.calculateRewardBonus = _index3.calculateRewardBonus.bind(_this);_this.middlewareState = {
-      accounts: {},
-      contract: {},
-      blockchain: {}
-    };
+    _this.generateReward = _index10.generateReward.bind(_this);
+    _this.calculateRewardBonus = _index3.calculateRewardBonus.bind(_this);
+    _this.gittokenAPI = _index5.default.bind(_this);
     return _this;
   }
 
@@ -213,6 +217,8 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
         }
       });
 
+      router.use('/api/v1', this.gittokenAPI);
+
       return router;
     }
   }, {
@@ -234,6 +240,7 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
           default:
             resolve(_this3.generateReward({
               rewardType: event,
+              deliveryID: data['headers']['x-github-delivery'],
               contributorUsername: data['body']['sender']['login'],
               rewardBonus: 0
             })

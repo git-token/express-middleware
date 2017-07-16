@@ -15,6 +15,7 @@ function generateReward(_ref) {
   var _this = this;
 
   var rewardType = _ref.rewardType,
+      deliveryID = _ref.deliveryID,
       contributorUsername = _ref.contributorUsername,
       rewardBonus = _ref.rewardBonus;
 
@@ -28,7 +29,7 @@ function generateReward(_ref) {
       contractFile: _this.contractFile
     }).then(function (contractDetails) {
       console.log('generateReward::contractDetails', contractDetails);
-      return _this.gittokenContract.rewardContributor.getData(contributorUsername, rewardType, rewardBonus);
+      return _this.gittokenContract.rewardContributor.getData(contributorUsername, rewardType, rewardBonus, deliveryID);
     }).then(function (data) {
       console.log('generateReward::data', data);
       return _this.signTransaction({

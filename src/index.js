@@ -13,6 +13,8 @@ import {
   parseRepositoryStats,
   retrieveGitHubUser
 } from './utils/index'
+import gittokenAPI from './api/index'
+import gittokenSQLite from '.sqlite/index'
 import { gittokenHyperlog, logMessage, logExchange, logVote } from './hyperlog/index'
 import {
   handleLogin,
@@ -50,13 +52,15 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     // this.smtpServer({
     //   onAuth: this.smtpHandleAuth
     // })
-    this.verifyContributor = verifyContributor.bind(this)
 
+
+    this.gittokenSQLite = gittokenSQLite.bind(this)
     this.gittokenHyperlog = gittokenHyperlog.bind(this)
     this.logMessage = logMessage.bind(this)
     this.logExchange = logExchange.bind(this)
     this.logVote = logVote.bind(this)
     this.handleLogin = handleLogin.bind(this)
+    this.verifyContributor = verifyContributor.bind(this)
     this.handleVerification = handleVerification.bind(this)
     this.handleAuthentication = handleAuthentication.bind(this)
     this.handleContractDetails = handleContractDetails.bind(this)
@@ -85,13 +89,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     this.faucet = faucet.bind(this)
     this.generateReward = generateReward.bind(this)
     this.calculateRewardBonus = calculateRewardBonus.bind(this)
-
-    //
-    this.middlewareState = {
-      accounts: {},
-      contract: {},
-      blockchain: {}
-    }
+    this.gittokenAPI = gittokenAPI.bind(this)
   }
 
   routeRequests () {
@@ -164,6 +162,8 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
       }
     })
 
+    router.use('/api/v1', this.gittokenAPI)
+
     return router
   }
 
@@ -179,6 +179,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
         default:
           resolve(this.generateReward({
             rewardType: event,
+            deliveryID: data['headers']['x-github-delivery'],
             contributorUsername: data['body']['sender']['login'],
             rewardBonus: 0
           }))
