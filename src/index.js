@@ -90,6 +90,16 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     this.generateReward = generateReward.bind(this)
     this.calculateRewardBonus = calculateRewardBonus.bind(this)
     this.gittokenAPI = gittokenAPI.bind(this)
+
+    /**
+     * TODO Replace this with database
+     */
+    this.middlewareState = {
+      accounts: {},
+      contract: {},
+      blockchain: {}
+    }
+
   }
 
   routeRequests () {

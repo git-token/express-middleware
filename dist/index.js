@@ -77,6 +77,11 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
     var _this
 
     // bind utility methods to class scope
+
+
+    /**
+     * TODO Replace this with database
+     */
     = (0, _possibleConstructorReturn3.default)(this, (GitTokenMiddleware.__proto__ || (0, _getPrototypeOf2.default)(GitTokenMiddleware)).call(this, options));
 
     var isGitHubHook = options.isGitHubHook,
@@ -137,7 +142,12 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
     _this.faucet = _index3.faucet.bind(_this);
     _this.generateReward = _index10.generateReward.bind(_this);
     _this.calculateRewardBonus = _index3.calculateRewardBonus.bind(_this);
-    _this.gittokenAPI = _index5.default.bind(_this);
+    _this.gittokenAPI = _index5.default.bind(_this);_this.middlewareState = {
+      accounts: {},
+      contract: {},
+      blockchain: {}
+    };
+
     return _this;
   }
 
