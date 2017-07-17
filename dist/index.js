@@ -159,15 +159,14 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
       var router = (0, _express.Router)();
 
       router.post('/verify/:address', function (req, res) {
-        if (!req.user) {
-          res.send((0, _stringify2.default)({
-            authenticated: false,
-            message: 'Could not find GitHub user'
-          }));
-        } else {
-          console.log('gittoken::verify::req.user', req.user);
-          res.send(true);
-        }
+        _this2.handleVerification({
+          user: req.user,
+          address: req.params.address
+        }).then(function (authStatus) {
+          res.status(200).send(authStatus);
+        }).catch(function (error) {
+          res.status(500).send(error);
+        });
       });
 
       router.post('/', function (req, res, next) {
@@ -228,8 +227,7 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
             console.log('txReceipt', txReceipt);
             res.status(200).send(txReceipt);
           }).catch(function (error) {
-            console.log('error', error);
-            res.status(500).send((0, _stringify2.default)(error, null, 2));
+            res.status(500).send(error);
           });
         }
       });
