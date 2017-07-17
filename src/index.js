@@ -111,8 +111,8 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
         address: req.params.address
       })
       .then((authStatus) => {
-        const { code } = authStatus
-        res.status(code).send(authStatus)
+        const { code, data } = authStatus
+        res.status(code).send(data)
       })
       .catch((error) => {
         res.status(500).send(error)

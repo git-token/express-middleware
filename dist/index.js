@@ -163,9 +163,10 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
           user: req.user,
           address: req.params.address
         }).then(function (authStatus) {
-          var code = authStatus.code;
+          var code = authStatus.code,
+              data = authStatus.data;
 
-          res.status(code).send(authStatus);
+          res.status(code).send(data);
         }).catch(function (error) {
           res.status(500).send(error);
         });

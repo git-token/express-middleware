@@ -19,7 +19,7 @@ function handleVerification(_ref) {
 
   return new _bluebird2.default(function (resolve, reject) {
     if (!user || !user.profile || !user.profile.username) {
-      resolve({ code: 401, authentication: false, user: user });
+      resolve({ code: 200, data: { authentication: false, user: user } });
     } else {
       var username = user.profile.username;
 
@@ -28,9 +28,11 @@ function handleVerification(_ref) {
         if (address == contributorAddress) {
           resolve({
             code: 200,
-            authentication: true,
-            user: user,
-            address: address
+            data: {
+              authentication: true,
+              user: user,
+              address: address
+            }
           });
         } else {
           return _this.verifyContributor({
@@ -44,9 +46,11 @@ function handleVerification(_ref) {
         if (_contributorAddress == address) {
           resolve({
             code: 200,
-            authentication: true,
-            user: user,
-            address: address
+            data: {
+              authentication: true,
+              user: user,
+              address: address
+            }
           });
         } else {
           var error = new Error('Could not verify user with the contract! Transaction Failed');

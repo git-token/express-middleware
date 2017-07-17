@@ -3,7 +3,7 @@ import Promise from 'bluebird'
 export default function handleVerification({ user, address }) {
   return new Promise((resolve, reject) => {
     if (!user || !user.profile || !user.profile.username) {
-      resolve({ code: 401, authentication: false, user })
+      resolve({ code: 200, data: { authentication: false, user } })
     } else {
       const { profile: { username } } = user
 
@@ -12,9 +12,11 @@ export default function handleVerification({ user, address }) {
           if (address == contributorAddress) {
             resolve({
               code: 200,
-              authentication: true,
-              user,
-              address
+              data: {
+                authentication: true,
+                user,
+                address
+              }
             })
           } else {
             return this.verifyContributor({
@@ -30,9 +32,11 @@ export default function handleVerification({ user, address }) {
           if (_contributorAddress == address) {
             resolve({
               code: 200,
-              authentication: true,
-              user,
-              address
+              data: {
+                authentication: true,
+                user,
+                address
+              }
             })
           } else {
             let error = new Error('Could not verify user with the contract! Transaction Failed')
