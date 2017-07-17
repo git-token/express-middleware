@@ -15,7 +15,7 @@ function verifyContributor(_ref) {
   var _this = this;
 
   var contributorAddress = _ref.contributorAddress,
-      email = _ref.email;
+      username = _ref.username;
 
   return new _bluebird2.default(function (resolve, reject) {
     var decimals = _this.config.decimals;
@@ -27,8 +27,8 @@ function verifyContributor(_ref) {
       contractFile: _this.contractFile
     }).then(function (contractDetails) {
       // console.log('generateReward::contractDetails', contractDetails)
-      console.log('verifyContributor::email, contributorAddress', email, contributorAddress);
-      return _this.gittokenContract.verifyContributor.getData(contributorAddress, email);
+      console.log('verifyContributor::username, contributorAddress', username, contributorAddress);
+      return _this.gittokenContract.verifyContributor.getData(contributorAddress, username);
     }).then(function (data) {
       return _this.signTransaction({
         to: _this.gittokenContract.address,

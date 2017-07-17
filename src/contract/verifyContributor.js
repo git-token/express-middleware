@@ -1,6 +1,6 @@
 import Promise from 'bluebird'
 
-export default function verifyContributor({ contributorAddress, email }) {
+export default function verifyContributor({ contributorAddress, username }) {
   return new Promise((resolve, reject) => {
     const { decimals } = this.config
     const from = `0x${this.ks.getAddresses()[0]}`
@@ -10,8 +10,8 @@ export default function verifyContributor({ contributorAddress, email }) {
       contractFile: this.contractFile
     }).then((contractDetails) => {
       // console.log('generateReward::contractDetails', contractDetails)
-      console.log('verifyContributor::email, contributorAddress', email, contributorAddress)
-      return this.gittokenContract.verifyContributor.getData(contributorAddress, email)
+      console.log('verifyContributor::username, contributorAddress', username, contributorAddress)
+      return this.gittokenContract.verifyContributor.getData(contributorAddress, username)
     }).then((data) => {
       return this.signTransaction({
         to: this.gittokenContract.address,
