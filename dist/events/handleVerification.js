@@ -21,12 +21,14 @@ function handleVerification(_ref) {
     if (!user || !user.profile || !user.profile.username) {
       resolve({ code: 200, data: { authentication: false, user: user } });
     } else {
-      console.log('handleVerification::user.profile', user.profile);
-      console.log('handleVerification::user.profile.username', user.profile.username);
       var username = user.profile.username;
 
-
-      _this.gittokenContract.getContributorAddress.callAsync(username).then(function (contributorAddress) {
+      _this.getSavedContract({
+        dirPath: _this.dirPath,
+        contractFile: _this.contractFile
+      }).then(function () {
+        return _this.gittokenContract.getContributorAddress.callAsync(username);
+      }).then(function (contributorAddress) {
         console.log('handleVerification::contributorAddress', contributorAddress);
         if (address == contributorAddress) {
           resolve({

@@ -115,6 +115,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
         res.status(code).send(data)
       })
       .catch((error) => {
+        console.log('/verify/:address::error', error)
         res.status(500).send(error)
       })
     })

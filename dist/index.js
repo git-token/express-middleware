@@ -168,6 +168,7 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
 
           res.status(code).send(data);
         }).catch(function (error) {
+          console.log('/verify/:address::error', error);
           res.status(500).send(error);
         });
       });
