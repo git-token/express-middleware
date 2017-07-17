@@ -11,7 +11,7 @@ export default function handleVerification({ user, address }) {
         contractFile: this.contractFile
       }).
       then(() => {
-        return this.gittokenContract.getContributorAddress.callAsync(username)
+        return this.gittokenContract.getContributorAddress(username)
       })
       .then((contributorAddress) => {
           console.log('handleVerification::contributorAddress', contributorAddress)

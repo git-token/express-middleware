@@ -27,7 +27,7 @@ function handleVerification(_ref) {
         dirPath: _this.dirPath,
         contractFile: _this.contractFile
       }).then(function () {
-        return _this.gittokenContract.getContributorAddress.callAsync(username);
+        return _this.gittokenContract.getContributorAddress(username);
       }).then(function (contributorAddress) {
         console.log('handleVerification::contributorAddress', contributorAddress);
         if (address == contributorAddress) {
