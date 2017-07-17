@@ -106,8 +106,15 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     let router = Router()
 
     router.post('/verify/:address', (req, res) => {
-      console.log('gittoken::verify::req.user', req.user)
-      res.send(true)
+      if (!req.user) {
+        res.send(JSON.stringify({
+          authenticated: false,
+          message: 'Could not find GitHub user'
+        }))
+      } else {
+        console.log('gittoken::verify::req.user', req.user)
+        res.send(true)
+      }
     })
 
     router.post('/', (req, res, next) => {

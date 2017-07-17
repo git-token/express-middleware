@@ -3,7 +3,7 @@ import WebSocket from 'ws'
 export default function socketHandler ({ }) {
 
   const WebSocketPort = 1325
-  this.webSocketServer = new WebSocket.Server({ port: WebSocketPort, origin: '*' })
+  this.webSocketServer = new WebSocket.Server({ port: WebSocketPort })
   console.log(`GitToken WebSocket Server Listening on Port ${WebSocketPort}`)
   this.webSocketServer.on('connection', (connection, req) => {
     // console.log('connection', connection)

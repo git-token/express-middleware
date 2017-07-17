@@ -159,8 +159,15 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
       var router = (0, _express.Router)();
 
       router.post('/verify/:address', function (req, res) {
-        console.log('gittoken::verify::req.user', req.user);
-        res.send(true);
+        if (!req.user) {
+          res.send((0, _stringify2.default)({
+            authenticated: false,
+            message: 'Could not find GitHub user'
+          }));
+        } else {
+          console.log('gittoken::verify::req.user', req.user);
+          res.send(true);
+        }
       });
 
       router.post('/', function (req, res, next) {
