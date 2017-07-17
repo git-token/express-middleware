@@ -21,10 +21,13 @@ function handleVerification(_ref) {
     if (!user || !user.profile || !user.profile.username) {
       resolve({ code: 200, data: { authentication: false, user: user } });
     } else {
+      console.log('handleVerification::user.profile', user.profile);
+      console.log('handleVerification::user.profile.username', user.profile.username);
       var username = user.profile.username;
 
 
       _this.gittokenContract.getContributorAddress.callAsync(username).then(function (contributorAddress) {
+        console.log('handleVerification::contributorAddress', contributorAddress);
         if (address == contributorAddress) {
           resolve({
             code: 200,
@@ -54,9 +57,10 @@ function handleVerification(_ref) {
           });
         } else {
           var error = new Error('Could not verify user with the contract! Transaction Failed');
-          reject(error);
+          throw error;
         }
       }).catch(function (error) {
+        console.log('handleVerification::error', error);
         reject(error);
       });
     }
