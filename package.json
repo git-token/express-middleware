@@ -33,7 +33,7 @@
     "ethereumjs-tx": "^1.3.1",
     "ethereumjs-util": "^5.1.2",
     "express": "^4.15.3",
-    "gittoken-contracts": "0.0.13",
+    "gittoken-contracts": "0.0.14",
     "gittoken-messenger-ui": "0.0.9",
     "hyperlog": "^4.12.1",
     "ip": "^1.1.5",
