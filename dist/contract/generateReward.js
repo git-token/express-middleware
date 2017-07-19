@@ -45,6 +45,7 @@ function generateReward(_ref) {
     }).then(function (txHash) {
       return _this.getTransactionReceipt(txHash);
     }).then(function (txReceipt) {
+      console.log('generateReward::txReceipt', txReceipt);
       return _this.gittokenContract.getContributorAddress.call(contributorUsername);
     }).then(function (_contributorAddress) {
       contributorAddress = _contributorAddress;
