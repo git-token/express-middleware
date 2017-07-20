@@ -23,7 +23,8 @@ import {
   handleAuthentication,
   ping,
   push,
-  pullRequest
+  pullRequest,
+  milestone
 } from './events/index'
 import {
   getSavedContract, createGitTokenContract, saveContractDetails, generateReward, verifyContributor
@@ -76,6 +77,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     this.ping = ping.bind(this)
     this.push = push.bind(this)
     this.pullRequest = pullRequest.bind(this)
+    this.milestone = milestone.bind(this)
 
     // bind utility methods to class scope
     this.getSavedContract = getSavedContract.bind(this)
