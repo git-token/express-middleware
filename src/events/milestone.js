@@ -4,6 +4,7 @@ export default function milestone ({ event, data }) {
   return new Promise((resolve, reject) => {
     const { headers, body } = data
     const { action } = body
+    const { decimals } = this.config
 
     /**
      * NOTE Determine when milestones are created, edited, and when
@@ -21,7 +22,7 @@ export default function milestone ({ event, data }) {
           // basically the contract should hold the rewards until the milestone is // reached. Tokens will be auctioned on behalf of the project for funding.
           contributorUsername: data['body']['sender']['login'],
           rewardBonus: 0,
-          reservedValue: 15000,
+          reservedValue: Number(15000 * Math.pow(10, decimals)),
         }))
         break;
       case 'edited':

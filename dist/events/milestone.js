@@ -21,6 +21,7 @@ function milestone(_ref) {
     var headers = data.headers,
         body = data.body;
     var action = body.action;
+    var decimals = _this.config.decimals;
 
     /**
      * NOTE Determine when milestones are created, edited, and when
@@ -38,7 +39,7 @@ function milestone(_ref) {
           // basically the contract should hold the rewards until the milestone is // reached. Tokens will be auctioned on behalf of the project for funding.
           contributorUsername: data['body']['sender']['login'],
           rewardBonus: 0,
-          reservedValue: 15000
+          reservedValue: Number(15000 * Math.pow(10, decimals))
         }));
         break;
       case 'edited':
