@@ -17,7 +17,8 @@ function generateReward(_ref) {
   var rewardType = _ref.rewardType,
       deliveryID = _ref.deliveryID,
       contributorUsername = _ref.contributorUsername,
-      rewardBonus = _ref.rewardBonus;
+      rewardBonus = _ref.rewardBonus,
+      reservedValue = _ref.reservedValue;
 
   return new _bluebird2.default(function (resolve, reject) {
     var decimals = _this.config.decimals;
@@ -29,7 +30,7 @@ function generateReward(_ref) {
       contractFile: _this.contractFile
     }).then(function (contractDetails) {
       console.log('generateReward::contractDetails', contractDetails);
-      return _this.gittokenContract.rewardContributor.getData(contributorUsername, rewardType, rewardBonus, deliveryID);
+      return _this.gittokenContract.rewardContributor.getData(contributorUsername, rewardType, rewardBonus, reservedValue, deliveryID);
     }).then(function (data) {
       console.log('generateReward::data', data);
       return _this.signTransaction({

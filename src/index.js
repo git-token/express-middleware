@@ -195,12 +195,16 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
         case 'ping':
           resolve(this.ping(data))
           break;
+        case 'milestone':
+          resolve(this.milestone({ event, data }))
+          break;
         default:
           resolve(this.generateReward({
             rewardType: event,
             deliveryID: data['headers']['x-github-delivery'],
             contributorUsername: data['body']['sender']['login'],
-            rewardBonus: 0
+            rewardBonus: 0,
+            reservedValue: 0
           }))
           // let error = new Error('Invalid Event Found')
           // reject(error)
