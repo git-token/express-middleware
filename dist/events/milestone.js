@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.milestone = milestone;
+exports.default = milestone;
 
 var _bluebird = require('bluebird');
 

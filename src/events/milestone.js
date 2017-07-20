@@ -1,6 +1,6 @@
 import Promise from 'bluebird'
 
-export function milestone ({ event, data }) {
+export default function milestone ({ event, data }) {
   return new Promise((resolve, reject) => {
     const { headers, body } = data
     const { action } = body
