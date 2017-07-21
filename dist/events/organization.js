@@ -38,15 +38,19 @@ function organization(_ref) {
           rewardBonus: 0,
           reservedValue: 0
         }).then(function () {
-          resolve(_this.generateReward({
+          return _this.generateReward({
             rewardType: event,
             deliveryID: headers['x-github-delivery'],
             // contributorUsername in this case should be the contract address;
             // basically the contract should hold the rewards until the milestone is // reached. Tokens will be auctioned on behalf of the project for funding.
             contributorUsername: body['membership']['user']['login'],
             rewardBonus: 0,
-            reservedValue: 15000
-          }));
+            reservedValue: 15000 * Math.pow(10, decimals)
+          });
+        }).then(function (result) {
+          resolve(result);
+        }).catch(function (error) {
+          reject(error);
         });
         break;
       default:
