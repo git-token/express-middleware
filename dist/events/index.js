@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.pullRequest = exports.push = exports.milestone = exports.ping = exports.handleLogin = exports.handleVerification = exports.handleAuthentication = exports.handleContractDetails = undefined;
+exports.pullRequest = exports.push = exports.organization = exports.milestone = exports.ping = exports.handleLogin = exports.handleVerification = exports.handleAuthentication = exports.handleContractDetails = undefined;
 
 var _ping = require('./ping');
 
@@ -33,6 +33,10 @@ var _milestone = require('./milestone');
 
 var _milestone2 = _interopRequireDefault(_milestone);
 
+var _organization = require('./organization');
+
+var _organization2 = _interopRequireDefault(_organization);
+
 var _pullRequest = require('./pullRequest');
 
 var _pullRequest2 = _interopRequireDefault(_pullRequest);
@@ -45,5 +49,6 @@ exports.handleVerification = _handleVerification2.default;
 exports.handleLogin = _handleLogin2.default;
 exports.ping = _ping2.default;
 exports.milestone = _milestone2.default;
+exports.organization = _organization2.default;
 exports.push = _push2.default;
 exports.pullRequest = _pullRequest2.default;

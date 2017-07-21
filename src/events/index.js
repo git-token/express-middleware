@@ -5,6 +5,7 @@ import handleVerification from './handleVerification'
 import handleContractDetails from './handleContractDetails'
 import push from './push'
 import milestone from './milestone'
+import organization from './organization'
 import pullRequest from './pullRequest'
 
 export {
@@ -14,6 +15,7 @@ export {
   handleLogin,
   ping,
   milestone,
+  organization,
   push,
   pullRequest
 }

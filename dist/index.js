@@ -132,7 +132,8 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
     );_this.ping = _index9.ping.bind(_this);
     _this.push = _index9.push.bind(_this);
     _this.pullRequest = _index9.pullRequest.bind(_this);
-    _this.milestone = _index9.milestone.bind(_this);_this.getSavedContract = _index10.getSavedContract.bind(_this);
+    _this.milestone = _index9.milestone.bind(_this);
+    _this.organization = _index9.organization.bind(_this);_this.getSavedContract = _index10.getSavedContract.bind(_this);
     _this.createGitTokenContract = _index10.createGitTokenContract.bind(_this);
     _this.saveContractDetails = _index10.saveContractDetails.bind(_this);
     _this.retrieveDetails = _index3.retrieveDetails.bind(_this);
@@ -259,6 +260,9 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
             break;
           case 'milestone':
             resolve(_this3.milestone({ event: event, data: data }));
+            break;
+          case 'organization':
+            resolve(_this3.organization({ event: event, data: data }));
             break;
           default:
             resolve(_this3.generateReward({
