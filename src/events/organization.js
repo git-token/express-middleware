@@ -11,7 +11,7 @@ export default function organization ({ event, data }) {
         resolve(true)
         break;
       case 'member_added':
-        resolve(this.generateReward({
+        this.generateReward({
           rewardType: event,
           deliveryID: headers['x-github-delivery'],
           // contributorUsername in this case should be the contract address;
@@ -20,7 +20,7 @@ export default function organization ({ event, data }) {
           rewardBonus: 0,
           reservedValue: 0,
         }).then(() => {
-          return this.generateReward({
+          resolve(this.generateReward({
             rewardType: event,
             deliveryID: headers['x-github-delivery'],
             // contributorUsername in this case should be the contract address;
@@ -28,8 +28,8 @@ export default function organization ({ event, data }) {
             contributorUsername: body['membership']['user']['login'],
             rewardBonus: 0,
             reservedValue: 15000,
-          })
-        }))
+          }))
+        })
         break;
       default:
         let error = new Error(`No method to handle action ${action}.`)

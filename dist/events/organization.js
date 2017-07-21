@@ -29,7 +29,7 @@ function organization(_ref) {
         resolve(true);
         break;
       case 'member_added':
-        resolve(_this.generateReward({
+        _this.generateReward({
           rewardType: event,
           deliveryID: headers['x-github-delivery'],
           // contributorUsername in this case should be the contract address;
@@ -38,7 +38,7 @@ function organization(_ref) {
           rewardBonus: 0,
           reservedValue: 0
         }).then(function () {
-          return _this.generateReward({
+          resolve(_this.generateReward({
             rewardType: event,
             deliveryID: headers['x-github-delivery'],
             // contributorUsername in this case should be the contract address;
@@ -46,8 +46,8 @@ function organization(_ref) {
             contributorUsername: body['membership']['user']['login'],
             rewardBonus: 0,
             reservedValue: 15000
-          });
-        }));
+          }));
+        });
         break;
       default:
         var error = new Error('No method to handle action ' + action + '.');
