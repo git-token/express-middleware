@@ -43,8 +43,8 @@ function saveContributionEvent({ event }) {
         txHash          CHAR(66),
         contributor     CHAR(42),
         username        TEXT,
-        value           INTEGER,
-        reservedValue   INTEGER,
+        value           INTEGER DEFAULT 0,
+        reservedValue   INTEGER DEFAULT 0,
         date            TIMESTAMP DEFAULT '1970-01-01 00:00:01.001',
         rewardType      TEXT,
         CONSTRAINT contribution_pk PRIMARY KEY (txHash)
@@ -84,12 +84,48 @@ function saveContributionEvent({ event }) {
         SELECT * FROM contribution WHERE txHash = "${transactionHash}"
       `))
     }).then((contribution) => {
-      return updateLeaderboard({ contribution: contribution[0] })
-    }).then((profile) => {
-      console.log('profile', profile)
-      resolve(profile)
+      return join(
+        updateLeaderboard({ contribution: contribution[0] }),
+        updateInflation({ contribution: contribution[0] })
+      )
+    }).then((data) => {
+      console.log('data', data)
+      resolve(data)
     }).catch((error) => {
       console.log('saveContributionEvent::error', error)
+      reject(error)
+    })
+  })
+}
+
+function updateInflation({ contribution }) {
+  return new Promise((resolve, reject) => {
+    const { date, value, reservedValue } = contribution
+    Promise.resolve(sqlite.all(`
+      CREATE TABLE IF NOT EXISTS total_supply (
+        totalSupply    INTEGER,
+        date           TIMESTAMP DEFAULT '1970-01-01 00:00:01.001',
+        CONSTRAINT total_supply_pk PRIMARY KEY (date)
+      );
+    `)).then(() => {
+      const contributionValue = value + reservedValue;
+      // console.log('contributionValue', contributionValue)
+      return Promise.resolve(sqlite.all(`
+        INSERT OR REPLACE INTO total_supply (
+          totalSupply,
+          date
+        ) VALUES (
+          (SELECT (sum(value)+sum(reservedValue)) FROM contribution WHERE date <= ${date}),
+          ${date}
+        );
+      `))
+    }).then(() => {
+      return Promise.resolve(sqlite.all(`
+        SELECT * FROM total_supply ORDER BY date ASC limit 1;
+      `))
+    }).then((totalSupply) => {
+      resolve(totalSupply)
+    }).catch((error) => {
       reject(error)
     })
   })
@@ -128,6 +164,7 @@ function updateLeaderboard({ contribution }) {
         `
       ))
       }).then(() => {
+        // Replace "0x0" with contract address;
         return Promise.resolve(sqlite.all(`
             INSERT OR REPLACE INTO leaderboard (
               username,

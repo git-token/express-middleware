@@ -5,8 +5,8 @@ CREATE TABLE IF NOT EXISTS contribution (
   txHash          CHAR(66),
   contributor     CHAR(42),
   username        TEXT,
-  value           INTEGER,
-  reservedValue   INTEGER,
+  value           INTEGER DEFAULT 0,
+  reservedValue   INTEGER DEFAULT 0,
   date            TIMESTAMP DEFAULT '1970-01-01 00:00:01.001',
   rewardType      TEXT,
   CONSTRAINT contribution_pk PRIMARY KEY (txHash)
@@ -20,6 +20,12 @@ CREATE TABLE IF NOT EXISTS leaderboard (
   numContributions     INTEGER,
   valuePerContribution REAL,
   CONSTRAINT leaderboard_pk PRIMARY KEY (username)
+);
+
+CREATE TABLE IF NOT EXISTS total_supply (
+  totalSupply    INTEGER,
+  date           TIMESTAMP DEFAULT '1970-01-01 00:00:01.001',
+  CONSTRAINT total_supply_pk PRIMARY KEY (date)
 );
 
 -- CREATE TABLE IF NOT EXISTS contributor_verified (
