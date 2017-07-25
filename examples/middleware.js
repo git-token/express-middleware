@@ -4,7 +4,7 @@ const clientID = process.argv[2]
 const clientSecret = process.argv[3]
 
 gittoken = new GitTokenMiddleware({
-  web3Provider: 'http://192.168.0.17:8545',
+  web3Provider: 'http://gittoken.org/web3/',
   isGitHubHook: true,
   dirPath: `${process.cwd()}/gittoken`,
   keystoreFileName: `.keystore`,
@@ -12,7 +12,7 @@ gittoken = new GitTokenMiddleware({
   config: {
     symbol: 'GTK',
     decimals: 8,
-    contributor: "0xc7bd4ea12519088160dcdaa652d864f77d32c7db",
+    contributor: "0x8CB2CeBB0070b231d4BA4D3b747acAebDFbbD142",
     email: 'ryan.michael.tate@gmail.com',
     organization: 'git-token'
   }
@@ -30,8 +30,8 @@ gittoken.handleGitHubWebHookEvent({
 }).then((result) => {
   console.log('result', JSON.stringify(result, null, 2))
   return gittoken.parseRepositoryStats({
-    owner: 'consensys',
-    repository: 'eth-lightwallet',
+    owner: 'git-token',
+    repository: 'contracts',
     clientID,
     clientSecret
   })

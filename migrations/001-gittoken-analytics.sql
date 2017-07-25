@@ -28,6 +28,13 @@ CREATE TABLE IF NOT EXISTS total_supply (
   CONSTRAINT total_supply_pk PRIMARY KEY (date)
 );
 
+CREATE TABLE IF NOT EXISTS contribution_frequency (
+  rewardType     TEXT,
+  count          INTEGER,
+  percentOfTotal REAL,
+  CONSTRAINT contribution_frequency_pk PRIMARY KEY (rewardType)
+);
+
 -- CREATE TABLE IF NOT EXISTS contributor_verified (
 --   txHash          CHAR(66),
 --   contributor     CHAR(42),

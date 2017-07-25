@@ -22,7 +22,7 @@ gittoken = new GitTokenMiddleware({
 })
 
 gittoken.analyticsProcessor.send(JSON.stringify({
-  type: 'configure',
+  event: 'configure',
   data: {
     web3Provider: 'http://138.68.225.133:8545',
     contractAddress: '0xfc9421ae996008fb28a11edce05b786ee6738395',

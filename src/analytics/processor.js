@@ -16,16 +16,63 @@ Promise.resolve().then(() => {
     console.log('SQLite DB Error', error)
 })
 
-
+function SendError(error) {
+  process.send(JSON.stringify({
+    event: 'error',
+    message: error.msg,
+    data: error
+  }))
+}
 
 process.on('message', (msg) => {
-  const { type, data } = JSON.parse(msg)
-  switch(type) {
+  const { event, data } = JSON.parse(msg)
+  switch(event) {
     case 'configure':
       return configure({ ...data });
       break;
+    case 'get_leaderboard':
+      query({
+        queryString: `SELECT * FROM leaderboard ORDER BY value DESC;`,
+        queryObject: []
+      }).then((data) => {
+        process.send(JSON.stringify({ event, data }))
+      }).catch((error) => {
+        console.log('error', error)
+        SendError(error)
+      });
+      break;
+    case 'get_contribution_frequency':
+    query({
+      queryString: `SELECT * FROM contribution_frequency ORDER BY percentOfTotal ASC;`,
+      queryObject: []
+    }).then((data) => {
+      process.send(JSON.stringify({ event, data }))
+    }).catch((error) => {
+      console.log('error', error)
+      SendError(error)
+    });
+    break;
+    case 'get_totalSupply':
+      query({
+        queryString: `SELECT * FROM total_supply ORDER BY date ASC;`,
+        queryObject: []
+      }).then((data) => {
+        process.send(JSON.stringify({ event, data }))
+      }).catch((error) => {
+        console.log('error', error)
+        SendError(error)
+      });
+      break;
     case 'get_contributions':
-      return getContributionEvents();
+      query({
+        queryString: `SELECT * FROM contribution ORDER BY date DESC;`,
+        queryObject: []
+      }).then((data) => {
+        process.send(JSON.stringify({ event, data }))
+      }).catch((error) => {
+        console.log('error', error)
+        SendError(error)
+      });
       break;
     case 'update_contributions':
       return updateContributions();
@@ -84,13 +131,7 @@ function saveContributionEvent({ event }) {
         SELECT * FROM contribution WHERE txHash = "${transactionHash}"
       `))
     }).then((contribution) => {
-      return join(
-        updateLeaderboard({ contribution: contribution[0] }),
-        updateInflation({ contribution: contribution[0] })
-      )
-    }).then((data) => {
-      console.log('data', data)
-      resolve(data)
+      resolve(contribution[0])
     }).catch((error) => {
       console.log('saveContributionEvent::error', error)
       reject(error)
@@ -98,7 +139,37 @@ function saveContributionEvent({ event }) {
   })
 }
 
-function updateInflation({ contribution }) {
+function updateContributionFrequency({ contribution }) {
+  return new Promise((resolve, reject) => {
+    Promise.resolve(sqlite.all(`
+      CREATE TABLE IF NOT EXISTS contribution_frequency (
+        rewardType     TEXT,
+        count          INTEGER,
+        percentOfTotal REAL,
+        CONSTRAINT contribution_frequency_pk PRIMARY KEY (rewardType)
+      );
+    `)).then(() => {
+      const { rewardType } = contribution
+      return Promise.resolve(sqlite.all(`
+        INSERT OR REPLACE INTO contribution_frequency (
+          rewardType,
+          count,
+          percentOfTotal
+        ) VALUES (
+          "${rewardType}",
+          (SELECT count(*) FROM contribution WHERE rewardType = "${rewardType}"),
+          (SELECT 100.0 * count(*) / (SELECT count(*) FROM contribution) AS PERCENTAGE FROM contribution WHERE rewardType = "${rewardType}")
+        );
+      `))
+    }).then(() => {
+      resolve(true)
+    }).catch((error) => {
+      reject(error)
+    })
+  })
+}
+
+function updateTotalSupply({ contribution }) {
   return new Promise((resolve, reject) => {
     const { date, value, reservedValue } = contribution
     Promise.resolve(sqlite.all(`
@@ -195,13 +266,11 @@ function updateLeaderboard({ contribution }) {
   })
 }
 
-function getContributionEvents() {
+function query({ queryString, queryObject }) {
   return new Promise((resolve, reject) => {
-    const queryString = `SELECT * FROM contribution ORDER BY date ASC;`
-    Promise.resolve(sqlite.all(queryString)).then((contributions) => {
-      resolve(contributions)
+    Promise.resolve(sqlite.all(queryString, queryObject)).then((result) => {
+      resolve(result)
     }).catch((error) => {
-      // console.log('getContributionEvents::error', error)
       reject(error)
     })
   })
@@ -213,8 +282,18 @@ function watchContractContributionEvents() {
     if (error) {
       console.log('watchContractContributionEvents::error', error)
     } else {
-      saveContributionEvent({ event: result }).then(() => {
-        // console.log('Contribution Saved')
+      saveContributionEvent({ event: result }).then((contribution) => {
+        return join(
+          updateLeaderboard({ contribution }),
+          updateTotalSupply({ contribution }),
+          updateContributionFrequency({ contribution })
+        )
+      }).then((data) => {
+        console.log('watchContractContributionEvents::data', data)
+        process.send(JSON.stringify({
+          event: 'broadcast_contribution_data',
+          data
+        }))
       }).catch((error) => {
         console.log('error', error)
       })
