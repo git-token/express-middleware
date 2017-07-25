@@ -3,3 +3,4 @@ node_modules
 contract.json
 README.md
 gittoken
+analytics.sqlite

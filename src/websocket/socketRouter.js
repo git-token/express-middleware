@@ -12,9 +12,9 @@ export default async function socketRouter({ connection, event, data }) {
         if (connection.readyState == 1) {
           switch(event) {
             case 'broadcast_contribution_data':
-              this.webSocketServer.clients.forEach((connection) => {
-                if (connection.readyState === 1) {
-                  connection.send(msg)
+              this.webSocketServer.clients.forEach((socket) => {
+                if (socket.readyState === 1) {
+                  socket.send(msg)
                 }
               })
               break;

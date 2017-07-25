@@ -49,9 +49,9 @@ exports.default = function () {
               if (connection.readyState == 1) {
                 switch (event) {
                   case 'broadcast_contribution_data':
-                    _this.webSocketServer.clients.forEach(function (connection) {
-                      if (connection.readyState === 1) {
-                        connection.send(msg);
+                    _this.webSocketServer.clients.forEach(function (socket) {
+                      if (socket.readyState === 1) {
+                        socket.send(msg);
                       }
                     });
                     break;
