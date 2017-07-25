@@ -7,6 +7,8 @@ export default async function socketRouter({ connection, event, data }) {
       this.analyticsProcessor.send(JSON.stringify({ event: 'get_totalSupply' }))
       this.analyticsProcessor.send(JSON.stringify({ event: 'get_leaderboard' }))
       this.analyticsProcessor.send(JSON.stringify({ event: 'get_contribution_frequency' }))
+      this.analyticsProcessor.send(JSON.stringify({ event: 'get_token_inflation' }))
+      this.analyticsProcessor.send(JSON.stringify({ event: 'get_summary_statistics' }))
       this.analyticsProcessor.on('message', (msg) => {
         const { event } = JSON.parse(msg)
         if (connection.readyState == 1) {

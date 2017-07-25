@@ -35,6 +35,21 @@ CREATE TABLE IF NOT EXISTS contribution_frequency (
   CONSTRAINT contribution_frequency_pk PRIMARY KEY (rewardType)
 );
 
+CREATE TABLE IF NOT EXISTS summary_statistics (
+  githubOrganization   TEXT,
+  contractAddress      CHAR(42),
+  tokenName            TEXT,
+  tokenSymbol          TEXT,
+  latestContribution   TIMESTAMP DEFAULT '1970-01-01 00:00:01.001',
+  tokenSupply          INTEGER,
+  reservedSupply       INTEGER,
+  percentReserved      REAL,
+  tokenInflation       REAL,
+  totalContributions   INTEGER,
+  uniqueContributions  INTEGER,
+  CONSTRAINT summary_statistics_pk PRIMARY KEY (contractAddress)
+);
+
 -- CREATE TABLE IF NOT EXISTS contributor_verified (
 --   txHash          CHAR(66),
 --   contributor     CHAR(42),

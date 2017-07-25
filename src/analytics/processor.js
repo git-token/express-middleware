@@ -5,6 +5,7 @@ import Web3 from 'web3'
 let web3;
 let eth;
 let contract;
+let contractDetails = {}
 
 const dbPath = `${process.cwd()}/analytics.sqlite`
 
@@ -74,8 +75,27 @@ process.on('message', (msg) => {
         SendError(error)
       });
       break;
-    case 'update_contributions':
-      return updateContributions();
+    case 'get_token_inflation':
+      query({
+        queryString: `SELECT * FROM token_inflation ORDER BY date DESC;`,
+        queryObject: []
+      }).then((data) => {
+        process.send(JSON.stringify({ event, data }))
+      }).catch((error) => {
+        console.log('error', error)
+        SendError(error)
+      });
+      break;
+    case 'get_summary_statistics':
+      query({
+        queryString: `SELECT * FROM summary_statistics;`,
+        queryObject: []
+      }).then((data) => {
+        process.send(JSON.stringify({ event, data }))
+      }).catch((error) => {
+        console.log('error', error)
+        SendError(error)
+      });
       break;
     default:
       return null;
@@ -186,7 +206,7 @@ function updateTotalSupply({ contribution }) {
           totalSupply,
           date
         ) VALUES (
-          (SELECT (sum(value)+sum(reservedValue)) FROM contribution WHERE date <= ${date}),
+          (SELECT (sum(value)+sum(reservedValue)) FROM contribution WHERE date <= ${date} ORDER BY date DESC),
           ${date}
         );
       `))
@@ -196,6 +216,122 @@ function updateTotalSupply({ contribution }) {
       `))
     }).then((totalSupply) => {
       resolve(totalSupply)
+    }).catch((error) => {
+      reject(error)
+    })
+  })
+}
+
+function updateTokenInflationRate({ contribution }) {
+  return new Promise((resolve, reject) => {
+    const { value, reservedValue, date } = contribution
+    Promise.resolve(sqlite.all(`
+      CREATE TABLE IF NOT EXISTS token_inflation (
+        date        TIMESTAMP DEFAULT '1970-01-01 00:00:01.001',
+        tokenSupply INTEGER,
+        rate        REAL,
+        avgRate     REAL,
+        CONSTRAINT token_inflation_pk PRIMARY KEY (date)
+      );
+    `)).then(() => {
+      return Promise.resolve(sqlite.all(`
+        INSERT OR REPLACE INTO token_inflation (
+          date,
+          tokenSupply,
+          rate,
+          avgRate
+        ) VALUES (
+          ${date},
+          (SELECT (sum(value) + sum(reservedValue)) FROM contribution WHERE date <= ${date}),
+          (SELECT (sum(value)+sum(reservedValue))/(sum(value)+sum(reservedValue)-(1.0*${value + reservedValue}))-1.0 FROM contribution WHERE date <= ${date}),
+          (SELECT sum(rate)/count(date) FROM token_inflation WHERE date <= ${date})
+        );
+      `))
+    }).then(() => {
+      return Promise.resolve(sqlite.all(`
+        SELECT * FROM token_inflation ORDER BY date DESC LIMIT 1;
+      `))
+    }).then((inflation) => {
+      resolve(inflation[0])
+    }).catch((error) => {
+      reject(error)
+    })
+  })
+}
+
+function getContractDetails({}) {
+  return new Promise((resolve, reject) => {
+    join(
+      contract.name.callAsync(),
+      contract.organization.callAsync(),
+      contract.symbol.callAsync(),
+      contract.decimals.callAsync()
+    ).then((data) => {
+      contractDetails = {
+        name: data[0],
+        organization: data[1],
+        symbol: data[2],
+        decimals: data[3],
+      }
+      resolve(contractDetails)
+    }).catch((error) => {
+      reject(error)
+    })
+  })
+}
+
+function updateSummaryStatistics({ contribution }) {
+  return new Promise((resolve, reject) => {
+    const { value, reservedValue } = contribution
+    Promise.resolve(sqlite.all(`
+      CREATE TABLE IF NOT EXISTS summary_statistics (
+        githubOrganization   TEXT,
+        contractAddress      CHAR(42),
+        tokenName            TEXT,
+        tokenSymbol          TEXT,
+        latestContribution   TIMESTAMP DEFAULT '1970-01-01 00:00:01.001',
+        tokenSupply          INTEGER,
+        reservedSupply       INTEGER,
+        percentReserved      REAL,
+        tokenInflation       REAL,
+        totalContributions   INTEGER,
+        uniqueContributions  INTEGER,
+        CONSTRAINT summary_statistics_pk PRIMARY KEY (contractAddress)
+      );
+    `)).then(() => {
+      return Promise.resolve(sqlite.all(`
+        INSERT OR REPLACE INTO summary_statistics (
+          githubOrganization,
+          contractAddress,
+          tokenName,
+          tokenSymbol,
+          latestContribution,
+          tokenSupply,
+          reservedSupply,
+          percentReserved,
+          tokenInflation,
+          totalContributions,
+          uniqueContributions
+        ) VALUES (
+          "${contractDetails['organization']}",
+          "${contract.address}",
+          "${contractDetails['name']}",
+          "${contractDetails['symbol']}",
+          (SELECT date FROM contribution ORDER BY date DESC limit 1),
+          (SELECT sum(value)+sum(reservedValue) FROM contribution),
+          (SELECT sum(reservedValue) FROM contribution),
+          (SELECT 1.0*sum(reservedValue)/(sum(value)+sum(reservedValue)) FROM contribution),
+          (SELECT (sum(value)+sum(reservedValue))/(sum(value)+sum(reservedValue)-(1.0*${value + reservedValue}))-1.0 FROM contribution),
+          (SELECT count(txHash) FROM contribution),
+          (SELECT count(distinct username) FROM contribution)
+        );
+      `))
+    }).then(() => {
+      return Promise.resolve(sqlite.all(`
+        SELECT * FROM summary_statistics;
+      `))
+    }).then((summary) => {
+      resolve(summary[0])
     }).catch((error) => {
       reject(error)
     })
@@ -232,28 +368,27 @@ function updateLeaderboard({ contribution }) {
             (SELECT count(*) FROM contribution where username = "${username}"),
             (SELECT sum(value)/count(*) FROM contribution where username = "${username}")
           );
+        `))
+     }).then(() => {
+      // Replace "0x0" with contract address;
+      return Promise.resolve(sqlite.all(`
+          INSERT OR REPLACE INTO leaderboard (
+            username,
+            contributorAddress,
+            value,
+            latestContribution,
+            numContributions,
+            valuePerContribution
+          ) VALUES (
+            "Total",
+            "0x0",
+            (SELECT sum(value)+sum(reservedValue) FROM contribution),
+            (SELECT max(date) FROM contribution),
+            (SELECT count(*) FROM contribution),
+            (SELECT (sum(value)+sum(reservedValue))/count(*) FROM contribution)
+          );
         `
       ))
-      }).then(() => {
-        // Replace "0x0" with contract address;
-        return Promise.resolve(sqlite.all(`
-            INSERT OR REPLACE INTO leaderboard (
-              username,
-              contributorAddress,
-              value,
-              latestContribution,
-              numContributions,
-              valuePerContribution
-            ) VALUES (
-              "Total",
-              "0x0",
-              (SELECT sum(value) FROM contribution),
-              (SELECT max(date) FROM contribution),
-              (SELECT count(*) FROM contribution),
-              (SELECT sum(value)/count(*) FROM contribution)
-            );
-          `
-        ))
     }).then(() => {
       return Promise.resolve(sqlite.all(`
           SELECT * FROM leaderboard WHERE username = "${username}";`
@@ -286,7 +421,9 @@ function watchContractContributionEvents() {
         return join(
           updateLeaderboard({ contribution }),
           updateTotalSupply({ contribution }),
-          updateContributionFrequency({ contribution })
+          updateContributionFrequency({ contribution }),
+          updateSummaryStatistics({ contribution }),
+          updateTokenInflationRate({ contribution })
         )
       }).then((data) => {
         console.log('watchContractContributionEvents::data', data)
@@ -301,10 +438,30 @@ function watchContractContributionEvents() {
   })
 }
 
+function promisifyContract ({ abi, contractAddress }) {
+  return new Promise((resolve, reject) => {
+    let _contract = web3.eth.contract(abi).at(contractAddress)
+    Promise.resolve(Object.keys(_contract)).map((method) => {
+      if (_contract[method] && _contract[method]['request']) {
+        _contract[method] = promisifyAll(_contract[method])
+      }
+    }).then(() => {
+      resolve(_contract)
+    }).catch((error) => {
+      reject(error)
+    })
+  })
+}
+
 function configure({ web3Provider, contractAddress, abi }) {
   web3 = new Web3(new Web3.providers.HttpProvider(web3Provider))
   eth = promisifyAll(web3.eth)
-  contract = web3.eth.contract(abi).at(contractAddress)
-
-  watchContractContributionEvents()
+  promisifyContract({ abi, contractAddress }).then((_contract) => {
+    contract = _contract;
+    return getContractDetails({})
+  }).then((details) => {
+    watchContractContributionEvents()
+  }).catch((error) => {
+    console.log('configure::error', error)
+  })
 }
