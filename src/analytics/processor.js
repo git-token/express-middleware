@@ -186,7 +186,7 @@ function updateContributionFrequency({ contribution }) {
         SELECT * FROM contribution_frequency;
       `))
     }).then((contributionFrequency) => {
-      resolve(contributionFrequency[0])
+      resolve(contributionFrequency)
     }).catch((error) => {
       reject(error)
     })
@@ -216,7 +216,7 @@ function updateTotalSupply({ contribution }) {
       `))
     }).then(() => {
       return Promise.resolve(sqlite.all(`
-        SELECT * FROM total_supply ORDER BY date ASC limit 1;
+        SELECT (sum(value)+sum(reservedValue)) FROM contribution WHERE date <= ${date};
       `))
     }).then((totalSupply) => {
       resolve(totalSupply[0])
@@ -367,10 +367,10 @@ function updateLeaderboard({ contribution }) {
           ) VALUES (
             "${username}",
             "${contribution['contributor']}",
-            (SELECT sum(value) FROM contribution where username = "${username}"),
-            (SELECT max(date) FROM contribution where username = "${username}"),
-            (SELECT count(*) FROM contribution where username = "${username}"),
-            (SELECT sum(value)/count(*) FROM contribution where username = "${username}")
+            (SELECT sum(value) FROM contribution WHERE username = "${username}"),
+            (SELECT max(date) FROM contribution WHERE username = "${username}"),
+            (SELECT count(*) FROM contribution WHERE username = "${username}"),
+            (SELECT sum(value)/count(*) FROM contribution WHERE username = "${username}")
           );
         `))
      }).then(() => {

@@ -174,7 +174,7 @@ function updateContributionFrequency(_ref2) {
     }).then(function () {
       return _bluebird2.default.resolve(_sqlite2.default.all('\n        SELECT * FROM contribution_frequency;\n      '));
     }).then(function (contributionFrequency) {
-      resolve(contributionFrequency[0]);
+      resolve(contributionFrequency);
     }).catch(function (error) {
       reject(error);
     });
@@ -194,7 +194,7 @@ function updateTotalSupply(_ref3) {
       // console.log('contributionValue', contributionValue)
       return _bluebird2.default.resolve(_sqlite2.default.all('\n        INSERT OR REPLACE INTO total_supply (\n          totalSupply,\n          date\n        ) VALUES (\n          (SELECT (sum(value)+sum(reservedValue)) FROM contribution WHERE date <= ' + date + ' ORDER BY date DESC),\n          ' + date + '\n        );\n      '));
     }).then(function () {
-      return _bluebird2.default.resolve(_sqlite2.default.all('\n        SELECT * FROM total_supply ORDER BY date ASC limit 1;\n      '));
+      return _bluebird2.default.resolve(_sqlite2.default.all('\n        SELECT (sum(value)+sum(reservedValue)) FROM contribution WHERE date <= ' + date + ';\n      '));
     }).then(function (totalSupply) {
       resolve(totalSupply[0]);
     }).catch(function (error) {
@@ -268,7 +268,7 @@ function updateLeaderboard(_ref7) {
         contributor = contribution.contributor;
 
     _bluebird2.default.resolve(_sqlite2.default.all('\n      CREATE TABLE IF NOT EXISTS leaderboard (\n        username             TEXT,\n        contributorAddress   CHAR(42),\n        value                INTEGER,\n        latestContribution   TIMESTAMP DEFAULT \'1970-01-01 00:00:01.001\',\n        numContributions     INTEGER,\n        valuePerContribution REAL,\n        CONSTRAINT leaderboard_pk PRIMARY KEY (username)\n      );\n    ')).then(function () {
-      return _bluebird2.default.resolve(_sqlite2.default.all('\n          INSERT OR REPLACE INTO leaderboard (\n            username,\n            contributorAddress,\n            value,\n            latestContribution,\n            numContributions,\n            valuePerContribution\n          ) VALUES (\n            "' + username + '",\n            "' + contribution['contributor'] + '",\n            (SELECT sum(value) FROM contribution where username = "' + username + '"),\n            (SELECT max(date) FROM contribution where username = "' + username + '"),\n            (SELECT count(*) FROM contribution where username = "' + username + '"),\n            (SELECT sum(value)/count(*) FROM contribution where username = "' + username + '")\n          );\n        '));
+      return _bluebird2.default.resolve(_sqlite2.default.all('\n          INSERT OR REPLACE INTO leaderboard (\n            username,\n            contributorAddress,\n            value,\n            latestContribution,\n            numContributions,\n            valuePerContribution\n          ) VALUES (\n            "' + username + '",\n            "' + contribution['contributor'] + '",\n            (SELECT sum(value) FROM contribution WHERE username = "' + username + '"),\n            (SELECT max(date) FROM contribution WHERE username = "' + username + '"),\n            (SELECT count(*) FROM contribution WHERE username = "' + username + '"),\n            (SELECT sum(value)/count(*) FROM contribution WHERE username = "' + username + '")\n          );\n        '));
     }).then(function () {
       // Replace "0x0" with contract address;
       return _bluebird2.default.resolve(_sqlite2.default.all('\n          INSERT OR REPLACE INTO leaderboard (\n            username,\n            contributorAddress,\n            value,\n            latestContribution,\n            numContributions,\n            valuePerContribution\n          ) VALUES (\n            "Total",\n            "0x0",\n            (SELECT sum(value)+sum(reservedValue) FROM contribution),\n            (SELECT max(date) FROM contribution),\n            (SELECT count(*) FROM contribution),\n            (SELECT (sum(value)+sum(reservedValue))/count(*) FROM contribution)\n          );\n        '));
