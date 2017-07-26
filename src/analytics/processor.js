@@ -216,7 +216,7 @@ function updateTotalSupply({ contribution }) {
       `))
     }).then(() => {
       return Promise.resolve(sqlite.all(`
-        SELECT (sum(value)+sum(reservedValue)) FROM contribution WHERE date <= ${date};
+        SELECT * FROM total_supply WHERE date = ${date};
       `))
     }).then((totalSupply) => {
       resolve(totalSupply[0])
