@@ -275,7 +275,7 @@ function updateLeaderboard(_ref7) {
     }).then(function () {
       return _bluebird2.default.resolve(_sqlite2.default.all('\n        SELECT * FROM leaderboard;\n      '));
     }).then(function (leaderboard) {
-      resolve(leaderboard[0]);
+      resolve(leaderboard);
     }).catch(function (error) {
       reject(error);
     });

@@ -398,7 +398,7 @@ function updateLeaderboard({ contribution }) {
         SELECT * FROM leaderboard;
       `))
     }).then((leaderboard) => {
-      resolve(leaderboard[0])
+      resolve(leaderboard)
     }).catch((error) => {
       reject(error)
     })
