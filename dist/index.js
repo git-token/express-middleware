@@ -44,25 +44,29 @@ var _KeystoreGenerator2 = require('./KeystoreGenerator');
 
 var _KeystoreGenerator3 = _interopRequireDefault(_KeystoreGenerator2);
 
-var _index = require('./smtp/index');
+var _index = require('./analytics/index');
 
-var _index2 = require('./websocket/index');
+var _index2 = _interopRequireDefault(_index);
 
-var _index3 = require('./utils/index');
+var _index3 = require('./smtp/index');
 
-var _index4 = require('./api/index');
+var _index4 = require('./websocket/index');
 
-var _index5 = _interopRequireDefault(_index4);
+var _index5 = require('./utils/index');
 
-var _index6 = require('./sqlite/index');
+var _index6 = require('./api/index');
 
 var _index7 = _interopRequireDefault(_index6);
 
-var _index8 = require('./hyperlog/index');
+var _index8 = require('./sqlite/index');
 
-var _index9 = require('./events/index');
+var _index9 = _interopRequireDefault(_index8);
 
-var _index10 = require('./contract/index');
+var _index10 = require('./hyperlog/index');
+
+var _index11 = require('./events/index');
+
+var _index12 = require('./contract/index');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -110,41 +114,44 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
     // })
 
 
-    _this.gittokenSQLite = _index7.default.bind(_this);
-    _this.gittokenHyperlog = _index8.gittokenHyperlog.bind(_this);
-    _this.logMessage = _index8.logMessage.bind(_this);
-    _this.logExchange = _index8.logExchange.bind(_this);
-    _this.logVote = _index8.logVote.bind(_this);
-    _this.handleLogin = _index9.handleLogin.bind(_this);
-    _this.verifyContributor = _index10.verifyContributor.bind(_this);
-    _this.handleVerification = _index9.handleVerification.bind(_this);
-    _this.handleAuthentication = _index9.handleAuthentication.bind(_this);
-    _this.handleContractDetails = _index9.handleContractDetails.bind(_this);
+    _this.gittokenSQLite = _index9.default.bind(_this);
+    _this.gittokenHyperlog = _index10.gittokenHyperlog.bind(_this);
+    _this.logMessage = _index10.logMessage.bind(_this);
+    _this.logExchange = _index10.logExchange.bind(_this);
+    _this.logVote = _index10.logVote.bind(_this);
+    _this.handleLogin = _index11.handleLogin.bind(_this);
+    _this.verifyContributor = _index12.verifyContributor.bind(_this);
+    _this.handleVerification = _index11.handleVerification.bind(_this);
+    _this.handleAuthentication = _index11.handleAuthentication.bind(_this);
+    _this.handleContractDetails = _index11.handleContractDetails.bind(_this);
 
     _this.gittokenHyperlog({});
 
-    _this.socketHandler = _index2.socketHandler.bind(_this);
-    _this.socketRouter = _index2.socketRouter.bind(_this);
+    _this.socketHandler = _index4.socketHandler.bind(_this);
+    _this.socketRouter = _index4.socketRouter.bind(_this);
     _this.socketHandler({}
 
-    // Bind event methods to class scope
+    // Setup Analytics Processor
+    );_this.analyticsProcessor = _index2.default.bind(_this);
+    _this.analyticsProcessor({}
 
-    );_this.ping = _index9.ping.bind(_this);
-    _this.push = _index9.push.bind(_this);
-    _this.pullRequest = _index9.pullRequest.bind(_this);
-    _this.milestone = _index9.milestone.bind(_this);
-    _this.organization = _index9.organization.bind(_this);_this.getSavedContract = _index10.getSavedContract.bind(_this);
-    _this.createGitTokenContract = _index10.createGitTokenContract.bind(_this);
-    _this.saveContractDetails = _index10.saveContractDetails.bind(_this);
-    _this.retrieveDetails = _index3.retrieveDetails.bind(_this);
-    _this.parsePushEvent = _index3.parsePushEvent.bind(_this);
-    _this.parseRepositoryStats = _index3.parseRepositoryStats.bind(_this);
-    _this.parseGitHubEvents = _index3.parseGitHubEvents.bind(_this);
-    _this.retrieveGitHubUser = _index3.retrieveGitHubUser.bind(_this);
-    _this.faucet = _index3.faucet.bind(_this);
-    _this.generateReward = _index10.generateReward.bind(_this);
-    _this.calculateRewardBonus = _index3.calculateRewardBonus.bind(_this);
-    _this.gittokenAPI = _index5.default.bind(_this);_this.middlewareState = {
+    // Bind event methods to class scope
+    );_this.ping = _index11.ping.bind(_this);
+    _this.push = _index11.push.bind(_this);
+    _this.pullRequest = _index11.pullRequest.bind(_this);
+    _this.milestone = _index11.milestone.bind(_this);
+    _this.organization = _index11.organization.bind(_this);_this.getSavedContract = _index12.getSavedContract.bind(_this);
+    _this.createGitTokenContract = _index12.createGitTokenContract.bind(_this);
+    _this.saveContractDetails = _index12.saveContractDetails.bind(_this);
+    _this.retrieveDetails = _index5.retrieveDetails.bind(_this);
+    _this.parsePushEvent = _index5.parsePushEvent.bind(_this);
+    _this.parseRepositoryStats = _index5.parseRepositoryStats.bind(_this);
+    _this.parseGitHubEvents = _index5.parseGitHubEvents.bind(_this);
+    _this.retrieveGitHubUser = _index5.retrieveGitHubUser.bind(_this);
+    _this.faucet = _index5.faucet.bind(_this);
+    _this.generateReward = _index12.generateReward.bind(_this);
+    _this.calculateRewardBonus = _index5.calculateRewardBonus.bind(_this);
+    _this.gittokenAPI = _index7.default.bind(_this);_this.middlewareState = {
       accounts: {},
       contract: {},
       blockchain: {}
