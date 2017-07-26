@@ -353,6 +353,7 @@ function configure(_ref10) {
     return getContractDetails({});
   }).then(function (details) {
     watchContractContributionEvents();
+    process.send((0, _stringify2.default)({ event: 'configured' }));
   }).catch(function (error) {
     console.log('configure::error', error);
   });

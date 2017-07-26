@@ -3,11 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _stringify = require('babel-runtime/core-js/json/stringify');
-
-var _stringify2 = _interopRequireDefault(_stringify);
-
 exports.default = createGitTokenContract;
 
 var _bluebird = require('bluebird');
@@ -62,18 +57,25 @@ function createGitTokenContract() {
     }).then(function (txHash) {
       return _this.getTransactionReceipt(txHash);
     }).then(function (txReceipt) {
-      _this.analyticsProcessor.send((0, _stringify2.default)({
-        event: 'configure',
-        data: {
-          web3Provider: _this.web3Provider,
-          contractAddress: txReceipt['contractAddress'],
-          abi: abi
-        }
-      }));
+      //
+      // this.analyticsProcessor.send(JSON.stringify({
+      //   event: 'configure',
+      //   data: {
+      // web3Provider: this.web3Provider,
+      // contractAddress: txReceipt['contractAddress'],
+      // abi
+      //   }
+      // }))
       _this.contractDetails = { txReceipt: txReceipt };
       return _this.saveContractDetails({});
     }).then(function (contractDetails) {
-      resolve(contractDetails);
+      return _this.configureAnalytics({
+        web3Provider: _this.web3Provider,
+        contractAddress: txReceipt['contractAddress'],
+        abi: abi
+      });
+    }).then(function (configured) {
+      resolve(_this.contractDetails);
     }).catch(function (error) {
       console.log('createGitTokenContract::error', error);
       reject(error);

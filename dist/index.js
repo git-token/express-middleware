@@ -48,6 +48,10 @@ var _index = require('./analytics/index');
 
 var _index2 = _interopRequireDefault(_index);
 
+var _configure = require('./analytics/configure');
+
+var _configure2 = _interopRequireDefault(_configure);
+
 var _index3 = require('./smtp/index');
 
 var _index4 = require('./websocket/index');
@@ -133,6 +137,7 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
 
     // Setup Analytics Processor
     );_this.analyticsProcessor = _index2.default.bind(_this);
+    _this.configureAnalytics = _configure2.default.bind(_this);
     _this.analyticsProcessor({}
 
     // Bind event methods to class scope

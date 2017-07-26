@@ -473,6 +473,7 @@ function configure({ web3Provider, contractAddress, abi }) {
     return getContractDetails({})
   }).then((details) => {
     watchContractContributionEvents()
+    process.send(JSON.stringify({ event: 'configured' }))
   }).catch((error) => {
     console.log('configure::error', error)
   })
