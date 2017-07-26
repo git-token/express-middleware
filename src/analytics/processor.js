@@ -182,7 +182,11 @@ function updateContributionFrequency({ contribution }) {
         );
       `))
     }).then(() => {
-      resolve(true)
+      return Promise.resolve(sqlite.all(`
+        SELECT * FROM contribution_frequency;
+      `))
+    }).then((contributionFrequency) => {
+      resolve(contributionFrequency[0])
     }).catch((error) => {
       reject(error)
     })
@@ -215,7 +219,7 @@ function updateTotalSupply({ contribution }) {
         SELECT * FROM total_supply ORDER BY date ASC limit 1;
       `))
     }).then((totalSupply) => {
-      resolve(totalSupply)
+      resolve(totalSupply[0])
     }).catch((error) => {
       reject(error)
     })
@@ -394,7 +398,7 @@ function updateLeaderboard({ contribution }) {
           SELECT * FROM leaderboard WHERE username = "${username}";`
         ))
     }).then((profile) => {
-      resolve(profile)
+      resolve(profile[0])
     }).catch((error) => {
       reject(error)
     })
@@ -423,13 +427,21 @@ function watchContractContributionEvents() {
           updateTotalSupply({ contribution }),
           updateContributionFrequency({ contribution }),
           updateSummaryStatistics({ contribution }),
-          updateTokenInflationRate({ contribution })
+          updateTokenInflationRate({ contribution }),
+          contribution
         )
       }).then((data) => {
         console.log('watchContractContributionEvents::data', data)
         process.send(JSON.stringify({
           event: 'broadcast_contribution_data',
-          data
+          data: {
+            leaderboard: data[0],
+            totalSuppply: data[1],
+            contributionFrequency: data[2],
+            summaryStatistics: data[3],
+            tokenInflation: data[4],
+            contributionHistory: data[5]
+          }
         }))
       }).catch((error) => {
         console.log('error', error)

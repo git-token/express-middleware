@@ -172,7 +172,9 @@ function updateContributionFrequency(_ref2) {
 
       return _bluebird2.default.resolve(_sqlite2.default.all('\n        INSERT OR REPLACE INTO contribution_frequency (\n          rewardType,\n          count,\n          percentOfTotal\n        ) VALUES (\n          "' + rewardType + '",\n          (SELECT count(*) FROM contribution WHERE rewardType = "' + rewardType + '"),\n          (SELECT 100.0 * count(*) / (SELECT count(*) FROM contribution) AS PERCENTAGE FROM contribution WHERE rewardType = "' + rewardType + '")\n        );\n      '));
     }).then(function () {
-      resolve(true);
+      return _bluebird2.default.resolve(_sqlite2.default.all('\n        SELECT * FROM contribution_frequency;\n      '));
+    }).then(function (contributionFrequency) {
+      resolve(contributionFrequency[0]);
     }).catch(function (error) {
       reject(error);
     });
@@ -194,7 +196,7 @@ function updateTotalSupply(_ref3) {
     }).then(function () {
       return _bluebird2.default.resolve(_sqlite2.default.all('\n        SELECT * FROM total_supply ORDER BY date ASC limit 1;\n      '));
     }).then(function (totalSupply) {
-      resolve(totalSupply);
+      resolve(totalSupply[0]);
     }).catch(function (error) {
       reject(error);
     });
@@ -273,7 +275,7 @@ function updateLeaderboard(_ref7) {
     }).then(function () {
       return _bluebird2.default.resolve(_sqlite2.default.all('\n          SELECT * FROM leaderboard WHERE username = "' + username + '";'));
     }).then(function (profile) {
-      resolve(profile);
+      resolve(profile[0]);
     }).catch(function (error) {
       reject(error);
     });
@@ -300,12 +302,19 @@ function watchContractContributionEvents() {
       console.log('watchContractContributionEvents::error', error);
     } else {
       saveContributionEvent({ event: result }).then(function (contribution) {
-        return (0, _bluebird.join)(updateLeaderboard({ contribution: contribution }), updateTotalSupply({ contribution: contribution }), updateContributionFrequency({ contribution: contribution }), updateSummaryStatistics({ contribution: contribution }), updateTokenInflationRate({ contribution: contribution }));
+        return (0, _bluebird.join)(updateLeaderboard({ contribution: contribution }), updateTotalSupply({ contribution: contribution }), updateContributionFrequency({ contribution: contribution }), updateSummaryStatistics({ contribution: contribution }), updateTokenInflationRate({ contribution: contribution }), contribution);
       }).then(function (data) {
         console.log('watchContractContributionEvents::data', data);
         process.send((0, _stringify2.default)({
           event: 'broadcast_contribution_data',
-          data: data
+          data: {
+            leaderboard: data[0],
+            totalSuppply: data[1],
+            contributionFrequency: data[2],
+            summaryStatistics: data[3],
+            tokenInflation: data[4],
+            contributionHistory: data[5]
+          }
         }));
       }).catch(function (error) {
         console.log('error', error);
