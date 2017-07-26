@@ -210,13 +210,13 @@ function updateTotalSupply({ contribution }) {
           totalSupply,
           date
         ) VALUES (
-          (SELECT (sum(value)+sum(reservedValue)) FROM contribution WHERE date <= ${date} ORDER BY date DESC),
+          (SELECT (sum(value)+sum(reservedValue)) FROM contribution WHERE date <= ${date}),
           ${date}
         );
       `))
     }).then(() => {
       return Promise.resolve(sqlite.all(`
-        SELECT * FROM total_supply WHERE date = ${date};
+        SELECT * FROM total_supply ORDER BY date DESC LIMIT 1;
       `))
     }).then((totalSupply) => {
       resolve(totalSupply[0])

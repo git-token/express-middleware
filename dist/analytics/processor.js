@@ -192,9 +192,9 @@ function updateTotalSupply(_ref3) {
     _bluebird2.default.resolve(_sqlite2.default.all('\n      CREATE TABLE IF NOT EXISTS total_supply (\n        totalSupply    INTEGER,\n        date           TIMESTAMP DEFAULT \'1970-01-01 00:00:01.001\',\n        CONSTRAINT total_supply_pk PRIMARY KEY (date)\n      );\n    ')).then(function () {
       var contributionValue = value + reservedValue;
       // console.log('contributionValue', contributionValue)
-      return _bluebird2.default.resolve(_sqlite2.default.all('\n        INSERT OR REPLACE INTO total_supply (\n          totalSupply,\n          date\n        ) VALUES (\n          (SELECT (sum(value)+sum(reservedValue)) FROM contribution WHERE date <= ' + date + ' ORDER BY date DESC),\n          ' + date + '\n        );\n      '));
+      return _bluebird2.default.resolve(_sqlite2.default.all('\n        INSERT OR REPLACE INTO total_supply (\n          totalSupply,\n          date\n        ) VALUES (\n          (SELECT (sum(value)+sum(reservedValue)) FROM contribution WHERE date <= ' + date + '),\n          ' + date + '\n        );\n      '));
     }).then(function () {
-      return _bluebird2.default.resolve(_sqlite2.default.all('\n        SELECT (sum(value)+sum(reservedValue)) FROM contribution WHERE date <= ' + date + ';\n      '));
+      return _bluebird2.default.resolve(_sqlite2.default.all('\n        SELECT * FROM total_supply ORDER BY date DESC LIMIT 1;\n      '));
     }).then(function (totalSupply) {
       resolve(totalSupply[0]);
     }).catch(function (error) {
