@@ -91,7 +91,7 @@ process.on('message', (msg) => {
         queryString: `SELECT * FROM summary_statistics;`,
         queryObject: []
       }).then((data) => {
-        process.send(JSON.stringify({ event, data }))
+        process.send(JSON.stringify({ event, data: data[0] }))
       }).catch((error) => {
         console.log('error', error)
         SendError(error)

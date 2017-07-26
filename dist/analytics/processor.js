@@ -122,7 +122,7 @@ process.on('message', function (msg) {
         queryString: 'SELECT * FROM summary_statistics;',
         queryObject: []
       }).then(function (data) {
-        process.send((0, _stringify2.default)({ event: event, data: data }));
+        process.send((0, _stringify2.default)({ event: event, data: data[0] }));
       }).catch(function (error) {
         console.log('error', error);
         SendError(error);
