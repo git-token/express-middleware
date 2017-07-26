@@ -273,9 +273,9 @@ function updateLeaderboard(_ref7) {
       // Replace "0x0" with contract address;
       return _bluebird2.default.resolve(_sqlite2.default.all('\n          INSERT OR REPLACE INTO leaderboard (\n            username,\n            contributorAddress,\n            value,\n            latestContribution,\n            numContributions,\n            valuePerContribution\n          ) VALUES (\n            "Total",\n            "0x0",\n            (SELECT sum(value)+sum(reservedValue) FROM contribution),\n            (SELECT max(date) FROM contribution),\n            (SELECT count(*) FROM contribution),\n            (SELECT (sum(value)+sum(reservedValue))/count(*) FROM contribution)\n          );\n        '));
     }).then(function () {
-      return _bluebird2.default.resolve(_sqlite2.default.all('\n          SELECT * FROM leaderboard WHERE username = "' + username + '";'));
-    }).then(function (profile) {
-      resolve(profile[0]);
+      return _bluebird2.default.resolve(_sqlite2.default.all('\n        SELECT * FROM leaderboard;\n      '));
+    }).then(function (leaderboard) {
+      resolve(leaderboard[0]);
     }).catch(function (error) {
       reject(error);
     });

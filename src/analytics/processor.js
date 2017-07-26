@@ -395,10 +395,10 @@ function updateLeaderboard({ contribution }) {
       ))
     }).then(() => {
       return Promise.resolve(sqlite.all(`
-          SELECT * FROM leaderboard WHERE username = "${username}";`
-        ))
-    }).then((profile) => {
-      resolve(profile[0])
+        SELECT * FROM leaderboard;
+      `))
+    }).then((leaderboard) => {
+      resolve(leaderboard[0])
     }).catch((error) => {
       reject(error)
     })
