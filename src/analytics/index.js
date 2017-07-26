@@ -2,7 +2,7 @@ import Promise, { promisifyAll } from 'bluebird'
 import { fork } from 'child_process'
 
 export default function analyticsEngine({ }) {
-  this.analyticsProcessor = fork(`./dist/analytics/processor`)
+  this.analyticsProcessor = fork(`gittoken-analytics/dist/processor`)
 
   // this.analyticsProcessor.on('message', (msg) => {
   //   const { type, data } = JSON.parse(msg)
