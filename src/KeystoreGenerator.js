@@ -25,7 +25,8 @@ export default class KeystoreGenerator {
     this.dirPath = dirPath
     this.accountsPath = accountsPath
     this.keystoreFileName = keystoreFileName
-    this.web3 = new Web3(new Web3.providers.HttpProvider(web3Provider))
+    this.web3Provider = web3Provider
+    this.web3 = new Web3(new Web3.providers.HttpProvider(this.web3Provider))
     this.eth = Promise.promisifyAll(this.web3.eth)
   }
 
