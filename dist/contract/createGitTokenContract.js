@@ -62,17 +62,17 @@ function createGitTokenContract() {
     }).then(function (txHash) {
       return _this.getTransactionReceipt(txHash);
     }).then(function (txReceipt) {
-      _this.contractDetails = { txReceipt: txReceipt };
-      return _this.saveContractDetails({});
-    }).then(function (contractDetails) {
       _this.analyticsProcessor.send((0, _stringify2.default)({
         event: 'configure',
         data: {
           web3Provider: _this.web3Provider,
-          contractAddress: contractDetails['txReceipt']['contractAddress'],
+          contractAddress: txReceipt['contractAddress'],
           abi: abi
         }
       }));
+      _this.contractDetails = { txReceipt: txReceipt };
+      return _this.saveContractDetails({});
+    }).then(function (contractDetails) {
       resolve(contractDetails);
     }).catch(function (error) {
       console.log('createGitTokenContract::error', error);
