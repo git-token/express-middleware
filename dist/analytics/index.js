@@ -21,7 +21,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function analyticsEngine(_ref) {
   (0, _objectDestructuringEmpty3.default)(_ref);
 
-  this.analyticsProcessor = (0, _child_process.fork)('gittoken-analytics/dist/processor'
+  this.analyticsProcessor = (0, _child_process.fork)(process.cwd() + '/node_modules/gittoken-analytics/dist/processor'
 
   // this.analyticsProcessor.on('message', (msg) => {
   //   const { type, data } = JSON.parse(msg)
