@@ -71,7 +71,7 @@ function createGitTokenContract() {
     }).then(function (contractDetails) {
       return _this.configureAnalytics({
         web3Provider: _this.web3Provider,
-        contractAddress: txReceipt['contractAddress'],
+        contractAddress: contractDetails['txReceipt']['contractAddress'],
         abi: abi
       });
     }).then(function (configured) {
