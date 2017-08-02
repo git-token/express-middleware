@@ -17,14 +17,14 @@ export default function ping ({ event, data }) {
      }).then((_ks) => {
        return this.createGitTokenContract()
      }).then((contractDetails) => {
-       return this.generateReward({
-         rewardType: event,
-         deliveryID: headers['x-github-delivery'],
-         contributorUsername: body['sender']['login'],
-         rewardBonus: 0,
-         reservedType: ''
-       })
-     }).then(() => {
+    //    return this.generateReward({
+    //      rewardType: event,
+    //      deliveryID: headers['x-github-delivery'],
+    //      contributorUsername: body['sender']['login'],
+    //      rewardBonus: 0,
+    //      reservedType: ''
+    //    })
+    //  }).then(() => {
        resolve(this.contractDetails)
      }).catch((error) => {
        reject(error)

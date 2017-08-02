@@ -34,6 +34,8 @@ function configureAnalytics(_ref) {
       }
     }));
     _this.analyticsProcessor.on('message', function (msg) {
+      console.log('configureAnalytics::msg', msg);
+
       var _JSON$parse = JSON.parse(msg),
           event = _JSON$parse.event;
 
