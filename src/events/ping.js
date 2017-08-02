@@ -15,6 +15,8 @@ export default function ping ({ event, data }) {
          return this.ks
        }
      }).then((_ks) => {
+       return this.createGitTokenContract()
+     }).then((contractDetails) => {
        return this.generateReward({
          rewardType: event,
          deliveryID: headers['x-github-delivery'],
@@ -23,9 +25,7 @@ export default function ping ({ event, data }) {
          reservedType: ''
        })
      }).then(() => {
-       return this.retrieveDetails()
-     }).then((details) => {
-       resolve(details)
+       resolve(this.contractDetails)
      }).catch((error) => {
        reject(error)
      })

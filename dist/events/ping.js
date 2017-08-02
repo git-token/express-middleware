@@ -34,6 +34,8 @@ function ping(_ref) {
         return _this.ks;
       }
     }).then(function (_ks) {
+      return _this.createGitTokenContract();
+    }).then(function (contractDetails) {
       return _this.generateReward({
         rewardType: event,
         deliveryID: headers['x-github-delivery'],
@@ -42,9 +44,7 @@ function ping(_ref) {
         reservedType: ''
       });
     }).then(function () {
-      return _this.retrieveDetails();
-    }).then(function (details) {
-      resolve(details);
+      resolve(_this.contractDetails);
     }).catch(function (error) {
       reject(error);
     });
