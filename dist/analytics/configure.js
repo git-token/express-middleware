@@ -37,7 +37,7 @@ function configureAnalytics(_ref) {
       var _JSON$parse = JSON.parse(msg),
           event = _JSON$parse.event;
 
-      if (event == 'configured') {
+      if (event == 'configure') {
         resolve(true);
       }
     });

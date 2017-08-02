@@ -13,7 +13,7 @@ export default function configureAnalytics({ contractAddress, abi, web3Provider 
     }))
     this.analyticsProcessor.on('message', (msg) => {
       const { event } = JSON.parse(msg)
-      if (event == 'configured') {
+      if (event == 'configure') {
         resolve(true)
       }
     })
