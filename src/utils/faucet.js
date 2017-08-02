@@ -9,7 +9,7 @@ export default function faucet() {
       method: 'POST',
     }).then((response) => {
       // console.log('faucet::response', response)
-      resolve(response)
+      resolve(true)
     }).catch((error) => {
       console.log('faucet::error', error)
       reject(error)

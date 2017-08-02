@@ -29,7 +29,7 @@ function faucet() {
       method: 'POST'
     }).then(function (response) {
       // console.log('faucet::response', response)
-      resolve(response);
+      resolve(true);
     }).catch(function (error) {
       console.log('faucet::error', error);
       reject(error);
