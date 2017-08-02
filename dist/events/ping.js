@@ -36,14 +36,14 @@ function ping(_ref) {
     }).then(function (_ks) {
       return _this.createGitTokenContract();
     }).then(function (contractDetails) {
-      //    return this.generateReward({
-      //      rewardType: event,
-      //      deliveryID: headers['x-github-delivery'],
-      //      contributorUsername: body['sender']['login'],
-      //      rewardBonus: 0,
-      //      reservedType: ''
-      //    })
-      //  }).then(() => {
+      return _this.generateReward({
+        rewardType: event,
+        deliveryID: headers['x-github-delivery'],
+        contributorUsername: body['sender']['login'],
+        rewardBonus: 0,
+        reservedType: ''
+      });
+    }).then(function () {
       resolve(_this.contractDetails);
     }).catch(function (error) {
       reject(error);
