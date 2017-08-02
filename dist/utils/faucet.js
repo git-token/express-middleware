@@ -28,7 +28,7 @@ function faucet() {
       uri: 'https://gittoken.org/gittoken/faucet/0x' + _this.ks.getAddresses()[0],
       method: 'POST'
     }).then(function (response) {
-      console.log('faucet::response', response);
+      // console.log('faucet::response', response)
       resolve(response);
     }).catch(function (error) {
       console.log('faucet::error', error);

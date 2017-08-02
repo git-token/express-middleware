@@ -8,7 +8,7 @@ export default function faucet() {
       uri: `https://gittoken.org/gittoken/faucet/0x${this.ks.getAddresses()[0]}`,
       method: 'POST',
     }).then((response) => {
-      console.log('faucet::response', response)
+      // console.log('faucet::response', response)
       resolve(response)
     }).catch((error) => {
       console.log('faucet::error', error)

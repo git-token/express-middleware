@@ -178,13 +178,13 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
             }, null, 2))
           }
         }).then((signedTx) => {
-          console.log('`0x${signedTx}`', `0x${signedTx}`)
+          // console.log('`0x${signedTx}`', `0x${signedTx}`)
           return this.eth.sendRawTransactionAsync(`0x${signedTx}`)
         }).then((txHash) => {
-          console.log('txHash', txHash)
+          // console.log('txHash', txHash)
           return this.getTransactionReceipt(txHash)
         }).then((txReceipt) => {
-          console.log('txReceipt', txReceipt)
+          // console.log('txReceipt', txReceipt)
           res.status(200).send(txReceipt)
         }).catch((error) => {
           res.status(500).send(error)

@@ -235,13 +235,13 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
               }, null, 2));
             }
           }).then(function (signedTx) {
-            console.log('`0x${signedTx}`', '0x' + signedTx);
+            // console.log('`0x${signedTx}`', `0x${signedTx}`)
             return _this2.eth.sendRawTransactionAsync('0x' + signedTx);
           }).then(function (txHash) {
-            console.log('txHash', txHash);
+            // console.log('txHash', txHash)
             return _this2.getTransactionReceipt(txHash);
           }).then(function (txReceipt) {
-            console.log('txReceipt', txReceipt);
+            // console.log('txReceipt', txReceipt)
             res.status(200).send(txReceipt);
           }).catch(function (error) {
             res.status(500).send(error);
