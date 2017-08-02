@@ -7,7 +7,8 @@ export default function configureAnalytics({ contractAddress, abi, web3Provider 
       data: {
         contractAddress,
         abi,
-        web3Provider
+        web3Provider,
+        mysqlOpts: this.mysqlOpts
       }
     }))
     this.analyticsProcessor.on('message', (msg) => {

@@ -26,7 +26,19 @@ function organization(_ref) {
 
     switch (action) {
       case 'member_invited':
-        resolve(true);
+        _this.generateReward({
+          rewardType: event,
+          deliveryID: headers['x-github-delivery'],
+          // contributorUsername in this case should be the contract address;
+          // basically the contract should hold the rewards until the milestone is // reached. Tokens will be auctioned on behalf of the project for funding.
+          contributorUsername: body['sender']['login'],
+          rewardBonus: 0,
+          reservedType: ''
+        }).then(function (result) {
+          resolve(result);
+        }).catch(function (error) {
+          reject(error);
+        });
         break;
       case 'member_added':
         _this.generateReward({
@@ -36,7 +48,7 @@ function organization(_ref) {
           // basically the contract should hold the rewards until the milestone is // reached. Tokens will be auctioned on behalf of the project for funding.
           contributorUsername: body['sender']['login'],
           rewardBonus: 0,
-          reservedValue: 0
+          reservedType: ''
         }).then(function () {
           return _this.generateReward({
             rewardType: event,
@@ -47,7 +59,7 @@ function organization(_ref) {
             // basically the contract should hold the rewards until the milestone is // reached. Tokens will be auctioned on behalf of the project for funding.
             contributorUsername: body['membership']['user']['login'],
             rewardBonus: 0,
-            reservedValue: Number(15000 * Math.pow(10, decimals))
+            reservedType: 'member_added'
           });
         }).then(function (result) {
           resolve(result);

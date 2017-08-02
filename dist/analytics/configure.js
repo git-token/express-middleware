@@ -29,7 +29,8 @@ function configureAnalytics(_ref) {
       data: {
         contractAddress: contractAddress,
         abi: abi,
-        web3Provider: web3Provider
+        web3Provider: web3Provider,
+        mysqlOpts: _this.mysqlOpts
       }
     }));
     _this.analyticsProcessor.on('message', function (msg) {

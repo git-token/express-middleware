@@ -22,7 +22,11 @@ export default function milestone ({ event, data }) {
           // basically the contract should hold the rewards until the milestone is // reached. Tokens will be auctioned on behalf of the project for funding.
           contributorUsername: data['body']['sender']['login'],
           rewardBonus: 0,
-          reservedValue: Number(15000 * Math.pow(10, decimals)),
+          /*
+            NOTE Eventually remove this switch statement and
+            replace with action field from payload request
+           */
+          reservedType: 'created',
         }))
         break;
       case 'edited':
@@ -33,7 +37,7 @@ export default function milestone ({ event, data }) {
           // basically the contract should hold the rewards until the milestone is // reached. Tokens will be auctioned on behalf of the project for funding.
           contributorUsername: data['body']['sender']['login'],
           rewardBonus: 0,
-          reservedValue: 0,
+          reservedType: '',
         }))
         break;
       default:

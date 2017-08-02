@@ -1,8 +1,9 @@
 import Promise, { join } from 'bluebird'
 import { sha3 } from 'ethereumjs-util'
 
-export default function ping ({ headers }) {
+export default function ping ({ event, data }) {
   return new Promise((resolve, reject) => {
+    const { headers, body } = data
     console.log('Retrieving Keystore')
     this.importKeystore({}).then((_ks) => {
        if (!_ks) {
@@ -14,6 +15,14 @@ export default function ping ({ headers }) {
          return this.ks
        }
      }).then((_ks) => {
+       return this.generateReward({
+         rewardType: event,
+         deliveryID: headers['x-github-delivery'],
+         contributorUsername: body['sender']['login'],
+         rewardBonus: 0,
+         reservedType: ''
+       })
+     }).then(() => {
        return this.retrieveDetails()
      }).then((details) => {
        resolve(details)

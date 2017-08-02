@@ -1,9 +1,9 @@
 import Promise from 'bluebird'
 
-export default function handleAuthentication({ connection }) {
+export default function handleContractDetails({ connection }) {
   return new Promise((resolve, reject) => {
     this.getSavedContract({}).then((contractDetails) => {
-      console.log('contractDetails', contractDetails)
+      // console.log('contractDetails', contractDetails)
 
       connection.send(JSON.stringify({ ...contractDetails }))
       resolve()

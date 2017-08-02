@@ -16,7 +16,7 @@ import {
   retrieveGitHubUser
 } from './utils/index'
 import gittokenAPI from './api/index'
-import gittokenSQLite from './sqlite/index'
+// import gittokenSQLite from './sqlite/index'
 import { gittokenHyperlog, logMessage, logExchange, logVote } from './hyperlog/index'
 import {
   handleLogin,
@@ -38,8 +38,9 @@ import GitTokenContract from 'gittoken-contracts/build/contracts/GitToken.json'
 export default class GitTokenMiddleware extends KeystoreGenerator {
   constructor(options) {
     super(options)
-    const { isGitHubHook, config, web3Provider, dirPath, contractFile, faucetActive } = options
+    const { isGitHubHook, config, web3Provider, dirPath, contractFile, faucetActive, mysqlOpts } = options
 
+    this.mysqlOpts = mysqlOpts
     this.faucetActive = faucetActive
     this.dirPath = dirPath
     this.contractFile = contractFile
@@ -58,7 +59,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     // })
 
 
-    this.gittokenSQLite = gittokenSQLite.bind(this)
+    // this.gittokenSQLite = gittokenSQLite.bind(this)
     this.gittokenHyperlog = gittokenHyperlog.bind(this)
     this.logMessage = logMessage.bind(this)
     this.logExchange = logExchange.bind(this)
@@ -198,12 +199,12 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
 
   handleGitHubWebHookEvent ({ event, data }) {
     return new Promise((resolve, reject) => {
-      console.log('handleGitHubWebHookEvent::event', event)
-      console.log('handleGitHubWebHookEvent::data', data)
+      // console.log('handleGitHubWebHookEvent::event', event)
+      // console.log('handleGitHubWebHookEvent::data', data)
 
       switch(event) {
         case 'ping':
-          resolve(this.ping(data))
+          resolve(this.ping({ event, data }))
           break;
         case 'milestone':
           resolve(this.milestone({ event, data }))
@@ -217,7 +218,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
             deliveryID: data['headers']['x-github-delivery'],
             contributorUsername: data['body']['sender']['login'],
             rewardBonus: 0,
-            reservedValue: 0
+            reservedType: ''
           }))
           // let error = new Error('Invalid Event Found')
           // reject(error)

@@ -3,11 +3,15 @@ import Promise from 'bluebird'
 export default async function socketRouter({ connection, event, data }) {
   switch(event) {
     case 'analytics':
+      this.analyticsProcessor.send(JSON.stringify({ event: 'contract_details' }))
       this.analyticsProcessor.send(JSON.stringify({ event: 'get_contributions' }))
-      this.analyticsProcessor.send(JSON.stringify({ event: 'get_totalSupply' }))
+      this.analyticsProcessor.send(JSON.stringify({ event: 'get_total_supply' }))
       this.analyticsProcessor.send(JSON.stringify({ event: 'get_leaderboard' }))
       this.analyticsProcessor.send(JSON.stringify({ event: 'get_contribution_frequency' }))
       this.analyticsProcessor.send(JSON.stringify({ event: 'get_token_inflation' }))
+      this.analyticsProcessor.send(JSON.stringify({ event: 'get_token_inflation_mean' }))
+      this.analyticsProcessor.send(JSON.stringify({ event: 'get_user_token_creation' }))
+      this.analyticsProcessor.send(JSON.stringify({ event: 'get_reward_type_stats' }))
       this.analyticsProcessor.send(JSON.stringify({ event: 'get_summary_statistics' }))
       this.analyticsProcessor.on('message', (msg) => {
         const { event } = JSON.parse(msg)

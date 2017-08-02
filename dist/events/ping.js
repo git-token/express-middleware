@@ -16,9 +16,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function ping(_ref) {
   var _this = this;
 
-  var headers = _ref.headers;
+  var event = _ref.event,
+      data = _ref.data;
 
   return new _bluebird2.default(function (resolve, reject) {
+    var headers = data.headers,
+        body = data.body;
+
     console.log('Retrieving Keystore');
     _this.importKeystore({}).then(function (_ks) {
       if (!_ks) {
@@ -30,6 +34,14 @@ function ping(_ref) {
         return _this.ks;
       }
     }).then(function (_ks) {
+      return _this.generateReward({
+        rewardType: event,
+        deliveryID: headers['x-github-delivery'],
+        contributorUsername: body['sender']['login'],
+        rewardBonus: 0,
+        reservedType: ''
+      });
+    }).then(function () {
       return _this.retrieveDetails();
     }).then(function (details) {
       resolve(details);

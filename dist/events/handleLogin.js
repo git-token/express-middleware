@@ -27,14 +27,14 @@ function handleLogin(_ref) {
         message = data.message;
 
     _this.getSavedContract({}).then(function () {
-      console.log('this.gittokenContract', _this.gittokenContract);
+      // console.log('this.gittokenContract', this.gittokenContract)
       if (message.match(RegExp('/login'))) {
-        var params = message.replace('/login ', '').split(' ');
-        console.log('params', params);
-        return _this.gittokenContract.getContributorAddress(params[0]);
+        var params = message.replace('/login ', '').split(' '
+        // console.log('params', params)
+        );return _this.gittokenContract.getContributorAddress(params[0]);
       }
     }).then(function (contributorAddress) {
-      console.log('contributorAddress', contributorAddress);
+      // console.log('contributorAddress', contributorAddress)
       connection.send((0, _stringify2.default)({
         event: 'login',
         date: new Date().getTime(),
