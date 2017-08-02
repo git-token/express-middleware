@@ -51,7 +51,7 @@ function generateReward(_ref) {
     }).then(function (_contributorAddress) {
       console.log('generateReward::_contributorAddress', _contributorAddress);
       contributorAddress = _contributorAddress;
-      if (!contributorAddress) {
+      if (!contributorAddress || contributorAddress == "0x") {
         return _this.gittokenContract.getUnclaimedRewards.call(contributorUsername);
       } else {
         return _this.gittokenContract.balanceOf.call(contributorAddress);

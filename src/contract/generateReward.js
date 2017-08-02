@@ -31,7 +31,7 @@ export default function generateReward ({ rewardType, deliveryID, contributorUse
     }).then((_contributorAddress) => {
       console.log('generateReward::_contributorAddress', _contributorAddress)
       contributorAddress = _contributorAddress
-      if (!contributorAddress) {
+      if (!contributorAddress || contributorAddress == "0x") {
         return this.gittokenContract.getUnclaimedRewards.call(contributorUsername)
       } else {
         return this.gittokenContract.balanceOf.call(contributorAddress)
