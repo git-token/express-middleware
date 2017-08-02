@@ -29,6 +29,7 @@ export default function generateReward ({ rewardType, deliveryID, contributorUse
       console.log('generateReward::txReceipt', txReceipt)
       return this.gittokenContract.getContributorAddress.call(contributorUsername)
     }).then((_contributorAddress) => {
+      console.log('generateReward::_contributorAddress', _contributorAddress)
       contributorAddress = _contributorAddress
       if (!contributorAddress) {
         return this.gittokenContract.getUnclaimedRewards.call(contributorUsername)

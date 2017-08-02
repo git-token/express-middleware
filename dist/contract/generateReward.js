@@ -49,6 +49,7 @@ function generateReward(_ref) {
       console.log('generateReward::txReceipt', txReceipt);
       return _this.gittokenContract.getContributorAddress.call(contributorUsername);
     }).then(function (_contributorAddress) {
+      console.log('generateReward::_contributorAddress', _contributorAddress);
       contributorAddress = _contributorAddress;
       if (!contributorAddress) {
         return _this.gittokenContract.getUnclaimedRewards.call(contributorUsername);
