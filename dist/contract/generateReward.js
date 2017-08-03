@@ -57,6 +57,7 @@ function generateReward(_ref) {
         return _this.gittokenContract.balanceOf.call(contributorAddress);
       }
     }).then(function (contributorBalance) {
+      console.log('contributorBalance', contributorBalance);
       resolve({
         address: contributorAddress,
         username: contributorUsername,

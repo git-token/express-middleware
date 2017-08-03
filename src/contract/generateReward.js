@@ -37,6 +37,7 @@ export default function generateReward ({ rewardType, deliveryID, contributorUse
         return this.gittokenContract.balanceOf.call(contributorAddress)
       }
     }).then((contributorBalance) => {
+      console.log('contributorBalance', contributorBalance)
       resolve({
         address: contributorAddress,
         username: contributorUsername,
