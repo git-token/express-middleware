@@ -57,15 +57,6 @@ function createGitTokenContract() {
     }).then(function (txHash) {
       return _this.getTransactionReceipt(txHash);
     }).then(function (txReceipt) {
-      //
-      // this.analyticsProcessor.send(JSON.stringify({
-      //   event: 'configure',
-      //   data: {
-      // web3Provider: this.web3Provider,
-      // contractAddress: txReceipt['contractAddress'],
-      // abi
-      //   }
-      // }))
       _this.contractDetails = { txReceipt: txReceipt };
       return _this.saveContractDetails({});
     }).then(function (contractDetails) {
