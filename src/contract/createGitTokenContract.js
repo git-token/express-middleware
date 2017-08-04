@@ -32,14 +32,21 @@ export default function createGitTokenContract() {
     }).then((txHash) => {
       return this.getTransactionReceipt(txHash)
     }).then((txReceipt) => {
-      this.contractDetails = { txReceipt }
+      this.contractDetails = {
+        txReceipt
+      }
+      return this.getContractDetails({ contractAddress: txReceipt['contractAddress'], abi })
+    }).then((contractDetails) => {
+      this.contractDetails = {
+        ...this.contractDetails,
+        ...contractDetails
+      }
       return this.saveContractDetails({})
     }).then((contractDetails) => {
       const { contractAddress } = contractDetails['txReceipt']
       return this.configureAnalytics({
         web3Provider: this.web3Provider,
-        contractAddress,
-        abi
+        contractDetails: this.contractDetails
       })
     }).then((configured) => {
       resolve(this.contractDetails)

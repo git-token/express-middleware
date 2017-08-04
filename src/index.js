@@ -30,7 +30,12 @@ import {
   organization
 } from './events/index'
 import {
-  getSavedContract, createGitTokenContract, saveContractDetails, generateReward, verifyContributor
+  getContractDetails,
+  getSavedContract,
+  createGitTokenContract,
+  saveContractDetails,
+  generateReward,
+  verifyContributor
 } from './contract/index'
 
 import GitTokenContract from 'gittoken-contracts/build/contracts/GitToken.json'
@@ -92,6 +97,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     this.getSavedContract = getSavedContract.bind(this)
     this.createGitTokenContract = createGitTokenContract.bind(this)
     this.saveContractDetails = saveContractDetails.bind(this)
+    this.getContractDetails = getContractDetails.bind(this)
     this.retrieveDetails = retrieveDetails.bind(this)
     this.parsePushEvent = parsePushEvent.bind(this)
     this.parseRepositoryStats = parseRepositoryStats.bind(this)

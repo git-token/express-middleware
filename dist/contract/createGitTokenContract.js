@@ -3,6 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends2 = require('babel-runtime/helpers/extends');
+
+var _extends3 = _interopRequireDefault(_extends2);
+
 exports.default = createGitTokenContract;
 
 var _bluebird = require('bluebird');
@@ -57,15 +62,19 @@ function createGitTokenContract() {
     }).then(function (txHash) {
       return _this.getTransactionReceipt(txHash);
     }).then(function (txReceipt) {
-      _this.contractDetails = { txReceipt: txReceipt };
+      _this.contractDetails = {
+        txReceipt: txReceipt
+      };
+      return _this.getContractDetails({ contractAddress: txReceipt['contractAddress'], abi: abi });
+    }).then(function (contractDetails) {
+      _this.contractDetails = (0, _extends3.default)({}, _this.contractDetails, contractDetails);
       return _this.saveContractDetails({});
     }).then(function (contractDetails) {
       var contractAddress = contractDetails['txReceipt'].contractAddress;
 
       return _this.configureAnalytics({
         web3Provider: _this.web3Provider,
-        contractAddress: contractAddress,
-        abi: abi
+        contractDetails: _this.contractDetails
       });
     }).then(function (configured) {
       resolve(_this.contractDetails);
