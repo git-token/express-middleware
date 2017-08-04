@@ -62,6 +62,7 @@ function createGitTokenContract() {
     }).then(function (txHash) {
       return _this.getTransactionReceipt(txHash);
     }).then(function (txReceipt) {
+      console.log('txReceipt', txReceipt);
       _this.contractDetails = {
         txReceipt: txReceipt
       };

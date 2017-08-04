@@ -32,6 +32,7 @@ export default function createGitTokenContract() {
     }).then((txHash) => {
       return this.getTransactionReceipt(txHash)
     }).then((txReceipt) => {
+      console.log('txReceipt', txReceipt)
       this.contractDetails = {
         txReceipt
       }
