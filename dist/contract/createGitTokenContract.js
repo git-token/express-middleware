@@ -54,7 +54,7 @@ function createGitTokenContract() {
       return _this.signTransaction({
         from: from,
         data: data,
-        gasLimit: 4e6,
+        gasLimit: 6e6,
         value: 0
       });
     }).then(function (signedTx) {

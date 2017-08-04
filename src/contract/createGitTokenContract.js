@@ -24,7 +24,7 @@ export default function createGitTokenContract() {
       return this.signTransaction({
         from,
         data,
-        gasLimit: 4e6,
+        gasLimit: 6e6,
         value: 0
       })
     }).then((signedTx) => {
