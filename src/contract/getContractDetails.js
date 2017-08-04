@@ -1,5 +1,4 @@
 import Promise, { promisifyAll, join } from 'bluebird'
-const jsonfile = promisifyAll(require('jsonfile'))
 
 export default function getContractDetails ({ contractAddress, abi }) {
   return new Promise((resolve, reject) => {
@@ -10,20 +9,15 @@ export default function getContractDetails ({ contractAddress, abi }) {
       contract.decimals.callAsync(),
       contract.organization.callAsync()
     ).then((data) => {
-      try {
-        resolve({
-          name: data[0],
-          symbol: data[1],
-          decimals: data[2].toNumber(),
-          organization: data[3],
-          address: contractAddress
-        })
-      } catch (error) {
-        throw error
-      }
+      resolve({
+        name: data[0],
+        symbol: data[1],
+        decimals: data[2].toNumber(),
+        organization: data[3],
+        address: contractAddress
+      })
     }).catch((error) => {
-      console.log('contractDetails::error', error)
-      this.handleError({ error, method: 'getContractDetails' })
+      reject(error)
     })
   })
 }
