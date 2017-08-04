@@ -19,12 +19,19 @@ function getContractDetails(_ref) {
 
   return new _bluebird2.default(function (resolve, reject) {
     var contract = _this.web3.eth.contract(abi).at(contractAddress);
-    (0, _bluebird.join)(contract.name.call(), contract.symbol.call(), contract.decimals.call(), contract.organization.call()).then(function (data) {
+    (0, _bluebird.join)(
+    // contract.name.call(),
+    // contract.symbol.call(),
+    contract.decimals.call()
+    // contract.organization.call()
+    ).then(function (data) {
+      var decimals = data[0].toNumber();
+      console.log('decimals', decimals);
       resolve({
-        name: data[0],
-        symbol: data[1],
-        decimals: data[2].toNumber(),
-        organization: data[3],
+        // name: data[0],
+        // symbol: data[1],
+        decimals: decimals,
+        // organization: data[3],
         address: contractAddress
       });
     }).catch(function (error) {
