@@ -3,11 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _extends2 = require('babel-runtime/helpers/extends');
-
-var _extends3 = _interopRequireDefault(_extends2);
-
 exports.default = createGitTokenContract;
 
 var _bluebird = require('bluebird');
@@ -45,7 +40,7 @@ function createGitTokenContract() {
           decimals = _config.decimals;
 
       var params = [contributor, name, username, organization, symbol, decimals];
-      console.log('params', params);
+      // console.log('params', params)
       return (_eth$contract$new = _this.eth.contract(abi).new).getData.apply(_eth$contract$new, params.concat([{
         from: from,
         data: unlinked_binary
@@ -54,7 +49,7 @@ function createGitTokenContract() {
       return _this.signTransaction({
         from: from,
         data: data,
-        gasLimit: 6e6,
+        gasLimit: 4e6,
         value: 0
       });
     }).then(function (signedTx) {
@@ -62,20 +57,15 @@ function createGitTokenContract() {
     }).then(function (txHash) {
       return _this.getTransactionReceipt(txHash);
     }).then(function (txReceipt) {
-      console.log('txReceipt', txReceipt);
-      _this.contractDetails = {
-        txReceipt: txReceipt
-      };
-      return _this.getContractDetails({ contractAddress: txReceipt['contractAddress'], abi: abi });
-    }).then(function (contractDetails) {
-      _this.contractDetails = (0, _extends3.default)({}, _this.contractDetails, contractDetails);
+      _this.contractDetails = { txReceipt: txReceipt };
       return _this.saveContractDetails({});
     }).then(function (contractDetails) {
       var contractAddress = contractDetails['txReceipt'].contractAddress;
 
       return _this.configureAnalytics({
         web3Provider: _this.web3Provider,
-        contractDetails: _this.contractDetails
+        contractAddress: contractAddress,
+        abi: abi
       });
     }).then(function (configured) {
       resolve(_this.contractDetails);

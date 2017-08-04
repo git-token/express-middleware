@@ -1,11 +1,12 @@
 import Promise from 'bluebird'
 
-export default function configureAnalytics({ contractDetails, web3Provider }) {
+export default function configureAnalytics({ contractAddress, abi, web3Provider }) {
   return new Promise((resolve, reject) => {
     this.analyticsProcessor.send(JSON.stringify({
       event: 'configure',
       data: {
-        contractDetails,
+        contractAddress,
+        abi,
         web3Provider,
         mysqlOpts: this.mysqlOpts
       }

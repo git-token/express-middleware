@@ -19,14 +19,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function configureAnalytics(_ref) {
   var _this = this;
 
-  var contractDetails = _ref.contractDetails,
+  var contractAddress = _ref.contractAddress,
+      abi = _ref.abi,
       web3Provider = _ref.web3Provider;
 
   return new _bluebird2.default(function (resolve, reject) {
     _this.analyticsProcessor.send((0, _stringify2.default)({
       event: 'configure',
       data: {
-        contractDetails: contractDetails,
+        contractAddress: contractAddress,
+        abi: abi,
         web3Provider: web3Provider,
         mysqlOpts: _this.mysqlOpts
       }

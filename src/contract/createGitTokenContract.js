@@ -15,7 +15,7 @@ export default function createGitTokenContract() {
     }).then(() => {
       const { contributor, name, username, organization, symbol, decimals } = this.config
       const params = [ contributor, name, username, organization, symbol, decimals ]
-      console.log('params', params)
+      // console.log('params', params)
       return this.eth.contract(abi).new.getData(...params, {
         from,
         data: unlinked_binary
@@ -24,7 +24,7 @@ export default function createGitTokenContract() {
       return this.signTransaction({
         from,
         data,
-        gasLimit: 6e6,
+        gasLimit: 4e6,
         value: 0
       })
     }).then((signedTx) => {
@@ -32,22 +32,14 @@ export default function createGitTokenContract() {
     }).then((txHash) => {
       return this.getTransactionReceipt(txHash)
     }).then((txReceipt) => {
-      console.log('txReceipt', txReceipt)
-      this.contractDetails = {
-        txReceipt
-      }
-      return this.getContractDetails({ contractAddress: txReceipt['contractAddress'], abi })
-    }).then((contractDetails) => {
-      this.contractDetails = {
-        ...this.contractDetails,
-        ...contractDetails
-      }
+      this.contractDetails = { txReceipt }
       return this.saveContractDetails({})
     }).then((contractDetails) => {
       const { contractAddress } = contractDetails['txReceipt']
       return this.configureAnalytics({
         web3Provider: this.web3Provider,
-        contractDetails: this.contractDetails
+        contractAddress,
+        abi
       })
     }).then((configured) => {
       resolve(this.contractDetails)
