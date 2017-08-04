@@ -15,7 +15,7 @@ export default function createGitTokenContract() {
     }).then(() => {
       const { contributor, name, username, organization, symbol, decimals } = this.config
       const params = [ contributor, name, username, organization, symbol, decimals ]
-      // console.log('params', params)
+      console.log('params', params)
       return this.eth.contract(abi).new.getData(...params, {
         from,
         data: unlinked_binary

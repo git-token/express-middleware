@@ -45,7 +45,7 @@ function createGitTokenContract() {
           decimals = _config.decimals;
 
       var params = [contributor, name, username, organization, symbol, decimals];
-      // console.log('params', params)
+      console.log('params', params);
       return (_eth$contract$new = _this.eth.contract(abi).new).getData.apply(_eth$contract$new, params.concat([{
         from: from,
         data: unlinked_binary

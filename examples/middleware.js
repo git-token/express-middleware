@@ -4,7 +4,7 @@ const clientID = process.argv[2]
 const clientSecret = process.argv[3]
 
 gittoken = new GitTokenMiddleware({
-  web3Provider: 'http://gittoken.org/web3/',
+  web3Provider: 'http://138.68.225.133:8545',
   isGitHubHook: true,
   dirPath: `${process.cwd()}/gittoken`,
   keystoreFileName: `.keystore`,
@@ -27,14 +27,6 @@ gittoken.handleGitHubWebHookEvent({
       'x-github-delivery': 'randomTestMsg'
     }
   }
-}).then((result) => {
-  console.log('result', JSON.stringify(result, null, 2))
-  return gittoken.parseRepositoryStats({
-    owner: 'git-token',
-    repository: 'contracts',
-    clientID,
-    clientSecret
-  })
 }).then((result) => {
   console.log('result', JSON.stringify(result, null, 2))
 }).catch((error) => {
