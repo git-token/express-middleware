@@ -60,9 +60,12 @@ function createGitTokenContract() {
       _this.contractDetails = { txReceipt: txReceipt };
       return _this.saveContractDetails({});
     }).then(function (contractDetails) {
+      var contractAddress = contractDetails['txReceipt'].contractAddress;
+
+      console.log('contractAddress, abi', contractAddress, abi);
       return _this.configureAnalytics({
         web3Provider: _this.web3Provider,
-        contractAddress: contractDetails['txReceipt']['contractAddress'],
+        contractAddress: contractAddress,
         abi: abi
       });
     }).then(function (configured) {
