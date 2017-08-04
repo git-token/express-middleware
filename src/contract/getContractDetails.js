@@ -4,10 +4,10 @@ export default function getContractDetails ({ contractAddress, abi }) {
   return new Promise((resolve, reject) => {
     const contract = this.web3.eth.contract(abi).at(contractAddress)
     join(
-      contract.name.callAsync(),
-      contract.symbol.callAsync(),
-      contract.decimals.callAsync(),
-      contract.organization.callAsync()
+      contract.name.call(),
+      contract.symbol.call(),
+      contract.decimals.call(),
+      contract.organization.call()
     ).then((data) => {
       resolve({
         name: data[0],

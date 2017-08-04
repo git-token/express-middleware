@@ -19,7 +19,7 @@ function getContractDetails(_ref) {
 
   return new _bluebird2.default(function (resolve, reject) {
     var contract = _this.web3.eth.contract(abi).at(contractAddress);
-    (0, _bluebird.join)(contract.name.callAsync(), contract.symbol.callAsync(), contract.decimals.callAsync(), contract.organization.callAsync()).then(function (data) {
+    (0, _bluebird.join)(contract.name.call(), contract.symbol.call(), contract.decimals.call(), contract.organization.call()).then(function (data) {
       resolve({
         name: data[0],
         symbol: data[1],
