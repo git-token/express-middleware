@@ -36,7 +36,6 @@ export default function createGitTokenContract() {
       return this.saveContractDetails({})
     }).then((contractDetails) => {
       const { contractAddress } = contractDetails['txReceipt']
-      console.log('contractAddress, abi', contractAddress, abi)
       return this.configureAnalytics({
         web3Provider: this.web3Provider,
         contractAddress,
