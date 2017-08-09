@@ -19,20 +19,14 @@ var _child_process = require('child_process');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function analyticsEngine(_ref) {
+  var _this = this;
+
   (0, _objectDestructuringEmpty3.default)(_ref);
 
-  this.analyticsProcessor = (0, _child_process.fork)(process.cwd() + '/node_modules/gittoken-analytics/dist/processor'
+  this.analyticsProcessor = (0, _child_process.fork)(process.cwd() + '/node_modules/gittoken-analytics/dist/processor');
 
-  // this.analyticsProcessor.on('message', (msg) => {
-  //   const { type, data } = JSON.parse(msg)
-  //   console.log('msg', msg)
-  //   // switch(type) {
-  //   //   case 'configure':
-  //   //
-  //   //     break;
-  //   //   default:
-  //   //     console.log('analyticsEngine::message::type, data', type, data)
-  //   // }
-  // })
-  );
+  this.analyticsProcessor.on('exit', function () {
+    console.log('Analytics Processor Exited. Attempting to restart...');
+    _this.analyticsProcessor = (0, _child_process.fork)(process.cwd() + '/node_modules/gittoken-analytics/dist/processor');
+  });
 }
