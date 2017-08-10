@@ -31,7 +31,7 @@ function faucet() {
       // console.log('faucet::response', response)
       resolve(true);
     }).catch(function (error) {
-      console.log('faucet::error', error);
+      // console.log('faucet::error', error)
       reject(error);
     });
   });
