@@ -18,6 +18,7 @@ export default async function socketRouter({ connection, event, data }) {
         if (connection.readyState == 1) {
           switch(event) {
             case 'milestone_created':
+            console.log('milestone created received from processor')
               this.webSocketServer.clients.forEach((socket) => {
                 if (socket.readyState === 1) {
                   socket.send(msg)

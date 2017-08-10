@@ -55,6 +55,7 @@ exports.default = function () {
               if (connection.readyState == 1) {
                 switch (event) {
                   case 'milestone_created':
+                    console.log('milestone created received from processor');
                     _this.webSocketServer.clients.forEach(function (socket) {
                       if (socket.readyState === 1) {
                         socket.send(msg);

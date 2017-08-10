@@ -9,10 +9,10 @@ export default function generateReward ({ rewardType, deliveryID, contributorUse
       dirPath: this.dirPath,
       contractFile: this.contractFile
     }).then((contractDetails) => {
-      console.log('generateReward::contractDetails', contractDetails)
+      // console.log('generateReward::contractDetails', contractDetails)
       return this.gittokenContract.rewardContributor.getData(contributorUsername, rewardType, reservedType, rewardBonus, deliveryID)
     }).then((data) => {
-      console.log('generateReward::data', data)
+      // console.log('generateReward::data', data)
       return this.signTransaction({
         to: this.gittokenContract.address,
         from,
@@ -21,15 +21,15 @@ export default function generateReward ({ rewardType, deliveryID, contributorUse
         data
       })
     }).then((signedTx) => {
-      console.log('generateReward::signedTx', signedTx)
+      // console.log('generateReward::signedTx', signedTx)
       return this.eth.sendRawTransactionAsync(`0x${signedTx}`)
     }).then((txHash) => {
       return this.getTransactionReceipt(txHash)
     }).then((txReceipt) => {
-      console.log('generateReward::txReceipt', txReceipt)
+      // console.log('generateReward::txReceipt', txReceipt)
       return this.gittokenContract.getContributorAddress.call(contributorUsername)
     }).then((_contributorAddress) => {
-      console.log('generateReward::_contributorAddress', _contributorAddress)
+      // console.log('generateReward::_contributorAddress', _contributorAddress)
       contributorAddress = _contributorAddress
       if (!contributorAddress || contributorAddress == "0x") {
         return this.gittokenContract.getUnclaimedRewards.call(contributorUsername)
@@ -37,7 +37,7 @@ export default function generateReward ({ rewardType, deliveryID, contributorUse
         return this.gittokenContract.balanceOf.call(contributorAddress)
       }
     }).then((contributorBalance) => {
-      console.log('contributorBalance', contributorBalance)
+      // console.log('contributorBalance', contributorBalance)
       resolve({
         address: contributorAddress,
         username: contributorUsername,

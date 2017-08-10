@@ -25,9 +25,9 @@ function getContractDetails(_ref) {
     contract.decimals.call()
     // contract.organization.call()
     ).then(function (data) {
-      var decimals = data[0].toNumber();
-      console.log('decimals', decimals);
-      resolve({
+      var decimals = data[0].toNumber
+      // console.log('decimals', decimals)
+      ();resolve({
         // name: data[0],
         // symbol: data[1],
         decimals: decimals,

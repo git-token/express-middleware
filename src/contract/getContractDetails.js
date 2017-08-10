@@ -10,7 +10,7 @@ export default function getContractDetails ({ contractAddress, abi }) {
       // contract.organization.call()
     ).then((data) => {
       let decimals = data[0].toNumber()
-      console.log('decimals', decimals)
+      // console.log('decimals', decimals)
       resolve({
         // name: data[0],
         // symbol: data[1],

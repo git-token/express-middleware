@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = generateReward;
 
-var _bluebird = require('bluebird');
+var _bluebird = require("bluebird");
 
 var _bluebird2 = _interopRequireDefault(_bluebird);
 
@@ -23,16 +23,16 @@ function generateReward(_ref) {
   return new _bluebird2.default(function (resolve, reject) {
     var decimals = _this.config.decimals;
 
-    var from = '0x' + _this.ks.getAddresses()[0];
+    var from = "0x" + _this.ks.getAddresses()[0];
     var contributorAddress = void 0;
     _this.getSavedContract({
       dirPath: _this.dirPath,
       contractFile: _this.contractFile
     }).then(function (contractDetails) {
-      console.log('generateReward::contractDetails', contractDetails);
+      // console.log('generateReward::contractDetails', contractDetails)
       return _this.gittokenContract.rewardContributor.getData(contributorUsername, rewardType, reservedType, rewardBonus, deliveryID);
     }).then(function (data) {
-      console.log('generateReward::data', data);
+      // console.log('generateReward::data', data)
       return _this.signTransaction({
         to: _this.gittokenContract.address,
         from: from,
@@ -41,15 +41,15 @@ function generateReward(_ref) {
         data: data
       });
     }).then(function (signedTx) {
-      console.log('generateReward::signedTx', signedTx);
-      return _this.eth.sendRawTransactionAsync('0x' + signedTx);
+      // console.log('generateReward::signedTx', signedTx)
+      return _this.eth.sendRawTransactionAsync("0x" + signedTx);
     }).then(function (txHash) {
       return _this.getTransactionReceipt(txHash);
     }).then(function (txReceipt) {
-      console.log('generateReward::txReceipt', txReceipt);
+      // console.log('generateReward::txReceipt', txReceipt)
       return _this.gittokenContract.getContributorAddress.call(contributorUsername);
     }).then(function (_contributorAddress) {
-      console.log('generateReward::_contributorAddress', _contributorAddress);
+      // console.log('generateReward::_contributorAddress', _contributorAddress)
       contributorAddress = _contributorAddress;
       if (!contributorAddress || contributorAddress == "0x") {
         return _this.gittokenContract.getUnclaimedRewards.call(contributorUsername);
@@ -57,7 +57,7 @@ function generateReward(_ref) {
         return _this.gittokenContract.balanceOf.call(contributorAddress);
       }
     }).then(function (contributorBalance) {
-      console.log('contributorBalance', contributorBalance);
+      // console.log('contributorBalance', contributorBalance)
       resolve({
         address: contributorAddress,
         username: contributorUsername,

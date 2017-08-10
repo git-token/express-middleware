@@ -140,7 +140,7 @@ export default class KeystoreGenerator {
 
   signTransaction({ from, to, value, nonce, data, gasPrice, gasLimit, chainId }) {
     return new Promise((resolve, reject) => {
-      console.log('signTransaction::from', from)
+      // console.log('signTransaction::from', from)
       join(
         this.eth.getTransactionCountAsync(from),
         this.eth.getGasPriceAsync(),

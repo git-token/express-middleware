@@ -39,6 +39,7 @@ function milestone(_ref) {
     switch (action) {
       case 'created':
         _bluebird2.default.resolve().then(function () {
+          console.log('Milestone Created Event => Send to Analytics');
           _this.analyticsProcessor.send((0, _stringify2.default)({
             event: 'milestone_created',
             data: {

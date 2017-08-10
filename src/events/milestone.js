@@ -16,6 +16,7 @@ export default function milestone ({ event, data }) {
      switch(action) {
       case 'created':
         Promise.resolve().then(() => {
+          console.log('Milestone Created Event => Send to Analytics')
           this.analyticsProcessor.send(JSON.stringify({
             event: 'milestone_created',
             data: {
@@ -29,7 +30,7 @@ export default function milestone ({ event, data }) {
               id: milestone['id']
             }
           }))
-          
+
           return this.generateReward({
             rewardType: event,
             deliveryID: headers['x-github-delivery'],
