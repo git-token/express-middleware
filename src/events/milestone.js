@@ -29,6 +29,7 @@ export default function milestone ({ event, data }) {
               id: milestone['id']
             }
           }))
+          
           return this.generateReward({
             rewardType: event,
             deliveryID: headers['x-github-delivery'],

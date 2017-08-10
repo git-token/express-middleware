@@ -52,6 +52,7 @@ function milestone(_ref) {
               id: milestone['id']
             }
           }));
+
           return _this.generateReward({
             rewardType: event,
             deliveryID: headers['x-github-delivery'],
