@@ -182,7 +182,7 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
 
           res.status(code).send(data);
         }).catch(function (error) {
-          console.log('/verify/:address::error', error);
+          // console.log('/verify/:address::error', error)
           res.status(500).send(error);
         });
       });
@@ -245,7 +245,7 @@ var GitTokenMiddleware = function (_KeystoreGenerator) {
             // console.log('txReceipt', txReceipt)
             res.status(200).send(txReceipt);
           }).catch(function (error) {
-            res.status(500).send(error);
+            res.status(500).send(error.message);
           });
         }
       });

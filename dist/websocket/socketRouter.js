@@ -54,6 +54,13 @@ exports.default = function () {
 
               if (connection.readyState == 1) {
                 switch (event) {
+                  case 'milestone_created':
+                    _this.webSocketServer.clients.forEach(function (socket) {
+                      if (socket.readyState === 1) {
+                        socket.send(msg);
+                      }
+                    });
+                    break;
                   case 'broadcast_contribution_data':
                     _this.webSocketServer.clients.forEach(function (socket) {
                       if (socket.readyState === 1) {

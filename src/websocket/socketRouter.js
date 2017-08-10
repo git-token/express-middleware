@@ -17,6 +17,13 @@ export default async function socketRouter({ connection, event, data }) {
         const { event } = JSON.parse(msg)
         if (connection.readyState == 1) {
           switch(event) {
+            case 'milestone_created':
+              this.webSocketServer.clients.forEach((socket) => {
+                if (socket.readyState === 1) {
+                  socket.send(msg)
+                }
+              })
+              break;
             case 'broadcast_contribution_data':
               this.webSocketServer.clients.forEach((socket) => {
                 if (socket.readyState === 1) {

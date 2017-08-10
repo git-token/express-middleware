@@ -132,7 +132,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
         res.status(code).send(data)
       })
       .catch((error) => {
-        console.log('/verify/:address::error', error)
+        // console.log('/verify/:address::error', error)
         res.status(500).send(error)
       })
     })
@@ -193,7 +193,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
           // console.log('txReceipt', txReceipt)
           res.status(200).send(txReceipt)
         }).catch((error) => {
-          res.status(500).send(error)
+          res.status(500).send(error.message)
         })
       }
     })
