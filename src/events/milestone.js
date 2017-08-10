@@ -3,7 +3,7 @@ import Promise from 'bluebird'
 export default function milestone ({ event, data }) {
   return new Promise((resolve, reject) => {
     const { headers, body } = data
-    const { action, milestone } = body
+    const { action, milestone, repository } = body
     const { decimals } = this.config
 
     /**
@@ -26,7 +26,7 @@ export default function milestone ({ event, data }) {
               createdOn: new Date(milestone['created_at']).getTime(),
               updatedOn: new Date(milestone['updated_at']).getTime(),
               dueOn: new Date(milestone['due_on']).getTime(),
-              repository: milestone['repository']['full_name'],
+              repository: repository['full_name'],
               id: milestone['id']
             }
           }))

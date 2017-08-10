@@ -26,7 +26,8 @@ function milestone(_ref) {
     var headers = data.headers,
         body = data.body;
     var action = body.action,
-        milestone = body.milestone;
+        milestone = body.milestone,
+        repository = body.repository;
     var decimals = _this.config.decimals;
 
     /**
@@ -49,7 +50,7 @@ function milestone(_ref) {
               createdOn: new Date(milestone['created_at']).getTime(),
               updatedOn: new Date(milestone['updated_at']).getTime(),
               dueOn: new Date(milestone['due_on']).getTime(),
-              repository: milestone['repository']['full_name'],
+              repository: repository['full_name'],
               id: milestone['id']
             }
           }));
