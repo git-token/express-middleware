@@ -4,6 +4,7 @@ export default async function socketRouter({ connection, event, data }) {
   switch(event) {
     case 'analytics':
       this.analyticsProcessor.send(JSON.stringify({ event: 'contract_details' }))
+      this.analyticsProcessor.send(JSON.stringify({ event: 'get_milestones' }))
       this.analyticsProcessor.send(JSON.stringify({ event: 'get_contributions' }))
       this.analyticsProcessor.send(JSON.stringify({ event: 'get_total_supply' }))
       this.analyticsProcessor.send(JSON.stringify({ event: 'get_leaderboard' }))
