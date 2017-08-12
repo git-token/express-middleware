@@ -94,7 +94,7 @@ export default function milestone ({ event, data }) {
             reservedType: 'created',
           })
         }).then((data) => {
-          reward = deata
+          reward = data
           return this.initializeAuction({
             initialPrice: 1000, // 1 ETH / TOken
             delay: 0,

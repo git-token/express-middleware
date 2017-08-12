@@ -118,7 +118,7 @@ function milestone(_ref) {
             reservedType: 'created'
           });
         }).then(function (data) {
-          reward = deata;
+          reward = data;
           return _this.initializeAuction({
             initialPrice: 1000, // 1 ETH / TOken
             delay: 0,
