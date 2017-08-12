@@ -19,6 +19,7 @@ function initializeAuction(_ref) {
       lockTokens = _ref.lockTokens;
 
   return new _bluebird2.default(function (resolve, reject) {
+    var from = '0x' + _this.ks.getAddresses()[0];
     _this.getSavedContract({
       dirPath: _this.dirPath,
       contractFile: _this.contractFile

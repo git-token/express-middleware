@@ -2,6 +2,7 @@ import Promise, { promisifyAll, join } from 'bluebird'
 
 export default function initializeAuction({ initialPrice, delay, lockTokens }) {
   return new Promise((resolve, reject) => {
+    const from = `0x${this.ks.getAddresses()[0]}`;
     this.getSavedContract({
       dirPath: this.dirPath,
       contractFile: this.contractFile

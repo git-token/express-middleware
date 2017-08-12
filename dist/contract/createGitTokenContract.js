@@ -20,7 +20,6 @@ function createGitTokenContract() {
         unlinked_binary = _gittokenContract.unlinked_binary;
 
     var from = '0x' + _this.ks.getAddresses()[0];
-    console.log('from', from);
     _this.eth.getBalanceAsync(from).then(function (balance) {
       if (balance.toNumber() < 18e14) {
         console.log('call faucet');
