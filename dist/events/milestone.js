@@ -40,16 +40,17 @@ function milestone(_ref) {
     switch (action) {
       case 'created':
         _bluebird2.default.resolve().then(function () {
-          console.log('Milestone Created Event => Send to Analytics');
           _this.analyticsProcessor.send((0, _stringify2.default)({
             event: 'milestone_created',
             data: {
               createdBy: milestone['creator']['login'],
               title: milestone['title'],
               description: milestone['description'],
+              state: milestone['state'],
               createdOn: new Date(milestone['created_at']).getTime(),
               updatedOn: new Date(milestone['updated_at']).getTime(),
               dueOn: new Date(milestone['due_on']).getTime(),
+              closedOn: new Date(milestone['closed_at']).getTime(),
               repository: repository['full_name'],
               id: milestone['id']
             }
@@ -84,6 +85,50 @@ function milestone(_ref) {
           rewardBonus: 0,
           reservedType: ''
         }));
+        break;
+      case 'closed':
+        var reward;
+        _bluebird2.default.resolve().then(function () {
+          _this.analyticsProcessor.send((0, _stringify2.default)({
+            event: 'milestone_closed',
+            data: {
+              createdBy: milestone['creator']['login'],
+              title: milestone['title'],
+              description: milestone['description'],
+              state: milestone['state'],
+              createdOn: new Date(milestone['created_at']).getTime(),
+              updatedOn: new Date(milestone['updated_at']).getTime(),
+              dueOn: new Date(milestone['due_on']).getTime(),
+              closedOn: new Date(milestone['closed_at']).getTime(),
+              repository: repository['full_name'],
+              id: milestone['id']
+            }
+          }));
+          return _this.generateReward({
+            rewardType: event,
+            deliveryID: headers['x-github-delivery'],
+            // contributorUsername in this case should be the contract address;
+            // basically the contract should hold the rewards until the milestone is // reached. Tokens will be auctioned on behalf of the project for funding.
+            contributorUsername: data['body']['sender']['login'],
+            rewardBonus: 0,
+            /*
+              NOTE Eventually remove this switch statement and
+              replace with action field from payload request
+             */
+            reservedType: 'created'
+          });
+        }).then(function (data) {
+          reward = deata;
+          return _this.initializeAuction({
+            initialPrice: 1000, // 1 ETH / TOken
+            delay: 0,
+            lockTokens: true
+          });
+        }).then(function () {
+          resolve(reward);
+        }).catch(function (error) {
+          reject(error);
+        });
         break;
       default:
         var error = new Error('No method to handle milestone action ' + action + '.');

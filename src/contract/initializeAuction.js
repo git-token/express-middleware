@@ -1,17 +1,14 @@
-import Promise from 'bluebird'
+import Promise, { promisifyAll, join } from 'bluebird'
 
-export default function verifyContributor({ contributorAddress, username }) {
+export default function initializeAuction({ initialPrice, delay, lockTokens }) {
   return new Promise((resolve, reject) => {
-    const { decimals } = this.config
-    const from = `0x${this.ks.getAddresses()[0]}`
-    // console.log('from', from)
     this.getSavedContract({
       dirPath: this.dirPath,
       contractFile: this.contractFile
     }).then((contractDetails) => {
-      // console.log('generateReward::contractDetails', contractDetails)
-      console.log('verifyContributor::username, contributorAddress', username, contributorAddress)
-      return this.gittokenContract.verifyContributor.getData(contributorAddress, username)
+      return this.gittokenContract.initializeAuction.getData(
+        initialPrice, delay, lockTokens
+      )
     }).then((data) => {
       return this.signTransaction({
         to: this.gittokenContract.address,
@@ -26,7 +23,6 @@ export default function verifyContributor({ contributorAddress, username }) {
     }).then((txHash) => {
       return this.getTransactionReceipt(txHash)
     }).then((txReceipt) => {
-      // console.log('txReceipt', txReceipt)
       resolve(txReceipt)
     }).catch((error) => {
       reject(error)

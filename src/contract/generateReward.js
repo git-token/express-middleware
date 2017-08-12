@@ -17,7 +17,8 @@ export default function generateReward ({ rewardType, deliveryID, contributorUse
         to: this.gittokenContract.address,
         from,
         value: 0,
-        gasLimit: 3e6,
+        gasPrice: 1e9,
+        gasLimit: 5e5,
         data
       })
     }).then((signedTx) => {

@@ -37,7 +37,8 @@ function generateReward(_ref) {
         to: _this.gittokenContract.address,
         from: from,
         value: 0,
-        gasLimit: 3e6,
+        gasPrice: 1e9,
+        gasLimit: 5e5,
         data: data
       });
     }).then(function (signedTx) {
