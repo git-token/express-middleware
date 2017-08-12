@@ -25,7 +25,7 @@ export default function createGitTokenContract() {
         from,
         data,
         gasPrice: 1e9, // 10 Gwei
-        gasLimit: 4e6,
+        gasLimit: 6e6,
         value: 0
       })
     }).then((signedTx) => {
