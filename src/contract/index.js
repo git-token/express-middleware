@@ -4,6 +4,7 @@ import createGitTokenContract from './createGitTokenContract'
 import saveContractDetails from './saveContractDetails'
 import generateReward from './generateReward'
 import verifyContributor from './verifyContributor'
+import initializeAuction from './initializeAuction'
 
 export {
   getContractDetails,
@@ -11,5 +12,6 @@ export {
   createGitTokenContract,
   saveContractDetails,
   generateReward,
-  verifyContributor
+  verifyContributor,
+  initializeAuction
 }

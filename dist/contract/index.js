@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.verifyContributor = exports.generateReward = exports.saveContractDetails = exports.createGitTokenContract = exports.getSavedContract = exports.getContractDetails = undefined;
+exports.initializeAuction = exports.verifyContributor = exports.generateReward = exports.saveContractDetails = exports.createGitTokenContract = exports.getSavedContract = exports.getContractDetails = undefined;
 
 var _getSavedContract = require('./getSavedContract');
 
@@ -29,6 +29,10 @@ var _verifyContributor = require('./verifyContributor');
 
 var _verifyContributor2 = _interopRequireDefault(_verifyContributor);
 
+var _initializeAuction = require('./initializeAuction');
+
+var _initializeAuction2 = _interopRequireDefault(_initializeAuction);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.getContractDetails = _getContractDetails2.default;
@@ -37,3 +41,4 @@ exports.createGitTokenContract = _createGitTokenContract2.default;
 exports.saveContractDetails = _saveContractDetails2.default;
 exports.generateReward = _generateReward2.default;
 exports.verifyContributor = _verifyContributor2.default;
+exports.initializeAuction = _initializeAuction2.default;

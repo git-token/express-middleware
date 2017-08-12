@@ -6,6 +6,7 @@ import analyticsProcessor from './analytics/index'
 import configureAnalytics from './analytics/configure'
 import { smtpServer, smtpHandleAuth } from './smtp/index'
 import { socketHandler, socketRouter } from './websocket/index'
+
 import {
   retrieveDetails,
   faucet,
@@ -15,9 +16,10 @@ import {
   parseRepositoryStats,
   retrieveGitHubUser
 } from './utils/index'
+
 import gittokenAPI from './api/index'
-// import gittokenSQLite from './sqlite/index'
 import { gittokenHyperlog, logMessage, logExchange, logVote } from './hyperlog/index'
+
 import {
   handleLogin,
   handleVerification,
@@ -29,13 +31,15 @@ import {
   milestone,
   organization
 } from './events/index'
+
 import {
   getContractDetails,
   getSavedContract,
   createGitTokenContract,
   saveContractDetails,
   generateReward,
-  verifyContributor
+  verifyContributor,
+  initializeAuction
 } from './contract/index'
 
 import GitTokenContract from 'gittoken-contracts/build/contracts/GitToken.json'
@@ -71,6 +75,7 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     this.logVote = logVote.bind(this)
     this.handleLogin = handleLogin.bind(this)
     this.verifyContributor = verifyContributor.bind(this)
+    this.initializeAuction = initializeAuction.bind(this)
     this.handleVerification = handleVerification.bind(this)
     this.handleAuthentication = handleAuthentication.bind(this)
     this.handleContractDetails = handleContractDetails.bind(this)

@@ -23,6 +23,7 @@ export default function initializeAuction({ initialPrice, delay, lockTokens }) {
     }).then((txHash) => {
       return this.getTransactionReceipt(txHash)
     }).then((txReceipt) => {
+      console.log('initializeAuction::txReceipt', txReceipt)
       resolve(txReceipt)
     }).catch((error) => {
       reject(error)

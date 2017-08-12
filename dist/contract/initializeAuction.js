@@ -38,6 +38,7 @@ function initializeAuction(_ref) {
     }).then(function (txHash) {
       return _this.getTransactionReceipt(txHash);
     }).then(function (txReceipt) {
+      console.log('initializeAuction::txReceipt', txReceipt);
       resolve(txReceipt);
     }).catch(function (error) {
       reject(error);
