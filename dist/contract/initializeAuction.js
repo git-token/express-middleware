@@ -31,7 +31,7 @@ function initializeAuction(_ref) {
         from: from,
         value: 0,
         gasPrice: 1e9,
-        gasLimit: 5e5,
+        gasLimit: 3e6,
         data: data
       });
     }).then(function (signedTx) {
