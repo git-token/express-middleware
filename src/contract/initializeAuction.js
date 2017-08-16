@@ -1,6 +1,6 @@
 import Promise, { promisifyAll, join } from 'bluebird'
 
-export default function initializeAuction({ initialPrice, delay, lockTokens }) {
+export default function initializeAuction({ initialPrice, delay, tokenLimitFactor, lockTokens }) {
   return new Promise((resolve, reject) => {
     const from = `0x${this.ks.getAddresses()[0]}`;
     this.getSavedContract({
@@ -8,7 +8,7 @@ export default function initializeAuction({ initialPrice, delay, lockTokens }) {
       contractFile: this.contractFile
     }).then((contractDetails) => {
       return this.gittokenContract.initializeAuction.getData(
-        initialPrice, delay, lockTokens
+        initialPrice, delay, tokenLimitFactor, lockTokens
       )
     }).then((data) => {
       return this.signTransaction({

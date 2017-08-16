@@ -34,10 +34,34 @@ exports.default = function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.t0 = event;
-            _context.next = _context.t0 === 'analytics' ? 3 : _context.t0 === 'contractDetails' ? 16 : _context.t0 === 'authenticate' ? 19 : _context.t0 === 'verify' ? 22 : _context.t0 === 'login' ? 25 : _context.t0 === 'message' ? 28 : _context.t0 === 'exchange' ? 31 : _context.t0 === 'vote' ? 34 : 37;
+            _context.next = _context.t0 === 'auction' ? 3 : _context.t0 === 'analytics' ? 7 : _context.t0 === 'contractDetails' ? 20 : _context.t0 === 'authenticate' ? 23 : _context.t0 === 'verify' ? 26 : _context.t0 === 'login' ? 29 : _context.t0 === 'message' ? 32 : _context.t0 === 'exchange' ? 35 : _context.t0 === 'vote' ? 38 : 41;
             break;
 
           case 3:
+            this.auctionProcessor.send((0, _stringify2.default)({ event: 'get_auctions' }));
+            this.auctionProcessor.send((0, _stringify2.default)({ event: 'get_auction_bids' }));
+            this.auctionProcessor.on('message', function (msg) {
+              var _JSON$parse = JSON.parse(msg),
+                  event = _JSON$parse.event;
+
+              if (connection.readyState == 1) {
+                if (event.match(RegExp('broadcast'))) {
+                  // Broadcast the above events to connected clients
+                  _this.webSocketServer.clients.forEach(function (socket) {
+                    if (socket.readyState === 1) {
+                      socket.send(msg);
+                    }
+                  });
+                } else {
+                  connection.send(msg);
+                }
+              } else {
+                connection.close();
+              }
+            });
+            return _context.abrupt('break', 43);
+
+          case 7:
             this.analyticsProcessor.send((0, _stringify2.default)({ event: 'contract_details' }));
             this.analyticsProcessor.send((0, _stringify2.default)({ event: 'get_milestones' }));
             this.analyticsProcessor.send((0, _stringify2.default)({ event: 'get_contributions' }));
@@ -50,8 +74,8 @@ exports.default = function () {
             this.analyticsProcessor.send((0, _stringify2.default)({ event: 'get_reward_type_stats' }));
             this.analyticsProcessor.send((0, _stringify2.default)({ event: 'get_summary_statistics' }));
             this.analyticsProcessor.on('message', function (msg) {
-              var _JSON$parse = JSON.parse(msg),
-                  event = _JSON$parse.event;
+              var _JSON$parse2 = JSON.parse(msg),
+                  event = _JSON$parse2.event;
 
               if (connection.readyState == 1) {
                 if (event == 'milestone_created' || event == 'broadcast_contribution_data') {
@@ -68,65 +92,65 @@ exports.default = function () {
                 connection.close();
               }
             });
-            return _context.abrupt('break', 39);
+            return _context.abrupt('break', 43);
 
-          case 16:
-            _context.next = 18;
+          case 20:
+            _context.next = 22;
             return this.handleContractDetails({ connection: connection });
 
-          case 18:
+          case 22:
             return _context.abrupt('return', _context.sent);
 
-          case 19:
-            _context.next = 21;
+          case 23:
+            _context.next = 25;
             return this.handleAuthentication({ connection: connection, data: data });
 
-          case 21:
+          case 25:
             return _context.abrupt('return', _context.sent);
 
-          case 22:
-            _context.next = 24;
+          case 26:
+            _context.next = 28;
             return this.handleVerification({ connection: connection, data: data });
 
-          case 24:
+          case 28:
             return _context.abrupt('return', _context.sent);
 
-          case 25:
-            _context.next = 27;
+          case 29:
+            _context.next = 31;
             return this.handleLogin({ connection: connection, data: data });
 
-          case 27:
+          case 31:
             return _context.abrupt('return', _context.sent);
 
-          case 28:
-            _context.next = 30;
+          case 32:
+            _context.next = 34;
             return this.logMessage({ connection: connection, data: data });
 
-          case 30:
+          case 34:
             return _context.abrupt('return', _context.sent);
 
-          case 31:
-            _context.next = 33;
+          case 35:
+            _context.next = 37;
             return this.logExchange({ connection: connection, data: data });
 
-          case 33:
+          case 37:
             return _context.abrupt('return', _context.sent);
 
-          case 34:
-            _context.next = 36;
+          case 38:
+            _context.next = 40;
             return this.logVote({ connection: connection, data: data });
 
-          case 36:
+          case 40:
             return _context.abrupt('return', _context.sent);
 
-          case 37:
+          case 41:
             connection.send((0, _stringify2.default)({
               event: 'Error',
               message: 'Invalid event, ' + event + ', requested'
             }));
             return _context.abrupt('return', null);
 
-          case 39:
+          case 43:
           case 'end':
             return _context.stop();
         }

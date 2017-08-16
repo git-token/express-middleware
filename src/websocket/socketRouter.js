@@ -2,6 +2,27 @@ import Promise from 'bluebird'
 
 export default async function socketRouter({ connection, event, data }) {
   switch(event) {
+    case 'auction':
+      this.auctionProcessor.send(JSON.stringify({ event: 'get_auctions' }))
+      this.auctionProcessor.send(JSON.stringify({ event: 'get_auction_bids' }))
+      this.auctionProcessor.on('message', (msg) => {
+        const { event } = JSON.parse(msg)
+        if (connection.readyState == 1) {
+          if (event.match(RegExp('broadcast'))) {
+            // Broadcast the above events to connected clients
+            this.webSocketServer.clients.forEach((socket) => {
+              if (socket.readyState === 1) {
+                socket.send(msg)
+              }
+            })
+          } else {
+            connection.send(msg)
+          }
+        } else {
+          connection.close()
+        }
+      })
+      break;
     case 'analytics':
       this.analyticsProcessor.send(JSON.stringify({ event: 'contract_details' }))
       this.analyticsProcessor.send(JSON.stringify({ event: 'get_milestones' }))

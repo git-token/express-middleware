@@ -16,6 +16,7 @@ function initializeAuction(_ref) {
 
   var initialPrice = _ref.initialPrice,
       delay = _ref.delay,
+      tokenLimitFactor = _ref.tokenLimitFactor,
       lockTokens = _ref.lockTokens;
 
   return new _bluebird2.default(function (resolve, reject) {
@@ -24,7 +25,7 @@ function initializeAuction(_ref) {
       dirPath: _this.dirPath,
       contractFile: _this.contractFile
     }).then(function (contractDetails) {
-      return _this.gittokenContract.initializeAuction.getData(initialPrice, delay, lockTokens);
+      return _this.gittokenContract.initializeAuction.getData(initialPrice, delay, tokenLimitFactor, lockTokens);
     }).then(function (data) {
       return _this.signTransaction({
         to: _this.gittokenContract.address,

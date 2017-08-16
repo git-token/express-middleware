@@ -98,6 +98,7 @@ export default function milestone ({ event, data }) {
           return this.initializeAuction({
             initialPrice: 1000, // 1 ETH / TOken
             delay: 0,
+            tokenLimitFactor: 20,
             lockTokens: true
           })
         }).then(() => {
