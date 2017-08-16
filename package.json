@@ -1,6 +1,6 @@
 {
   "name": "gittoken-api-middleware",
-  "version": "0.1.82",
+  "version": "0.1.83",
   "description": "GitToken Express Middleware for GitHub Webhook Endpoints",
   "main": "./src/index.js",
   "scripts": {
@@ -34,7 +34,7 @@
     "ethereumjs-util": "^5.1.2",
     "express": "^4.15.3",
     "gittoken-analytics": "^0.1.48",
-    "gittoken-auction": "0.0.6",
+    "gittoken-auction": "0.0.7",
     "gittoken-contracts": "0.0.29",
     "hyperlog": "^4.12.1",
     "ip": "^1.1.5",
