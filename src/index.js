@@ -2,8 +2,13 @@ import Web3 from 'web3'
 import express, { Router } from 'express'
 import Promise, { promisifyAll } from 'bluebird'
 import KeystoreGenerator from './KeystoreGenerator'
+
 import analyticsProcessor from './analytics/index'
 import configureAnalytics from './analytics/configure'
+
+import auctionProcessor from './auction/index'
+import configureAuction from './auction/configure'
+
 import { smtpServer, smtpHandleAuth } from './smtp/index'
 import { socketHandler, socketRouter } from './websocket/index'
 
@@ -90,6 +95,11 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     this.analyticsProcessor = analyticsProcessor.bind(this)
     this.configureAnalytics = configureAnalytics.bind(this)
     this.analyticsProcessor({})
+
+    // Setup Auction Processor
+    this.auctionProcessor = auctionProcessor.bind(this)
+    this.configureAuction = configureAuction.bind(this)
+    this.auctionProcessor({})
 
     // Bind event methods to class scope
     this.ping = ping.bind(this)

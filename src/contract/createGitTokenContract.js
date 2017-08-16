@@ -1,4 +1,4 @@
-import Promise, { promisifyAll } from 'bluebird'
+import Promise, { promisifyAll, join } from 'bluebird'
 
 export default function createGitTokenContract() {
   return new Promise((resolve, reject) => {
@@ -37,11 +37,10 @@ export default function createGitTokenContract() {
       return this.saveContractDetails({})
     }).then((contractDetails) => {
       const { contractAddress } = contractDetails['txReceipt']
-      return this.configureAnalytics({
-        web3Provider: this.web3Provider,
-        contractAddress,
-        abi
-      })
+      return join(
+        this.configureAnalytics({ web3Provider: this.web3Provider, contractAddress, abi }),
+        this.configureAuction({ web3Provider: this.web3Provider, contractAddress, abi })
+      )
     }).then((configured) => {
       resolve(this.contractDetails)
     }).catch((error) => {

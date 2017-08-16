@@ -17,24 +17,18 @@ export default async function socketRouter({ connection, event, data }) {
       this.analyticsProcessor.on('message', (msg) => {
         const { event } = JSON.parse(msg)
         if (connection.readyState == 1) {
-          switch(event) {
-            case 'milestone_created':
-            console.log('milestone created received from processor')
-              this.webSocketServer.clients.forEach((socket) => {
-                if (socket.readyState === 1) {
-                  socket.send(msg)
-                }
-              })
-              break;
-            case 'broadcast_contribution_data':
-              this.webSocketServer.clients.forEach((socket) => {
-                if (socket.readyState === 1) {
-                  socket.send(msg)
-                }
-              })
-              break;
-            default:
-              connection.send(msg)
+          if (
+            event == 'milestone_created' ||
+            event == 'broadcast_contribution_data'
+          ) {
+            // Broadcast the above events to connected clients
+            this.webSocketServer.clients.forEach((socket) => {
+              if (socket.readyState === 1) {
+                socket.send(msg)
+              }
+            })
+          } else {
+            connection.send(msg)
           }
         } else {
           connection.close()

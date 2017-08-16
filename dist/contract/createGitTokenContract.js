@@ -63,11 +63,7 @@ function createGitTokenContract() {
     }).then(function (contractDetails) {
       var contractAddress = contractDetails['txReceipt'].contractAddress;
 
-      return _this.configureAnalytics({
-        web3Provider: _this.web3Provider,
-        contractAddress: contractAddress,
-        abi: abi
-      });
+      return (0, _bluebird.join)(_this.configureAnalytics({ web3Provider: _this.web3Provider, contractAddress: contractAddress, abi: abi }), _this.configureAuction({ web3Provider: _this.web3Provider, contractAddress: contractAddress, abi: abi }));
     }).then(function (configured) {
       resolve(_this.contractDetails);
     }).catch(function (error) {
