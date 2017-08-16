@@ -120,7 +120,7 @@ function milestone(_ref) {
         }).then(function (data) {
           reward = data;
           return _this.initializeAuction({
-            initialPrice: 1000, // 1 ETH / TOken
+            initialPrice: 1000 * Math.pow(10, decimals), // 1 ETH / TOken
             delay: 0,
             tokenLimitFactor: 20,
             lockTokens: true
