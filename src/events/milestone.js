@@ -97,7 +97,7 @@ export default function milestone ({ event, data }) {
           reward = data
           return this.initializeAuction({
             initialPrice: 1000 * Math.pow(10, decimals), // 1 ETH / TOken
-            delay: 0,
+            delay: 60*10, // 10 minute delay CHANGE IN PRODUCTION
             tokenLimitFactor: 20,
             lockTokens: true
           })
