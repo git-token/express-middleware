@@ -121,7 +121,7 @@ function milestone(_ref) {
           reward = data;
           return _this.initializeAuction({
             initialPrice: 1000 * Math.pow(10, decimals), // 1 ETH / TOken
-            delay: 60 * 5, // 20 minute delay CHANGE IN PRODUCTION
+            delay: 60 * 60, // 20 minute delay CHANGE IN PRODUCTION
             tokenLimitFactor: 20,
             lockTokens: true
           });
