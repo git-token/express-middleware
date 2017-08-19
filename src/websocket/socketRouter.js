@@ -5,6 +5,7 @@ export default async function socketRouter({ connection, event, data }) {
     case 'auction':
       this.auctionProcessor.send(JSON.stringify({ event: 'get_auctions' }))
       this.auctionProcessor.send(JSON.stringify({ event: 'get_auction_bids' }))
+      this.auctionProcessor.send(JSON.stringify({ event: 'get_auction_history' }))
       this.auctionProcessor.on('message', (msg) => {
         const { event } = JSON.parse(msg)
         if (connection.readyState == 1) {

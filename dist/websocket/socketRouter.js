@@ -34,12 +34,13 @@ exports.default = function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.t0 = event;
-            _context.next = _context.t0 === 'auction' ? 3 : _context.t0 === 'analytics' ? 7 : _context.t0 === 'contractDetails' ? 20 : _context.t0 === 'authenticate' ? 23 : _context.t0 === 'verify' ? 26 : _context.t0 === 'login' ? 29 : _context.t0 === 'message' ? 32 : _context.t0 === 'exchange' ? 35 : _context.t0 === 'vote' ? 38 : 41;
+            _context.next = _context.t0 === 'auction' ? 3 : _context.t0 === 'analytics' ? 8 : _context.t0 === 'contractDetails' ? 21 : _context.t0 === 'authenticate' ? 24 : _context.t0 === 'verify' ? 27 : _context.t0 === 'login' ? 30 : _context.t0 === 'message' ? 33 : _context.t0 === 'exchange' ? 36 : _context.t0 === 'vote' ? 39 : 42;
             break;
 
           case 3:
             this.auctionProcessor.send((0, _stringify2.default)({ event: 'get_auctions' }));
             this.auctionProcessor.send((0, _stringify2.default)({ event: 'get_auction_bids' }));
+            this.auctionProcessor.send((0, _stringify2.default)({ event: 'get_auction_history' }));
             this.auctionProcessor.on('message', function (msg) {
               var _JSON$parse = JSON.parse(msg),
                   event = _JSON$parse.event;
@@ -59,9 +60,9 @@ exports.default = function () {
                 connection.close();
               }
             });
-            return _context.abrupt('break', 43);
+            return _context.abrupt('break', 44);
 
-          case 7:
+          case 8:
             this.analyticsProcessor.send((0, _stringify2.default)({ event: 'contract_details' }));
             this.analyticsProcessor.send((0, _stringify2.default)({ event: 'get_milestones' }));
             this.analyticsProcessor.send((0, _stringify2.default)({ event: 'get_contributions' }));
@@ -92,65 +93,65 @@ exports.default = function () {
                 connection.close();
               }
             });
-            return _context.abrupt('break', 43);
+            return _context.abrupt('break', 44);
 
-          case 20:
-            _context.next = 22;
+          case 21:
+            _context.next = 23;
             return this.handleContractDetails({ connection: connection });
 
-          case 22:
+          case 23:
             return _context.abrupt('return', _context.sent);
 
-          case 23:
-            _context.next = 25;
+          case 24:
+            _context.next = 26;
             return this.handleAuthentication({ connection: connection, data: data });
 
-          case 25:
+          case 26:
             return _context.abrupt('return', _context.sent);
 
-          case 26:
-            _context.next = 28;
+          case 27:
+            _context.next = 29;
             return this.handleVerification({ connection: connection, data: data });
 
-          case 28:
+          case 29:
             return _context.abrupt('return', _context.sent);
 
-          case 29:
-            _context.next = 31;
+          case 30:
+            _context.next = 32;
             return this.handleLogin({ connection: connection, data: data });
 
-          case 31:
+          case 32:
             return _context.abrupt('return', _context.sent);
 
-          case 32:
-            _context.next = 34;
+          case 33:
+            _context.next = 35;
             return this.logMessage({ connection: connection, data: data });
 
-          case 34:
+          case 35:
             return _context.abrupt('return', _context.sent);
 
-          case 35:
-            _context.next = 37;
+          case 36:
+            _context.next = 38;
             return this.logExchange({ connection: connection, data: data });
 
-          case 37:
+          case 38:
             return _context.abrupt('return', _context.sent);
 
-          case 38:
-            _context.next = 40;
+          case 39:
+            _context.next = 41;
             return this.logVote({ connection: connection, data: data });
 
-          case 40:
+          case 41:
             return _context.abrupt('return', _context.sent);
 
-          case 41:
+          case 42:
             connection.send((0, _stringify2.default)({
               event: 'Error',
               message: 'Invalid event, ' + event + ', requested'
             }));
             return _context.abrupt('return', null);
 
-          case 43:
+          case 44:
           case 'end':
             return _context.stop();
         }
