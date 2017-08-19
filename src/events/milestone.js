@@ -43,7 +43,7 @@ export default function milestone ({ event, data }) {
               NOTE Eventually remove this switch statement and
               replace with action field from payload request
              */
-            reservedType: 'created',
+            reservedType: action,
           })
         }).then((data) => {
           resolve(data)
@@ -59,7 +59,7 @@ export default function milestone ({ event, data }) {
           // basically the contract should hold the rewards until the milestone is // reached. Tokens will be auctioned on behalf of the project for funding.
           contributorUsername: data['body']['sender']['login'],
           rewardBonus: 0,
-          reservedType: '',
+          reservedType: action,
         }))
         break;
       case 'closed':
@@ -91,13 +91,13 @@ export default function milestone ({ event, data }) {
               NOTE Eventually remove this switch statement and
               replace with action field from payload request
              */
-            reservedType: 'created',
+            reservedType: action,
           })
         }).then((data) => {
           reward = data
           return this.initializeAuction({
             initialPrice: 1000 * Math.pow(10, decimals), // 1 ETH / TOken
-            delay: 60*60, // 20 minute delay CHANGE IN PRODUCTION
+            delay: 60*10, // 20 minute delay CHANGE IN PRODUCTION
             tokenLimitFactor: 20,
             lockTokens: true
           })
