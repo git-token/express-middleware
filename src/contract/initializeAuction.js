@@ -7,8 +7,15 @@ export default function initializeAuction({ initialPrice, delay, tokenLimitFacto
       dirPath: this.dirPath,
       contractFile: this.contractFile
     }).then((contractDetails) => {
+
+      return this.getAuctionPrice()
+    }).then((auctionPrice) => {
+
       return this.gittokenContract.initializeAuction.getData(
-        initialPrice, delay, tokenLimitFactor, lockTokens
+        auctionPrice,
+        delay,
+        tokenLimitFactor,
+        lockTokens
       )
     }).then((data) => {
       return this.signTransaction({

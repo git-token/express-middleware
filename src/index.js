@@ -19,7 +19,8 @@ import {
   parseGitHubEvents,
   parsePushEvent,
   parseRepositoryStats,
-  retrieveGitHubUser
+  retrieveGitHubUser,
+  getAuctionPrice
 } from './utils/index'
 
 import gittokenAPI from './api/index'
@@ -54,13 +55,13 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     super(options)
     const { isGitHubHook, config, web3Provider, dirPath, contractFile, faucetActive, mysqlOpts } = options
 
-    this.mysqlOpts = mysqlOpts
-    this.faucetActive = faucetActive
-    this.dirPath = dirPath
-    this.contractFile = contractFile
+    this.mysqlOpts        = mysqlOpts
+    this.faucetActive     = faucetActive
+    this.dirPath          = dirPath
+    this.contractFile     = contractFile
     this.gittokenContract = JSON.parse(GitTokenContract)
-    this.isGitHubHook = isGitHubHook
-    this.config = config
+    this.isGitHubHook     = isGitHubHook
+    this.config           = config
 
     // this.dirPath = dirPath
     // this.web3Provider = web3Provider
@@ -74,21 +75,21 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
 
 
     // this.gittokenSQLite = gittokenSQLite.bind(this)
-    this.gittokenHyperlog = gittokenHyperlog.bind(this)
-    this.logMessage = logMessage.bind(this)
-    this.logExchange = logExchange.bind(this)
-    this.logVote = logVote.bind(this)
-    this.handleLogin = handleLogin.bind(this)
-    this.verifyContributor = verifyContributor.bind(this)
-    this.initializeAuction = initializeAuction.bind(this)
-    this.handleVerification = handleVerification.bind(this)
-    this.handleAuthentication = handleAuthentication.bind(this)
+    this.gittokenHyperlog      = gittokenHyperlog.bind(this)
+    this.logMessage            = logMessage.bind(this)
+    this.logExchange           = logExchange.bind(this)
+    this.logVote               = logVote.bind(this)
+    this.handleLogin           = handleLogin.bind(this)
+    this.verifyContributor     = verifyContributor.bind(this)
+    this.initializeAuction     = initializeAuction.bind(this)
+    this.handleVerification    = handleVerification.bind(this)
+    this.handleAuthentication  = handleAuthentication.bind(this)
     this.handleContractDetails = handleContractDetails.bind(this)
 
     this.gittokenHyperlog({})
 
     this.socketHandler = socketHandler.bind(this)
-    this.socketRouter = socketRouter.bind(this)
+    this.socketRouter  = socketRouter.bind(this)
     this.socketHandler({})
 
     // Setup Analytics Processor
@@ -102,26 +103,27 @@ export default class GitTokenMiddleware extends KeystoreGenerator {
     this.auctionProcessor({})
 
     // Bind event methods to class scope
-    this.ping = ping.bind(this)
-    this.push = push.bind(this)
-    this.pullRequest = pullRequest.bind(this)
-    this.milestone = milestone.bind(this)
+    this.ping         = ping.bind(this)
+    this.push         = push.bind(this)
+    this.pullRequest  = pullRequest.bind(this)
+    this.milestone    = milestone.bind(this)
     this.organization = organization.bind(this)
 
     // bind utility methods to class scope
-    this.getSavedContract = getSavedContract.bind(this)
+    this.getSavedContract       = getSavedContract.bind(this)
     this.createGitTokenContract = createGitTokenContract.bind(this)
-    this.saveContractDetails = saveContractDetails.bind(this)
-    this.getContractDetails = getContractDetails.bind(this)
-    this.retrieveDetails = retrieveDetails.bind(this)
-    this.parsePushEvent = parsePushEvent.bind(this)
-    this.parseRepositoryStats = parseRepositoryStats.bind(this)
-    this.parseGitHubEvents = parseGitHubEvents.bind(this)
-    this.retrieveGitHubUser = retrieveGitHubUser.bind(this)
-    this.faucet = faucet.bind(this)
-    this.generateReward = generateReward.bind(this)
-    this.calculateRewardBonus = calculateRewardBonus.bind(this)
-    this.gittokenAPI = gittokenAPI.bind(this)
+    this.saveContractDetails    = saveContractDetails.bind(this)
+    this.getContractDetails     = getContractDetails.bind(this)
+    this.retrieveDetails        = retrieveDetails.bind(this)
+    this.parsePushEvent         = parsePushEvent.bind(this)
+    this.parseRepositoryStats   = parseRepositoryStats.bind(this)
+    this.parseGitHubEvents      = parseGitHubEvents.bind(this)
+    this.retrieveGitHubUser     = retrieveGitHubUser.bind(this)
+    this.getAuctionPrice        = getAuctionPrice.bind(this)
+    this.faucet                 = faucet.bind(this)
+    this.generateReward         = generateReward.bind(this)
+    this.calculateRewardBonus   = calculateRewardBonus.bind(this)
+    this.gittokenAPI            = gittokenAPI.bind(this)
 
     /**
      * TODO Replace this with database
