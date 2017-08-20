@@ -5,6 +5,7 @@ import parseRepositoryStats from './parseRepositoryStats'
 import retrieveGitHubUser from './retrieveGitHubUser'
 import faucet from './faucet'
 import calculateRewardBonus from './calculateRewardBonus'
+import getAuctionPrice from './getAuctionPrice'
 
 export {
   retrieveGitHubUser,
@@ -13,5 +14,6 @@ export {
   parsePushEvent,
   retrieveDetails,
   faucet,
-  calculateRewardBonus
+  calculateRewardBonus,
+  getAuctionPrice
 }

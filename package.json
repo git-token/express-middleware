@@ -35,7 +35,7 @@
     "express": "^4.15.3",
     "gittoken-analytics": "^0.1.54",
     "gittoken-auction": "0.0.23",
-    "gittoken-contracts": "0.0.36",
+    "gittoken-contracts": "0.0.37",
     "hyperlog": "^4.12.1",
     "ip": "^1.1.5",
     "jsonfile": "^3.0.0",
