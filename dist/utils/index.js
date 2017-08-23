@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.calculateRewardBonus = exports.faucet = exports.retrieveDetails = exports.parsePushEvent = exports.parseGitHubEvents = exports.parseRepositoryStats = exports.retrieveGitHubUser = undefined;
+exports.getAuctionPrice = exports.calculateRewardBonus = exports.faucet = exports.retrieveDetails = exports.parsePushEvent = exports.parseGitHubEvents = exports.parseRepositoryStats = exports.retrieveGitHubUser = undefined;
 
 var _retrieveDetails = require('./retrieveDetails');
 
@@ -33,6 +33,10 @@ var _calculateRewardBonus = require('./calculateRewardBonus');
 
 var _calculateRewardBonus2 = _interopRequireDefault(_calculateRewardBonus);
 
+var _getAuctionPrice = require('./getAuctionPrice');
+
+var _getAuctionPrice2 = _interopRequireDefault(_getAuctionPrice);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.retrieveGitHubUser = _retrieveGitHubUser2.default;
@@ -42,3 +46,4 @@ exports.parsePushEvent = _parsePushEvent2.default;
 exports.retrieveDetails = _retrieveDetails2.default;
 exports.faucet = _faucet2.default;
 exports.calculateRewardBonus = _calculateRewardBonus2.default;
+exports.getAuctionPrice = _getAuctionPrice2.default;

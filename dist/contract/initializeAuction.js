@@ -25,7 +25,11 @@ function initializeAuction(_ref) {
       dirPath: _this.dirPath,
       contractFile: _this.contractFile
     }).then(function (contractDetails) {
-      return _this.gittokenContract.initializeAuction.getData(initialPrice, delay, tokenLimitFactor, lockTokens);
+
+      return _this.getAuctionPrice();
+    }).then(function (auctionPrice) {
+
+      return _this.gittokenContract.initializeAuction.getData(auctionPrice, delay, tokenLimitFactor, lockTokens);
     }).then(function (data) {
       return _this.signTransaction({
         to: _this.gittokenContract.address,
