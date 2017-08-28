@@ -25,7 +25,7 @@ function auctionEngine(_ref) {
 
   this.auctionProcessor = (0, _child_process.fork)(process.cwd() + '/node_modules/gittoken-auction/dist/processor');
 
-  this.auctionProcessor.on('exit', function () {
+  this.auctionProcessor.on('disconnect', function () {
     console.log('Auction Processor Exited. Attempting to restart...');
     _this.auctionProcessor = (0, _child_process.fork)(process.cwd() + '/node_modules/gittoken-auction/dist/processor');
   });

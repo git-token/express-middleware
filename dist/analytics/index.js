@@ -25,7 +25,7 @@ function analyticsEngine(_ref) {
 
   this.analyticsProcessor = (0, _child_process.fork)(process.cwd() + '/node_modules/gittoken-analytics/dist/processor');
 
-  this.analyticsProcessor.on('exit', function () {
+  this.analyticsProcessor.on('disconnect', function () {
     console.log('Analytics Processor Exited. Attempting to restart...');
     _this.analyticsProcessor = (0, _child_process.fork)(process.cwd() + '/node_modules/gittoken-analytics/dist/processor');
   });
